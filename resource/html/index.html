@@ -21,7 +21,7 @@
         <p>Script Table Operator allows users to run Python/R Scripts within the Teradata EDW.</p>
       </div>
     </div>
-<!--
+    <!--
     <div class="control-group" ng-if="checkIfDriverFunction()">
       <label class="control-label">Drop Output Table If Exists</label>
       <div class="controls">
@@ -67,7 +67,7 @@
         <div id="tabs-required">
 
           <!--<table class="table table-condensed table-hover" ng-model-options="{ debounce: 200 }">-->
-            <table class="table table-condensed table-hover">
+          <table class="table table-condensed table-hover">
             <thead>
               <tr>
                 <th>Name</th>
@@ -86,16 +86,29 @@
                       <option value="" selected>--No Selection--</option>
                   </select>
                 </td>-->
-                <td>Input Table</td>
+                <td>On Clause</td>
+                <!--Add checkbox-->
                 <td>
-                  <input required ng-model="config.function.input_table" type="text" data-container="body" data-html="true" title="Input Table" data-placement="right" />
+
+                  Use SQL ON Clause: <input type="checkbox" ng-model="config.function.useSQLOnClause"></input>
+                  <div ng-if='!config.function.useSQLOnClause'>
+                    <p class="inner-label">Input Table</p>
+                    <input required ng-model="config.function.sql_on_clause" type="text" data-container="body" data-html="true" title="Input Table"
+                      data-placement="right" />
+                  </div>
+                  <div ng-if='config.function.useSQLOnClause'>
+                    <p class="inner-label">ON Clause</p>
+                    <input required ng-model="config.function.sql_on_clause" type="text" data-container="body" data-html="true" title="On Clause"
+                      data-placement="right" />
+                  </div>
                 </td>
               </tr>
 
               <tr>
                 <td>Output Table</td>
                 <td>
-                  <input required ng-model="config.function.output_table" type="text" data-container="body" data-html="true" title="Output Table" data-placement="right" />
+                  <input required ng-model="config.function.output_table" type="text" data-container="body" data-html="true" title="Output Table"
+                    data-placement="right" />
                 </td>
               </tr>
 
@@ -103,26 +116,29 @@
                 <td>Script</td>
                 <td>
                   <div>
-                  <p class="inner-label">Script Alias</p>
-                    <input required ng-model="config.function.script_alias" type="text" data-container="body" data-html="true" title="Script Alias" data-placement="right" />
-                    </div>
+                    <p class="inner-label">Script Alias</p>
+                    <input required ng-model="config.function.script_alias" type="text" data-container="body" data-html="true" title="Script Alias"
+                      data-placement="right" />
+                  </div>
 
-                    <div>
-                  <p class="inner-label">Script Filename</p>
-                    <input required ng-model="config.function.script_filename" type="text" data-container="body" data-html="true" title="Script Filename" data-placement="right" />
-                    </div>
+                  <div>
+                    <p class="inner-label">Script Filename</p>
+                    <input required ng-model="config.function.script_filename" type="text" data-container="body" data-html="true" title="Script Filename"
+                      data-placement="right" />
+                  </div>
 
-                    <div>
-                  <p class="inner-label">Script File Location</p>
-                    <input required ng-model="config.function.script_filelocation" type="text" data-container="body" data-html="true" title="Script File Location" data-placement="right" />
-                    </div>
+                  <div>
+                    <p class="inner-label">Script File Location</p>
+                    <input required ng-model="config.function.script_filelocation" type="text" data-container="body" data-html="true" title="Script File Location"
+                      data-placement="right" />
+                  </div>
                 </td>
               </tr>
 
               <tr>
                 <td>Command Type</td>
                 <td>
-                    <select required ng-model="config.function.command_type" data-container="body" data-placement="right" data-html="true" >
+                  <select required ng-model="config.function.command_type" data-container="body" data-placement="right" data-html="true">
                       <option value="" selected>--No Selection--</option>
                       <option value="python" selected>Python</option>
                       <option value="r" selected>R</option>
@@ -133,14 +149,16 @@
               <tr>
                 <td>Arguments</td>
                 <td>
-                  <input required ng-model="config.function.arguments" type="text" data-container="body" data-html="true" title="Script Arguments" data-placement="right" />
+                  <input required ng-model="config.function.arguments" type="text" data-container="body" data-html="true" title="Script Arguments"
+                    data-placement="right" />
                 </td>
               </tr>
 
-                           <tr>
-                <td>Schema</td>
+              <tr>
+                <td>Returns Clause</td>
                 <td>
-                  <input required ng-model="config.function.schema" type="text" data-container="body" data-html="true" title="Schema" data-placement="right" />
+                  <input required ng-model="config.function.schema" type="text" data-container="body" data-html="true" title="Schema" data-placement="right"
+                  />
                 </td>
               </tr>
 
