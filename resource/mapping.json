@@ -1,0 +1,797 @@
+[
+  {
+    "category": "Statistical Analysis",
+    "function_name": "AddOnePlayer",
+    "file_name": "ADDONEPLAYER.json"
+  },
+  {
+    "category": "Graph Analysis",
+    "function_name": "AllPairsShortestPath",
+    "file_name": "ALLPAIRSSHORTESTPATH.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "AntiSelect",
+    "file_name": "ANTISELECT.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "Ngram",
+    "file_name": "NGRAM.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "ApproxCountMap",
+    "file_name": "APPROXCOUNTMAP.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "ApproxDCountMap",
+    "file_name": "APPROXDCOUNTMAP.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "ApproxDCountReduce",
+    "file_name": "APPROXDCOUNTREDUCE.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "ApproxPercentileMap",
+    "file_name": "APPROXPERCENTILEMAP.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "ApproxPercentileReduce",
+    "file_name": "APPROXPERCENTILEREDUCE.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "Approx_Percentile_Summary",
+    "file_name": "APPROX_PERCENTILE_SUMMARY.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "Arima",
+    "file_name": "ARIMA.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "ArimaPredictor",
+    "file_name": "ARIMAPREDICTOR.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "Attribution",
+    "file_name": "ATTRIBUTION.json"
+  },
+  {
+    "category": "Association Analysis",
+    "function_name": "Basket_Generator",
+    "file_name": "BASKET_GENERATOR.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "Burst",
+    "file_name": "BURST.json"
+  },
+  {
+    "category": "Association Analysis",
+    "function_name": "CFilter",
+    "file_name": "CFILTER.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "ChangePointDetection",
+    "file_name": "CHANGEPOINTDETECTION.json"
+  },
+  {
+    "category": "Graph Analysis",
+    "function_name": "Closeness",
+    "file_name": "CLOSENESS.json"
+  },
+  {
+    "category": "Cluster Analysis",
+    "function_name": "Canopy",
+    "file_name": "CANOPY.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "CMAVG",
+    "file_name": "CMAVG.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "TextTokenizer",
+    "file_name": "TEXTTOKENIZER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "POSTagger",
+    "file_name": "POSTAGGER.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "Corr_Map",
+    "file_name": "CORR_MAP.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "Corr_Reduce",
+    "file_name": "CORR_REDUCE.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "CoxPH",
+    "file_name": "COXPH.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "CoxPredict",
+    "file_name": "COXPREDICT.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "CoxSurvFit",
+    "file_name": "COXSURVFIT.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "DistnmatchMultipleinput",
+    "file_name": "DISTNMATCHMULTIPLEINPUT.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "DistnmatchReduce",
+    "file_name": "DISTNMATCHREDUCE.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "DTW",
+    "file_name": "DTW.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "DWT",
+    "file_name": "DWT.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "DWT2D",
+    "file_name": "DWT2D.json"
+  },
+  {
+    "category": "Graph Analysis",
+    "function_name": "EigenVectorCentrality",
+    "file_name": "EIGENVECTORCENTRALITY.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "EMAVG",
+    "file_name": "EMAVG.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "EvaluateNamedEntityFinderPartition",
+    "file_name": "EVALUATENAMEDENTITYFINDERPARTITION.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "EvaluateNamedEntityFinderRow",
+    "file_name": "EVALUATENAMEDENTITYFINDERROW.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "EvaluateSentimentExtractor",
+    "file_name": "EVALUATESENTIMENTEXTRACTOR.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "ExtractSentiment",
+    "file_name": "EXTRACTSENTIMENT.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "FellegiSunterPredict",
+    "file_name": "FELLEGISUNTERPREDICT.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "FellegiSunterTrainer",
+    "file_name": "FELLEGISUNTERTRAINER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "FindNamedEntity",
+    "file_name": "FINDNAMEDENTITY.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "RandomSample",
+    "file_name": "RANDOMSAMPLE.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "FMeasure",
+    "file_name": "FMEASURE.json"
+  },
+  {
+    "category": "Ensemble",
+    "function_name": "Forest_Analyze",
+    "file_name": "FOREST_ANALYZE.json"
+  },
+  {
+    "category": "Ensemble",
+    "function_name": "Forest_Drive",
+    "file_name": "FOREST_DRIVE.json"
+  },
+  {
+    "category": "Ensemble",
+    "function_name": "Forest_Predict",
+    "file_name": "FOREST_PREDICT.json"
+  },
+  {
+    "category": "Association Analysis",
+    "function_name": "FPGrowth",
+    "file_name": "FPGROWTH.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "FrequentPaths",
+    "file_name": "FREQUENTPATHS.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "GeometryLoader",
+    "file_name": "GEOMETRYLOADER.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "GeometryOverlay",
+    "file_name": "GEOMETRYOVERLAY.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "GLM",
+    "file_name": "GLM.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "GLMPredict",
+    "file_name": "GLMPREDICT.json"
+  },
+  {
+    "category": "Cluster Analysis",
+    "function_name": "GmmFit",
+    "file_name": "GMMFIT.json"
+  },
+  {
+    "category": "Cluster Analysis",
+    "function_name": "GMMPredict",
+    "file_name": "GMMPREDICT.json"
+  },
+  {
+    "category": "Cluster Analysis",
+    "function_name": "GMMProfile",
+    "file_name": "GMMPROFILE.json"
+  },
+  {
+    "category": "Graph Analysis",
+    "function_name": "GTree",
+    "file_name": "GTREE.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "Histogram_Map",
+    "file_name": "HISTOGRAM_MAP.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "Histogram_Reduce",
+    "file_name": "HISTOGRAM_REDUCE.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "Hist_Map",
+    "file_name": "HIST_MAP.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "Hist_Prep",
+    "file_name": "HIST_PREP.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "Hist_Reduce",
+    "file_name": "HIST_REDUCE.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "HMMDecoder",
+    "file_name": "HMMDECODER.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "HMMEvaluator",
+    "file_name": "HMMEVALUATOR.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "HMMSupervisedLearner",
+    "file_name": "HMMSUPERVISEDLEARNER.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "HMMUnsupervisedLearner",
+    "file_name": "HMMUNSUPERVISEDLEARNER.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "IdentityMatch",
+    "file_name": "IDENTITYMATCH.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "IDWT",
+    "file_name": "IDWT.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "IDWT2D",
+    "file_name": "IDWT2D.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "Interpolator",
+    "file_name": "INTERPOLATOR.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "IpGeo",
+    "file_name": "IPGEO.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "Sessionize",
+    "file_name": "SESSIONIZE.json"
+  },
+  {
+    "category": "Cluster Analysis",
+    "function_name": "KMeans",
+    "file_name": "KMEANS.json"
+  },
+  {
+    "category": "Cluster Analysis",
+    "function_name": "KMeansPlot",
+    "file_name": "KMEANSPLOT.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "KNN",
+    "file_name": "KNN.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "LARS",
+    "file_name": "LARS.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "LARSPredict",
+    "file_name": "LARSPREDICT.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "LdaInference",
+    "file_name": "LDAINFERENCE.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "LdaTopicPrinter",
+    "file_name": "LDATOPICPRINTER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "LdaTrainer",
+    "file_name": "LDATRAINER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "LDist",
+    "file_name": "LDIST.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "LinReg",
+    "file_name": "LINREG.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "LinRegMatrix",
+    "file_name": "LINREGMATRIX.json"
+  },
+  {
+    "category": "Graph Analysis",
+    "function_name": "LocalClusteringCoefficient",
+    "file_name": "LOCALCLUSTERINGCOEFFICIENT.json"
+  },
+  {
+    "category": "Graph Analysis",
+    "function_name": "LoopyBeliefPropagation",
+    "file_name": "LOOPYBELIEFPROPAGATION.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "LRTest",
+    "file_name": "LRTEST.json"
+  },
+  {
+    "category": "Cluster Analysis",
+    "function_name": "MinHash",
+    "file_name": "MINHASH.json"
+  },
+  {
+    "category": "Graph Analysis",
+    "function_name": "Modularity",
+    "file_name": "MODULARITY.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "Multi_Case",
+    "file_name": "MULTI_CASE.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "MurMurHash",
+    "file_name": "MURMURHASH.json"
+  },
+  {
+    "category": "Naive Bayes",
+    "function_name": "NaiveBayesMap",
+    "file_name": "NAIVEBAYESMAP.json"
+  },
+  {
+    "category": "Naive Bayes",
+    "function_name": "NaiveBayesPredict",
+    "file_name": "NAIVEBAYESPREDICT.json"
+  },
+  {
+    "category": "Naive Bayes",
+    "function_name": "NaiveBayesReduce",
+    "file_name": "NAIVEBAYESREDUCE.json"
+  },
+  {
+    "category": "Naive Bayes",
+    "function_name": "NaiveBayesTrain",
+    "file_name": "NAIVEBAYESTRAIN.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "NaiveBayesTextClassifierInternal",
+    "file_name": "NAIVEBAYESTEXTCLASSIFIERINTERNAL.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "NaiveBayesTextClassifierPredict",
+    "file_name": "NAIVEBAYESTEXTCLASSIFIERPREDICT.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "NaiveBayesTextClassifierTrainer",
+    "file_name": "NAIVEBAYESTEXTCLASSIFIERTRAINER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "Ner",
+    "file_name": "NER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "NerEvaluator",
+    "file_name": "NEREVALUATOR.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "NerTrainer",
+    "file_name": "NERTRAINER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "TextChunker",
+    "file_name": "TEXTCHUNKER.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "OutlierFilter",
+    "file_name": "OUTLIERFILTER.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "Pack",
+    "file_name": "PACK.json"
+  },
+  {
+    "category": "Graph Analysis",
+    "function_name": "PageRank",
+    "file_name": "PAGERANK.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "PartitionScale",
+    "file_name": "PARTITIONSCALE.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "Path_Analyzer",
+    "file_name": "PATH_ANALYZER.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "Path_Generator",
+    "file_name": "PATH_GENERATOR.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "Path_Start",
+    "file_name": "PATH_START.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "Path_Summarizer",
+    "file_name": "PATH_SUMMARIZER.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "PCA_Map",
+    "file_name": "PCA_MAP.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "PCA_Reduce",
+    "file_name": "PCA_REDUCE.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "Percentile",
+    "file_name": "PERCENTILE.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "Pivot",
+    "file_name": "PIVOT.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "PointInPolygon",
+    "file_name": "POINTINPOLYGON.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "XMLParser",
+    "file_name": "XMLPARSER.json"
+  },
+  {
+    "category": "Graph Analysis",
+    "function_name": "Psalsa",
+    "file_name": "PSALSA.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "PSTParserAFS",
+    "file_name": "PSTPARSERAFS.json"
+  },
+  {
+    "category": "Graph Analysis",
+    "function_name": "RandomWalkSample",
+    "file_name": "RANDOMWALKSAMPLE.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "RtChangePointDetection",
+    "file_name": "RTCHANGEPOINTDETECTION.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "Sample",
+    "file_name": "SAMPLE.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "Sax2",
+    "file_name": "SAX2.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "Scale",
+    "file_name": "SCALE.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "ScaleMap",
+    "file_name": "SCALEMAP.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "ScalePrinter",
+    "file_name": "SCALEPRINTER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "Sentenizer",
+    "file_name": "SENTENIZER.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "SeriesSplitter",
+    "file_name": "SERIESSPLITTER.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "ConfusionMatrix",
+    "file_name": "CONFUSIONMATRIX.json"
+  },
+  {
+    "category": "Ensemble",
+    "function_name": "Single_Tree_Drive",
+    "file_name": "SINGLE_TREE_DRIVE.json"
+  },
+  {
+    "category": "Ensemble",
+    "function_name": "Single_Tree_Predict",
+    "file_name": "SINGLE_TREE_PREDICT.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "SMAVG",
+    "file_name": "SMAVG.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "SortCombination",
+    "file_name": "SORTCOMBINATION.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "SparseSvmPredictor",
+    "file_name": "SPARSESVMPREDICTOR.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "SparseSvmTrainer",
+    "file_name": "SPARSESVMTRAINER.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "StringSimilarity",
+    "file_name": "STRINGSIMILARITY.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "SvmModelPrinter",
+    "file_name": "SVMMODELPRINTER.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "JSONParser",
+    "file_name": "JSONPARSER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "TextClassifier",
+    "file_name": "TEXTCLASSIFIER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "TextClassifierEvaluator",
+    "file_name": "TEXTCLASSIFIEREVALUATOR.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "TextClassifierTrainer",
+    "file_name": "TEXTCLASSIFIERTRAINER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "TextMorph",
+    "file_name": "TEXTMORPH.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "TextTagging",
+    "file_name": "TEXTTAGGING.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "Apache_Log_Parser",
+    "file_name": "APACHE_LOG_PARSER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "Text_Parser",
+    "file_name": "TEXT_PARSER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "TF",
+    "file_name": "TF.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "TF_IDF",
+    "file_name": "TF_IDF.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "Tokenize",
+    "file_name": "TOKENIZE.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "TrainNamedEntityFinder",
+    "file_name": "TRAINNAMEDENTITYFINDER.json"
+  },
+  {
+    "category": "Text Analysis",
+    "function_name": "TrainSentimentExtractor",
+    "file_name": "TRAINSENTIMENTEXTRACTOR.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "Unpack",
+    "file_name": "UNPACK.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "Unpivot",
+    "file_name": "UNPIVOT.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "URIPack",
+    "file_name": "URIPACK.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "URIUnpack",
+    "file_name": "URIUNPACK.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "VectorDistance",
+    "file_name": "VECTORDISTANCE.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "VWAP",
+    "file_name": "VWAP.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "WMAVG",
+    "file_name": "WMAVG.json"
+  },
+  {
+    "category": "Association Analysis",
+    "function_name": "WSRecommenderReduce",
+    "file_name": "WSRECOMMENDERREDUCE.json"
+  },
+  {
+    "category": "Association Analysis",
+    "function_name": "WSRecommender",
+    "file_name": "WSRECOMMENDER.json"
+  },
+  {
+    "category": "Statistical Analysis",
+    "function_name": "ConfusionMatrixPlot",
+    "file_name": "CONFUSIONMATRIXPLOT.json"
+  },
+  {
+    "category": "Data Transformation",
+    "function_name": "XMLRelation",
+    "file_name": "XMLRELATION.json"
+  },
+  {
+    "category": "Time Series Analysis",
+    "function_name": "nPath",
+    "file_name": "NPATH.json"
+  }
+]
