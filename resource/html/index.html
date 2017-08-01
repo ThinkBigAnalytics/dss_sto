@@ -90,10 +90,10 @@
                 <!--Add checkbox-->
                 <td>
 
-                  Use SQL ON Clause: <input type="checkbox" ng-model="config.function.useSQLOnClause"></input>
+                  <input type="checkbox" ng-model="config.function.useSQLOnClause"></input> Use SQL ON Clause 
                   <div ng-if='!config.function.useSQLOnClause'>
                     <p class="inner-label">Input Table</p>
-                    <input required ng-model="config.function.sql_on_clause" type="text" data-container="body" data-html="true" title="Input Table"
+                    <input required ng-model="config.function.input_table" type="text" data-container="body" data-html="true" title="Input Table"
                       data-placement="right" />
                   </div>
                   <div ng-if='config.function.useSQLOnClause'>
@@ -115,19 +115,32 @@
               <tr>
                 <td>Script</td>
                 <td>
-                  <div>
+
+                  <input type="checkbox" ng-model="config.function.replace_script"></input> Replace Script
+
+
+                  <div class="inner-cell">
+                    <p class="inner-label">Script Location</p>
+                    <select required ng-model="config.function.script_location" data-container="body" data-placement="right" data-html="true">
+                      <option value="" selected>--No Selection--</option>
+                      <option value="sz" selected>Teradata Server</option>
+                      <option value="cz" selected>Dataiku Managed Folder</option>
+                  </select>
+                  </div>
+
+                  <div class="inner-cell">
                     <p class="inner-label">Script Alias</p>
                     <input required ng-model="config.function.script_alias" type="text" data-container="body" data-html="true" title="Script Alias"
                       data-placement="right" />
                   </div>
 
-                  <div>
+                  <div class="inner-cell">
                     <p class="inner-label">Script Filename</p>
                     <input required ng-model="config.function.script_filename" type="text" data-container="body" data-html="true" title="Script Filename"
                       data-placement="right" />
                   </div>
 
-                  <div>
+                  <div class="inner-cell">
                     <p class="inner-label">Script File Location</p>
                     <input required ng-model="config.function.script_filelocation" type="text" data-container="body" data-html="true" title="Script File Location"
                       data-placement="right" />
@@ -157,7 +170,7 @@
               <tr>
                 <td>Returns Clause</td>
                 <td>
-                  <input required ng-model="config.function.schema" type="text" data-container="body" data-html="true" title="Schema" data-placement="right"
+                  <input required ng-model="config.function.return_clause" type="text" data-container="body" data-html="true" title="Schema" data-placement="right"
                   />
                 </td>
               </tr>
@@ -351,15 +364,15 @@
     </div>
 
   </div>
-  <!--End ng-controller->
+  <!--End ng-controller0-->
 
 </div>
-
-<div id="dialog" data-html="true" title="Dialog" style="display: none">
+    
+ <div id="dialog" data-html="true" title="Dialog" style="display: none">
   <pre class="content">Dialog</pre>
   <div class="other"></div>
 </div>
 
 <div id="dialog-validation" data-html="true" title="Invalid recipe inputs" style="display: none">
   <div class="content"></div>
-</div>
+</div> 

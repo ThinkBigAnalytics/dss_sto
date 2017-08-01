@@ -215,26 +215,6 @@
       },
 
       /**
-       * Checks if function is a driver function
-       */
-      checkIfDriverFunction: function () {
-        // $delay(() => {
-        // console.log($scope.config.function.function_version ? $scope.config.function.function_version : '');
-        // console.log(functionVersion);
-        console.log('Checking if  driver function');
-        console.log(functionMetadata.function_type.toUpperCase());
-        if (functionMetadata.function_type.toUpperCase() == 'DRIVER') {
-          console.log('true');
-          return true;
-        } else {
-          console.log('false')
-          return false;
-        }
-
-        // })
-      },
-
-      /**
        * Gets the description of the given argument from the static JSON metadata.
        */
       getArgumentDescription: function (i) {
@@ -762,6 +742,9 @@
        */
       initialize: function () {
         console.log('Did this even run?');
+        console.log($scope);
+        console.log($scope.inputs);
+        console.log($scope.filepath);
         $scope.communicateWithBackend();
         // if ($scope.config.function) {
         //   $scope.getFunctionMetadata($scope.config.function.name);
@@ -785,6 +768,7 @@
     })
 
     $scope.initialize();
+
 
   });
 

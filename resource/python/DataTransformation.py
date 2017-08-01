@@ -86,17 +86,26 @@ def do(payload, config, plugin_config, inputs):
     #         logging.info("file is not valid json");
 
     # # Get input table metadata.
-    # input_table_name = inputs[0]['fullName'].split('.')[1]
-    # input_dataset =  dataiku.Dataset(input_table_name)
-    # schema = input_dataset.read_schema()
-    
+    print('Inputs?')
+    print(inputs)
+    inputfoldername = inputs[1]['fullName'].split('.')[1]
+    input_folder =  dataiku.Folder(inputfoldername)
+    print('inputfoldername')
+    print(inputfoldername)
+    filepath = input_folder.file_path('ex2p.py')
+    print('filepath')
+    print(filepath)
+    folderpath = input_folder.get_path()
+    print('Folder path')
+    print(folderpath)
+    # console.log('This should error')
     # inputschemas = {}
     # for inputdataset in inputs:
     #     inputtablename = inputdataset['fullName'].split('.')[1]
     #     inputdataset = dataiku.Dataset(inputtablename)
     #     inputschemas[inputtablename] = inputdataset.read_schema()
-        
+    #     console.log('Input Table name')     
+    #     console.log(inputtablename)
 
-    # return {'choices' : choices, 'schema': schema, 'inputs': inputs, 'inputschemas': inputschemas}
-
-    return {}
+    # return {'choices' : choices, 'schema': schema,x`` 'inputs': inputs, 'inputschemas': inputschemas}
+    return {'inputfoldername': inputfoldername, 'filepath': filepath}

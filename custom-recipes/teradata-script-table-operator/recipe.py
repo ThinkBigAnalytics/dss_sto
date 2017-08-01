@@ -24,9 +24,16 @@ input_A_names = get_input_names_for_role('main')
 # The dataset objects themselves can then be created like this:
 input_A_datasets = [dataiku.Dataset(name) for name in input_A_names]
 
+# To  retrieve the datasets of an input role named 'input_A' as an array of dataset names:
+input_B_names = get_input_names_for_role('sto_scripts')
+# The dataset objects themselves can then be created like this:
+input_B_datasets = [dataiku.Dataset(name) for name in input_B_names]
+
 # For outputs, the process is the same:
 output_A_names = get_output_names_for_role('main')
 output_A_datasets = [dataiku.Dataset(name) for name in output_A_names]
+
+
 
 
 # The configuration consists of the parameters set up by the user in the recipe Settings tab.
@@ -57,6 +64,7 @@ function_config = get_recipe_config().get('function', None)
 # -*- coding: utf-8 -*-
 import dataiku
 import pandas as pd, numpy as np
+import os
 from dataiku import pandasutils as pdu
 from dataiku.core.sql import SQLExecutor2
 
@@ -64,23 +72,62 @@ print('Checks')
 print(function_config)
 print(output_A_names)
 print(output_A_datasets)
+# print(get_output_names())
+
+# print('Starting handle')
+handle = dataiku.Folder("sto_scripts")
+# filepath = handle.file_path("ex2p.py")
+filepath = "/home/aagdcph/ex2p.py"
+# filepath ="/home/dataiku/dss_data/managed_folders/DT186022_TEST/kA2too62/"
+print(filepath) 
+# path = handle.get_path()
+
+# print('Check folder directory')
+# print(handle)
+# print(path)
+# print("Stuff")
+# print(os.listdir("/home/dataiku/dss_data/managed_folders/DT186022_TEST/kA2too62/"))
+
+
+# print(jsonfile)
 # Recipe inputs
-empty_table = dataiku.Dataset("empty_table")
-empty_table_df = empty_table.get_dataframe()
+# empty_table = dataiku.Dataset("empty_table")
+empty_table = input_A_datasets[0]
+print("Location info")
+output_location = output_A_datasets[0].get_location_info()['info']
+print(output_location)
+# print(output_A_datasets[0].get_location_info()['info'])
+print(output_location.get('schema'))
+print(output_location.get('table'))
+# empty_table_df = empty_table.get_dataframe()
+
+print("Past empty table")
+
+scriptAlias = function_config.get('script_alias')
+scriptFileName = function_config.get('script_filename')
+scriptLocation = function_config.get('script_location')
+scriptFileLocation = function_config.get('script_filelocation')
+commandType = function_config.get('command_type')
+returnClause = function_config.get('return_clause')
+scriptArguments = function_config.get('arguments')
+
 
 # select query
 setSessionQuery = 'SET SESSION SEARCHUIFDBPATH = aagdcph;'
 etQuery = 'COMMIT WORK;'
-removeFileQuery = """CALL SYSUIF.REMOVE_FILE('""" + function_config.get('script_alias') + """',1);"""
-installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + function_config.get('script_alias') + """','""" + function_config.get('script_filename') + """','sz!/home/aagdcph/ex2p.py');"""
-replaceFileQuery = """CALL SYSUIF.REPLACE_FILE('""" + function_config.get('script_alias') + """','""" + function_config.get('script_filename') + """','sz!/home/aagdcph/ex2p.py');"""
+removeFileQuery = """CALL SYSUIF.REMOVE_FILE('""" + scriptAlias + """',1);"""
+# installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + function_config.get('script_alias') + """','""" + function_config.get('script_filename') + """','cz!"""+filepath+"""');"""
+installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + scriptAlias + """','""" + scriptFileName + """','"""+scriptLocation+"""!"""+scriptFileLocation+"""');"""
+
+#sz if in DB
+replaceFileQuery = """CALL SYSUIF.REPLACE_FILE('""" + scriptAlias + """','""" + scriptFileName + """','"""+scriptLocation+"""!"""+scriptFileLocation+"""', 0);"""
 createOutputTableQuery = """CREATE TABLE aagdcph.DT186022_TEST_pythonrecipe_out AS (
 SELECT COUNT(*) AS nSims,
        AVG(CAST (oc1 AS INT)) AS AvgCustomers, 
        AVG(CAST (oc2 AS INT)) AS AvgReneged,
        AVG(CAST (oc3 AS FLOAT)) AS AvgWaitTime
 FROM SCRIPT (ON (SELECT * FROM ex2tbl) 
-             SCRIPT_COMMAND('export PATH; """ + function_config.get('command_type') + """ ./aagdcph/ex2p.py 4 5 10 6 480')
+             SCRIPT_COMMAND('export PATH; """ + commandType + """ ./aagdcph/"""+scriptFileName+""" 4 5 10 6 480')
              RETURNS ('oc1 VARCHAR(10), oc2 VARCHAR(10), oc3 VARCHAR(18)')
             )) WITH DATA;"""
 scriptDoesExist = """select * from dbc.tables
@@ -100,18 +147,26 @@ SELECT COUNT(*) AS nSims,
        AVG(CAST (oc2 AS INT)) AS AvgReneged,
        AVG(CAST (oc3 AS FLOAT)) AS AvgWaitTime
 FROM SCRIPT (ON (SELECT * FROM ex2tbl) 
-             SCRIPT_COMMAND('export PATH; """ + function_config.get('command_type') + """ ./aagdcph/ex2p.py 4 5 10 6 480')
+             SCRIPT_COMMAND('export PATH; """ + commandType + """ ./aagdcph/ex2p.py 4 5 10 6 480')
              RETURNS ('oc1 VARCHAR(10), oc2 VARCHAR(10), oc3 VARCHAR(18)')
             );"""
+print("Output names")
+print(output_A_names[0])
+
+if useSQLOnClause:
+    onClause = function_config.get('sql_on_clause')
+else:
+    onClause = """SELECT * FROM """ + function_config.get('input_table')
+
+
 createTableQuery = """CREATE TABLE aagdcph.DT186022_TEST_pythonrecipe_out AS (
-SELECT COUNT(*) AS nSims,
-       AVG(CAST (oc1 AS INT)) AS AvgCustomers, 
-       AVG(CAST (oc2 AS INT)) AS AvgReneged,
-       AVG(CAST (oc3 AS FLOAT)) AS AvgWaitTime
-FROM SCRIPT (ON (SELECT * FROM ex2tbl) 
-             SCRIPT_COMMAND('export PATH; """ + function_config.get('command_type') + """ ./aagdcph/ex2p.py 4 5 10 6 480')
-             RETURNS ('oc1 VARCHAR(10), oc2 VARCHAR(10), oc3 VARCHAR(18)')
+SELECT *
+FROM SCRIPT (ON ("""+onClause+""") 
+             SCRIPT_COMMAND('export PATH; """ + commandType + """ ./aagdcph/"""+scriptFileName+""" """+scriptArguments+"""')
+             RETURNS ('"""+returnClause+"""')
             )) WITH DATA;"""
+
+            # RETURNS ('"""oc1 VARCHAR(10), oc2 VARCHAR(10), oc3 VARCHAR(18)"""')
 # some helper function
 def getFunctionQuery(inputDataset, outputDataset):
     return [setSessionQuery,
@@ -122,9 +177,10 @@ def getFunctionQuery(inputDataset, outputDataset):
 def getReplaceFunctionQuery():
     return [setSessionQuery,
             etQuery,
-            removeFileQuery,
-            etQuery,
-            installFileQuery,
+            # removeFileQuery,
+            # etQuery,
+            # installFileQuery,
+            replaceFileQuery,
             etQuery]
 
 def getSelectTableQuery(inputDataset, inputTableName):
@@ -135,9 +191,12 @@ and TableKind = 'T';""".format(dataset=inputDataset, table=inputTableName)
     
 
 # actual query
+print("Actual query")
 query = getFunctionQuery(empty_table, None)
+# query = getFunctionQuery(input_A_datasets[0], None)
 print(query)
 executor = SQLExecutor2(dataset=empty_table)
+# executor = SQLExecutor2(dataset=input_A_datasets[0])
 
 existingtable = executor.query_to_df(getSelectTableQuery("'aagdcph'", "'DT186022_TEST_pythonrecipe_out'"))
 print(len(existingtable.index))
@@ -145,9 +204,12 @@ if len(existingtable.index):
     executor.query_to_df('COMMIT WORK',['DROP TABLE aagdcph.DT186022_TEST_pythonrecipe_out']);
 existingScript = executor.query_to_df(scriptDoesExist);
 if len(existingScript.index):
-    query = getReplaceFunctionQuery()
+    if function_config.get("replace_script"):
+        query = getReplaceFunctionQuery()
+    else:
+        query = getFunctionQuery(input_A_datasets[0], None)
 else:
-    query = getFunctionQuery(empty_table, None) 
+    query = getFunctionQuery(input_A_datasets[0], None) 
 lenquery = len(query) - 1
 executor.query_to_df(query[lenquery], query[-lenquery:])
 executor.query_to_df('COMMIT WORK', ['SET SESSION SEARCHUIFDBPATH = aagdcph;', createTableQuery])

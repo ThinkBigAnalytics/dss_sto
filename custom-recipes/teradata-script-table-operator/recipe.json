@@ -1,32 +1,36 @@
 // This file is the descriptor for the Custom code recipe KC_TestPlugins_compute_pythonrecipe_out
 {
     // Meta data for display purposes
-    "meta" : {
-        "label" : "Teradata Script Table Operator",
-        "author" : "Me",
-        "tags" : ["myrecipe", "dev"]
+    "meta": {
+        "label": "Teradata Script Table Operator",
+        "author": "Me",
+        "tags": [
+            "myrecipe",
+            "dev"
+        ]
     },
-
-    "kind" : "PYTHON",
-
+    "kind": "PYTHON",
     // Inputs and outputs are defined by roles. In the recipe's I/O tab, the user can associate one
     // or more dataset to each input and output role.
-
     // The "arity" field indicates whether the user can associate several datasets to the role ('NARY')
     // or at most one ('UNARY'). The "required" field indicates whether the user is allowed to
     // associate no dataset with the role.
-
-    "inputRoles" : [
+    "inputRoles": [
         {
             "name": "main",
             "arity": "NARY",
             "required": true,
             "acceptsDataset": true
+        },
+        {
+            "name": "sto_scripts",
+            "arity": "NARY",
+            "required": true,
+            "acceptsDataset": true,
+            "acceptsManagedFolder": true
         }
     ],
-
-   
-    "outputRoles" : [
+    "outputRoles": [
         {
             "name": "main",
             "arity": "UNARY",
@@ -34,13 +38,10 @@
             "acceptsDataset": true
         }
     ],
-
     // The field "params" holds a list of all the params
     // for wich the user will be prompted for values in the Settings tab of the recipe.
-
     // The available parameter types are:
     // STRING, INT, DOUBLE, BOOLEAN, PASSWORD, SELECT, MAP, COLUMN, COLUMNS, TEXTAREA
-
     "params": [
         // {
         //     "name": "function",
@@ -50,7 +51,6 @@
         //     "description":"Column storing function name",
         //     "mandatory" : true
         // },
-
         // A "SELECT" parameter is a multi-choice selector. Choices are specified using the selectChoice field
         {
             "name": "parameter3",
@@ -63,27 +63,22 @@
                 {
                     "value": "val_y",
                     "label": "display name for val_y"
-                },
+                }
             ]
         },
-
         // A 'COLUMN' parameter is a string, whose value is a column name from an input schema.
         // To specify the input schema whose column names are used, use the "columnRole" field like below.
         // The column names will come from the schema of the first dataset associated to that role.
         {
             "name": "parameter4",
             "type": "COLUMN",
-            "columnRole":"input_B_role"
+            "columnRole": "input_B_role"
         }
-
         // The 'COLUMNS' type works in the same way, except that it is a list of strings.
     ],
-
-    "readable" : true,
-    "writable" : false,
+    "readable": true,
+    "writable": false,
     "paramsTemplate": "html/index.html",
-    "paramsModule" : "teradataSTO.module",
-    "paramsPythonSetup" : "python/DataTransformation.py"
-
-
+    "paramsModule": "teradataSTO.module",
+    "paramsPythonSetup": "python/DataTransformation.py"
 }
