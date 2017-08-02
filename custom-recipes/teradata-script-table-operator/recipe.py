@@ -110,6 +110,12 @@ scriptFileLocation = function_config.get('script_filelocation')
 commandType = function_config.get('command_type')
 returnClause = function_config.get('return_clause')
 scriptArguments = function_config.get('arguments')
+database = 'aagdcph'
+script_command = ''
+if commandType == 'python':
+    script_command = """'export PATH; python ./"""+database+"""/"""+scriptFileName+""" """+scriptArguments+"""'"""
+elif commandType == 'r':
+    script_command = """'R --vanilla --slave -f ./"""+database+"""/"""+scriptFileName+"""'"""
 
 
 # select query
@@ -147,11 +153,12 @@ SELECT COUNT(*) AS nSims,
        AVG(CAST (oc2 AS INT)) AS AvgReneged,
        AVG(CAST (oc3 AS FLOAT)) AS AvgWaitTime
 FROM SCRIPT (ON (SELECT * FROM ex2tbl) 
-             SCRIPT_COMMAND('export PATH; """ + commandType + """ ./aagdcph/ex2p.py 4 5 10 6 480')
+             SCRIPT_COMMAND("""'export PATH; """ + commandType + """ ./aagdcph/ex2p.py 4 5 10 6 480'""")
              RETURNS ('oc1 VARCHAR(10), oc2 VARCHAR(10), oc3 VARCHAR(18)')
             );"""
 print("Output names")
 print(output_A_names[0])
+useSQLOnClause = function_config.get('useSQLOnClause')
 
 if useSQLOnClause:
     onClause = function_config.get('sql_on_clause')
@@ -162,7 +169,7 @@ else:
 createTableQuery = """CREATE TABLE aagdcph.DT186022_TEST_pythonrecipe_out AS (
 SELECT *
 FROM SCRIPT (ON ("""+onClause+""") 
-             SCRIPT_COMMAND('export PATH; """ + commandType + """ ./aagdcph/"""+scriptFileName+""" """+scriptArguments+"""')
+             SCRIPT_COMMAND("""+script_command+""")
              RETURNS ('"""+returnClause+"""')
             )) WITH DATA;"""
 
@@ -216,7 +223,7 @@ executor.query_to_df('COMMIT WORK', ['SET SESSION SEARCHUIFDBPATH = aagdcph;', c
 #executor.query_to_df('\n'.join(query))
 
 # Recipe outputs
-nQuery = """SELECT * FROM {} SAMPLE 10;""".format('aagdcph.DT186022_TEST_pythonrecipe_out')
+nQuery = """SELECT * FROM {};""".format('aagdcph.DT186022_TEST_pythonrecipe_out')
 selectResult = executor.query_to_df(nQuery);
 pythonrecipe_out = output_A_datasets[0]
 pythonrecipe_out.write_with_schema(selectResult)

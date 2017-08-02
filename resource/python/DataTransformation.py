@@ -86,8 +86,12 @@ def do(payload, config, plugin_config, inputs):
     #         logging.info("file is not valid json");
 
     # # Get input table metadata.
-    print('Inputs?')
+    # inputnames = get_input_names_for_role('main')
+
+    # print('Inputs?')
     print(inputs)
+    inputtablename = inputs[0]['fullName'].split('.')[0]
+    print(inputtablename)
     inputfoldername = inputs[1]['fullName'].split('.')[1]
     input_folder =  dataiku.Folder(inputfoldername)
     print('inputfoldername')
@@ -108,4 +112,4 @@ def do(payload, config, plugin_config, inputs):
     #     console.log(inputtablename)
 
     # return {'choices' : choices, 'schema': schema,x`` 'inputs': inputs, 'inputschemas': inputschemas}
-    return {'inputfoldername': inputfoldername, 'filepath': filepath}
+    return {'inputfoldername': inputfoldername, 'filepath': filepath, 'inputs': inputs}
