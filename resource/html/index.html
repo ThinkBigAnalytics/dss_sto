@@ -61,7 +61,7 @@
       <div id="tabs">
         <ul>
           <li><a href="#tabs-execution">Script Execution Arguments</a></li>
-          <!-- <li><a href="#tabs-loading">Script Loading Arguments</a></li> -->
+          <li><a href="#tabs-loading">Additional Files</a></li>
         </ul>
 
         <div id="tabs-execution">
@@ -91,7 +91,7 @@
                 <td>
                   <div class="inner-cell">
                     <p class="inner-label">SQL ON Clause</p>
-                  <input type="checkbox" ng-model="config.function.useSQLOnClause"></input> Use SQL ON Clause
+                    <input type="checkbox" ng-model="config.function.useSQLOnClause"></input> Use SQL ON Clause
                   </div>
 
                   <div class="inner-cell" ng-if='!config.function.useSQLOnClause'>
@@ -184,28 +184,59 @@
 
         </div>
 
-        <!-- <div id="tabs-loading">
+        <div id="tabs-loading">
 
           <table class="table table-condensed table-hover" ng-model-options="{ debounce: 200 }">
 
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Value</th>
+                <th>File Alias</th>
+                <th>File Details</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr>
-                 <td>Replace Script</td>
-                <td> 
-                 </td> 
+              <tr ng-repeat="file in config.function.files">
+                <!--Add support for repeating based on size of thingy  -->
+                <td>
+                  <div class="inner-cell">
+                    <p class="inner-label">File Alias</p>
+                    <input required ng-model="file.file_alias" type="text" data-container="body" data-html="true" title="File Alias" data-placement="right"
+                    />
+                  </div>
+                  <button ng-click="removeFile($index)">Remove File</button>
+                </td>
+                <td>
+                  <div class="inner-cell">
+                    <p class="inner-label">File Name</p>
+                    <input required ng-model="file.filename" type="text" data-container="body" data-html="true" title="Filename" data-placement="right"
+                    />
+                  </div>                  
+                  <div class="inner-cell">
+                    <p class="inner-label">File Location</p>
+                    <input required ng-model="file.file_location" type="text" data-container="body" data-html="true" title="File Location" data-placement="right"
+                    />
+                  </div>
+                  <div class="inner-cell">
+                    <p class="inner-label">File Details</p>
+                    <p class="inner-label">File Location</p>
+                    <select required ng-model="file.script_location" data-container="body" data-placement="right" data-html="true">                      
+                      <option value="s" selected>Teradata Server</option>
+                      <option value="c" selected>Dataiku Managed Folder</option>
+                  </select>
+                    <p class="inner-label">File Format</p>                    
+                    <select required ng-model="file.script_fileformat" data-container="body" data-placement="right" data-html="true">                      
+                      <option value="s" selected>Text File</option>
+                      <option value="c" selected>Binary File</option>
+                  </select>
+                  </div>
+                </td>
               </tr>
             </tbody>
-
+            <button style="align:right" ng-click="addMoreFilesClick()">Add More Files</button>
           </table>
 
-        </div> -->
+        </div>
         <!--End optional-->
       </div>
 

@@ -79,6 +79,8 @@
      */
     const LISTEN_INTERVAL = 50;
 
+    let fileArraySize = 0;
+
     /**
      * Object keys that are repeatedly used in this script.
      */
@@ -170,6 +172,22 @@
         //     $scope.activateTooltips();
         //   })
 
+      },
+
+      addMoreFilesClick: function () {
+
+        $scope.config.function.files.push({});
+        fileArraySize = $scope.config.function.files.length;
+        console.log('This button was clicked');
+        console.log(fileArraySize);
+        console.log($scope.config.function.files);
+
+      },
+
+      removeFile: function (index) {
+        if (index > -1) {
+          $scope.config.function.files.splice(index, 1);
+        }
       },
 
       /**
@@ -277,20 +295,20 @@
         var tableNameAliases = [];
         tableNameAliases.push(tableNameAlias);
         functionMetadata.argument_clauses.map(argument => {
-          if(argument.name.toUpperCase() === tableNameAlias){
-            if(KEYS.ALTERNATE_NAMES in argument){
-              argument.alternateNames.map(function(altname) {tableNameAliases.push(altname);})
+          if (argument.name.toUpperCase() === tableNameAlias) {
+            if (KEYS.ALTERNATE_NAMES in argument) {
+              argument.alternateNames.map(function (altname) { tableNameAliases.push(altname); })
             }
             console.log('tableNameAliases');
             console.log(tableNameAliases);
             // tableNameAliases.push(argument.name.toUpperCase());
-            
+
           }
         })
         let potentialMatches = argumentsList
-            .filter(arg => tableNameAliases.includes(arg.name.toUpperCase()));
+          .filter(arg => tableNameAliases.includes(arg.name.toUpperCase()));
         // .filter(arg => tableNameAlias.toUpperCase() === arg.name.toUpperCase());
-          // .filter(arg => [KEYS.INPUT_TABLE, KEYS.INPUT_TABLE_ALTERNATIVE].includes(arg.name.toUpperCase()));
+        // .filter(arg => [KEYS.INPUT_TABLE, KEYS.INPUT_TABLE_ALTERNATIVE].includes(arg.name.toUpperCase()));
         console.log('Find tablename');
         console.log(potentialMatches);
         console.log(argumentsList);
@@ -330,13 +348,13 @@
           console.log('Table name');
           console.log(targetTableAlias);
           // const isAliased = KEYS.INPUT_TABLE !== targetTableAlias;
-          if (aliasedInputsList !== []){
+          if (aliasedInputsList !== []) {
             isAliasedInputsPopulated = true;
             aliasedInputsList.map((input) => {
               if (input.name.toUpperCase() === targetTableAlias.toUpperCase()) {
                 console.log('true');
                 isInAliasedInputsList = true;
-              }                            
+              }
             }
             )
           } else {
@@ -364,7 +382,7 @@
             //console.log(unaliasedInputsList);
             if (unaliasedInputsList.count && unaliasedInputsList.values && unaliasedInputsList.values.length) {
               console.log('Went to unaliased');
-              
+
               targetTableName = unaliasedInputsList.values[0];
               //console.log(targetTableName);
             }
@@ -662,9 +680,9 @@
       activateUi: function () {
 
         $delay(() => {
-        console.log('I can actually run');
+          console.log('I can actually run');
           $scope.initializeBootstrap();
-          
+
           $scope.activateCosmeticImprovements();
           $scope.activateTabs();
           $scope.activateMultiTagsInput();
@@ -745,6 +763,13 @@
         console.log($scope);
         console.log($scope.inputs);
         console.log($scope.filepath);
+        if ($scope.config.function.files == undefined || $scope.config.function.files == null) {
+          $scope.config.function.files = []
+          fileArraySize = $scope.config.function.files.length;
+          console.log(fileArraySize)
+
+        }
+
         $scope.communicateWithBackend();
         // if ($scope.config.function) {
         //   $scope.getFunctionMetadata($scope.config.function.name);
