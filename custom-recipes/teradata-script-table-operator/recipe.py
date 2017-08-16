@@ -110,6 +110,8 @@ scriptFileLocation = function_config.get('script_filelocation')
 commandType = function_config.get('command_type')
 returnClause = function_config.get('return_clause')
 scriptArguments = function_config.get('arguments')
+additionalFiles = function_config.get('files')
+
 database = 'aagdcph'
 script_command = ''
 if commandType == 'python':
@@ -117,16 +119,23 @@ if commandType == 'python':
 elif commandType == 'r':
     script_command = """'R --vanilla --slave -f ./"""+database+"""/"""+scriptFileName+"""'"""
 
+#INSTALL Additional files
+installAdditionalFiles = """"""
+for item in additionalFiles:
+    if replace_file:
+        installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.REPLACE_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('file_address').rstrip()+"""',0);"""        
+    else:
+        installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('file_address').rstrip()+"""');"""
 
 # select query
 setSessionQuery = 'SET SESSION SEARCHUIFDBPATH = aagdcph;'
 etQuery = 'COMMIT WORK;'
 removeFileQuery = """CALL SYSUIF.REMOVE_FILE('""" + scriptAlias + """',1);"""
 # installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + function_config.get('script_alias') + """','""" + function_config.get('script_filename') + """','cz!"""+filepath+"""');"""
-installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + scriptAlias + """','""" + scriptFileName + """','"""+scriptLocation+"""!"""+scriptFileLocation+"""');"""
+installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + scriptAlias + """','""" + scriptFileName + """','"""+scriptLocation+"""!"""+scriptFileLocation.rstrip()+"""');"""
 
 #sz if in DB
-replaceFileQuery = """CALL SYSUIF.REPLACE_FILE('""" + scriptAlias + """','""" + scriptFileName + """','"""+scriptLocation+"""!"""+scriptFileLocation+"""', 0);"""
+replaceFileQuery = """CALL SYSUIF.REPLACE_FILE('""" + scriptAlias + """','""" + scriptFileName + """','"""+scriptLocation+"""!"""+scriptFileLocation.rstrip()+"""', 0);"""
 createOutputTableQuery = """CREATE TABLE aagdcph.DT186022_TEST_pythonrecipe_out AS (
 SELECT COUNT(*) AS nSims,
        AVG(CAST (oc1 AS INT)) AS AvgCustomers, 
@@ -176,13 +185,15 @@ FROM SCRIPT (ON ("""+onClause+""")
             # RETURNS ('"""oc1 VARCHAR(10), oc2 VARCHAR(10), oc3 VARCHAR(18)"""')
 # some helper function
 def getFunctionQuery(inputDataset, outputDataset):
-    return [setSessionQuery,
+    return [installAdditionalFiles,
+            setSessionQuery,
             etQuery,
             installFileQuery,
             etQuery]
 
 def getReplaceFunctionQuery():
-    return [setSessionQuery,
+    return [installAdditionalFiles,
+            setSessionQuery,
             etQuery,
             # removeFileQuery,
             # etQuery,

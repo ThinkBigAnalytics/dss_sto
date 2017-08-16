@@ -164,10 +164,10 @@
               </tr>
 
               <tr>
-                <td>Arguments</td>
+                <td>Script Arguments</td>
                 <td>
-                  <input required ng-model="config.function.arguments" type="text" data-container="body" data-html="true" title="Script Arguments"
-                    data-placement="right" />
+                  <input ng-model="config.function.arguments" type="text" data-container="body" data-html="true" title="Script Arguments" data-placement="right"
+                  />
                 </td>
               </tr>
 
@@ -211,24 +211,32 @@
                     <p class="inner-label">File Name</p>
                     <input required ng-model="file.filename" type="text" data-container="body" data-html="true" title="Filename" data-placement="right"
                     />
-                  </div>                  
+                  </div>
                   <div class="inner-cell">
-                    <p class="inner-label">File Location</p>
-                    <input required ng-model="file.file_location" type="text" data-container="body" data-html="true" title="File Location" data-placement="right"
+                    <p class="inner-label">File Address</p>
+                    <input required ng-model="file.file_address" type="text" data-container="body" data-html="true" title="File Location" data-placement="right"
                     />
                   </div>
                   <div class="inner-cell">
                     <p class="inner-label">File Details</p>
-                    <p class="inner-label">File Location</p>
-                    <select required ng-model="file.script_location" data-container="body" data-placement="right" data-html="true">                      
+                    <div class="inner-cell">
+                      <p class="inner-label">File Location</p>
+                      <select required ng-model="file.file_location" data-container="body" data-placement="right" data-html="true">                      
                       <option value="s" selected>Teradata Server</option>
                       <option value="c" selected>Dataiku Managed Folder</option>
-                  </select>
-                    <p class="inner-label">File Format</p>                    
-                    <select required ng-model="file.script_fileformat" data-container="body" data-placement="right" data-html="true">                      
-                      <option value="s" selected>Text File</option>
-                      <option value="c" selected>Binary File</option>
-                  </select>
+                      </select>
+                    </div>
+                    <div class="inner-cell">
+                      <p class="inner-label">File Format</p>
+                      <select required ng-model="file.file_format" data-container="body" data-placement="right" data-html="true">                      
+                        <option value="s" selected>Text File</option>
+                        <option value="c" selected>Binary File</option>
+                      </select>
+                    </div>
+                    <div class="inner-cell">
+                      <p class="inner-label">Replace File</p>
+                      <input type="checkbox" ng-model="file.replace_file"></input> Replace Current Script
+                    </div>
                   </div>
                 </td>
               </tr>
