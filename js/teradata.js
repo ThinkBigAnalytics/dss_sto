@@ -523,7 +523,8 @@
 
         //console.log(functionVersion);
         //console.log($scope.config.function.function_version);
-        // $scope.config.function.function_version = functionVersion;
+        // $scope.config.function.function_version = functionVersion;        
+          
         console.log('Checking scope config');
         console.log($scope.config);
         runFunction();
@@ -762,7 +763,7 @@
         console.log('Did this even run?');
         console.log($scope);
         console.log($scope.inputs);
-        console.log($scope.filepath);
+        // console.log($scope.filepath);
         if ($scope.config.function.files == undefined || $scope.config.function.files == null) {
           $scope.config.function.files = []
           fileArraySize = $scope.config.function.files.length;

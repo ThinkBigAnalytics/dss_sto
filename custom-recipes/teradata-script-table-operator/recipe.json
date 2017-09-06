@@ -18,15 +18,15 @@
     "inputRoles": [
         {
             "name": "main",
-            "arity": "NARY",
+            "arity": "UNARY",
             "required": true,
             "acceptsDataset": true
         },
         {
             "name": "sto_scripts",
-            "arity": "NARY",
+            "arity": "UNARY",
             "required": true,
-            "acceptsDataset": true,
+            "acceptsDataset": false,
             "acceptsManagedFolder": true
         }
     ],

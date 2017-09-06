@@ -93,15 +93,24 @@ def do(payload, config, plugin_config, inputs):
     inputtablename = inputs[0]['fullName'].split('.')[0]
     print(inputtablename)
     inputfoldername = inputs[1]['fullName'].split('.')[1]
-    input_folder =  dataiku.Folder(inputfoldername)
+    inputFolderLocation =  dataiku.Folder(inputfoldername)
+    # inputFolderDetails = []
+
+    
     print('inputfoldername')
     print(inputfoldername)
-    filepath = input_folder.file_path('ex2p.py')
+    filepath = inputFolderLocation.file_path('ex2p.py')
     print('filepath')
     print(filepath)
-    folderpath = input_folder.get_path()
+    folderpath = inputFolderLocation.get_path()
     print('Folder path')
     print(folderpath)
+    fileList = []
+    print('Reached here')
+    listdr = os.listdir(folderpath)
+    for item in listdr:
+        fileList.append(item)            
+        print(item)
     # console.log('This should error')
     # inputschemas = {}
     # for inputdataset in inputs:
@@ -112,4 +121,5 @@ def do(payload, config, plugin_config, inputs):
     #     console.log(inputtablename)
 
     # return {'choices' : choices, 'schema': schema,x`` 'inputs': inputs, 'inputschemas': inputschemas}
-    return {'inputfoldername': inputfoldername, 'filepath': filepath, 'inputs': inputs}
+    print('ending')
+    return {'inputfolder':folderpath, 'fileList':fileList,'inputs': inputs}

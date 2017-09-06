@@ -15,6 +15,9 @@ import dataiku
 # Import the helpers for custom recipes
 from dataiku.customrecipe import *
 
+#CALL Subprocess for BTEQ script
+from subprocess import call
+
 # Inputs and outputs are defined by roles. In the recipe's I/O tab, the user can associate one
 # or more dataset to each input and output role.
 # Roles need to be defined in recipe.json, in the inputRoles and outputRoles fields.
@@ -106,7 +109,12 @@ print("Past empty table")
 scriptAlias = function_config.get('script_alias')
 scriptFileName = function_config.get('script_filename')
 scriptLocation = function_config.get('script_location')
-scriptFileLocation = function_config.get('script_filelocation')
+
+if(scriptLocation == 'sz'):
+    scriptFileLocation = function_config.get('script_filelocation')
+else:
+    scriptFileLocation = handle.file_path(scriptFileName)
+
 commandType = function_config.get('command_type')
 returnClause = function_config.get('return_clause')
 scriptArguments = function_config.get('arguments')
@@ -122,7 +130,7 @@ elif commandType == 'r':
 #INSTALL Additional files
 installAdditionalFiles = """"""
 for item in additionalFiles:
-    if replace_file:
+    if item.get('replace_file'):
         installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.REPLACE_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('file_address').rstrip()+"""',0);"""        
     else:
         installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('file_address').rstrip()+"""');"""
@@ -188,12 +196,12 @@ def getFunctionQuery(inputDataset, outputDataset):
     return [installAdditionalFiles,
             setSessionQuery,
             etQuery,
-            installFileQuery,
+            #installFileQuery,
             etQuery]
 
 def getReplaceFunctionQuery():
     return [installAdditionalFiles,
-            setSessionQuery,
+            setSessionQuery,#Add UI option
             etQuery,
             # removeFileQuery,
             # etQuery,
@@ -201,12 +209,41 @@ def getReplaceFunctionQuery():
             replaceFileQuery,
             etQuery]
 
+            #Look for complex Orange book example
+            #Tabs for input, output, and script
+
 def getSelectTableQuery(inputDataset, inputTableName):
     return """select * from dbc.tables
 where databasename = {dataset}
 and TableName = {table}
 and TableKind = 'T';""".format(dataset=inputDataset, table=inputTableName)
     
+#PERFORM FILE LOADING
+if function_config.get("replace_script"):
+    bteqScript = """bteq << EOF 
+              .LOGON 153.64.211.111/aagdcph,aagdcph; 
+              """+setSessionQuery+"""         
+              """+installAdditionalFiles+"""   
+              """+replaceFileQuery+"""              
+              .QUIT
+              EOF"""
+else:
+    bteqScript = """bteq << EOF 
+              .LOGON 153.64.211.111/aagdcph,aagdcph;                 
+              """+setSessionQuery+"""          
+              """+installAdditionalFiles+"""  
+              """+installFileQuery+"""
+              .QUIT
+              EOF"""
+try:
+    exitValue = call([bteqScript],shell=True)
+    if(exitValue !=0):
+        print(exitValue)
+        raise RuntimeError('Error during BTEQ Loading, please check logs for more information')
+except Exception as error:
+    print('Error during BTEQ File loading. Please check the logs')
+    raise 
+
 
 # actual query
 print("Actual query")
@@ -220,16 +257,16 @@ existingtable = executor.query_to_df(getSelectTableQuery("'aagdcph'", "'DT186022
 print(len(existingtable.index))
 if len(existingtable.index):
     executor.query_to_df('COMMIT WORK',['DROP TABLE aagdcph.DT186022_TEST_pythonrecipe_out']);
-existingScript = executor.query_to_df(scriptDoesExist);
-if len(existingScript.index):
-    if function_config.get("replace_script"):
-        query = getReplaceFunctionQuery()
-    else:
-        query = getFunctionQuery(input_A_datasets[0], None)
-else:
-    query = getFunctionQuery(input_A_datasets[0], None) 
-lenquery = len(query) - 1
-executor.query_to_df(query[lenquery], query[-lenquery:])
+# existingScript = executor.query_to_df(scriptDoesExist);
+# if len(existingScript.index):
+#     if function_config.get("replace_script"):
+#         query = getReplaceFunctionQuery()
+#     else:
+#         query = getFunctionQuery(input_A_datasets[0], None)
+# else:
+#     query = getFunctionQuery(input_A_datasets[0], None) 
+# lenquery = len(query) - 1
+# executor.query_to_df(query[lenquery], query[-lenquery:])
 executor.query_to_df('COMMIT WORK', ['SET SESSION SEARCHUIFDBPATH = aagdcph;', createTableQuery])
 #executor.query_to_df('\n'.join(query))
 

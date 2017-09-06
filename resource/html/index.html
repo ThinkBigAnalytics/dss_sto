@@ -101,8 +101,8 @@
                   </div>
                   <div class="inner-cell" ng-if='config.function.useSQLOnClause'>
                     <p class="inner-label">ON Clause</p>
-                    <input required ng-model="config.function.sql_on_clause" type="text" data-container="body" data-html="true" title="On Clause"
-                      data-placement="right" />
+                    <textarea required ng-model="config.function.sql_on_clause" title="On Clause"
+                      ></textarea>
                   </div>
                 </td>
               </tr>
@@ -133,16 +133,23 @@
                       data-placement="right" />
                   </div>
 
-                  <div class="inner-cell">
+                  <div class="inner-cell" ng-if="config.function.script_location == 'sz'">
                     <p class="inner-label">Script Filename</p>
                     <input required ng-model="config.function.script_filename" type="text" data-container="body" data-html="true" title="Script Filename"
                       data-placement="right" />
                   </div>
 
-                  <div class="inner-cell">
+                  <div class="inner-cell" ng-if="config.function.script_location == 'sz'">
                     <p class="inner-label">Script File Location</p>
                     <input required ng-model="config.function.script_filelocation" type="text" data-container="body" data-html="true" title="Script File Location"
                       data-placement="right" />
+                  </div>
+
+                  <div class="inner-cell" ng-if="config.function.script_location == 'cz'">
+                    <p class="inner-label">Script Filename</p>
+                    <select required ng-model="config.function.script_filename" data-container="body" data-placement="right" data-html="true" ng-options="inputFile as inputFile for inputFile in fileList">
+                      <option value="" selected>--No Selection--</option>                      
+                  </select>
                   </div>
 
                   <div class="inner-cell">
