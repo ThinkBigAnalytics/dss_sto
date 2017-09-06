@@ -32,6 +32,7 @@
 
 .dss-page {
     background: url(/plugins/KC_TestPlugins/resource/img/aoa.jpg) !important;
+    background-size: cover !important;
 }
 
 .dss-page.cluster-analysis {
