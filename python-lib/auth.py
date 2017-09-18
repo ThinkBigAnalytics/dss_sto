@@ -11,6 +11,7 @@ Usage:
 
 from authconstants import *
 
+import dataiku
 from dataiku import customrecipe
 from binascii import hexlify, unhexlify
 from simplecrypt import encrypt, decrypt
@@ -19,6 +20,19 @@ import hashlib
 import hmac
 import base64
 
+def getCurrentConnectionName(inputDataset):
+    #input Dataset is the output of dataiku.Dataset("dataset name")
+    return inputDataset.get_location_info().get('info', {}).get('connectionName', '')
+
+def getUserFromConnectionName(name, inputDataset):
+    client = dataiku.api_client()
+    mydssconnection = client.get_connection(name)
+    connectiondef = mydssconnection.get_definition().get(name,{})
+    return connectiondef.get('params', {}).get('user', '')
+    
+def getConnectionUser(inputDataset):
+    name = getCurrentConnectionName(inputDataset)
+    return getUserFromConnectionName(name, inputDataset)  
 
 def getAuthFilePath(filename):
     try:
