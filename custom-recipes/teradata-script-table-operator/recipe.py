@@ -221,7 +221,7 @@ and TableKind = 'T';""".format(dataset=inputDataset, table=inputTableName)
 #PERFORM FILE LOADING
 if function_config.get("replace_script"):
     bteqScript = """bteq << EOF 
-              .LOGON 153.64.211.111/aagdcph,\$tdwallet(password_sto);
+              .LOGON 153.64.211.111/aagdcph,aagdcph;
               """+setSessionQuery+"""         
               """+installAdditionalFiles+"""   
               """+replaceFileQuery+"""              
@@ -229,7 +229,7 @@ if function_config.get("replace_script"):
               EOF"""
 else:
     bteqScript = """bteq << EOF 
-              .LOGON 153.64.211.111/aagdcph,\$tdwallet(password_sto);
+              .LOGON 153.64.211.111/aagdcph,aagdcph;
               """+setSessionQuery+"""          
               """+installAdditionalFiles+"""  
               """+installFileQuery+"""
