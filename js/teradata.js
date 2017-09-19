@@ -764,12 +764,10 @@
         console.log($scope);
         console.log($scope.inputs);
         // console.log($scope.filepath);
-        if ($scope.config.function.files == undefined || $scope.config.function.files == null) {
-          $scope.config.function.files = []
-          fileArraySize = $scope.config.function.files.length;
-          console.log(fileArraySize)
-
-        }
+        $scope.config.function = {};
+        $scope.config.function.files = $scope.config.function.files || []
+        fileArraySize = $scope.config.function.files.length;
+        console.log(fileArraySize)
 
         $scope.communicateWithBackend();
         // if ($scope.config.function) {
