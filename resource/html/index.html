@@ -60,7 +60,9 @@
     <div class="control-group">
       <div id="tabs">
         <ul>
+          <li><a href="#tabs-table">Output SQL Arguments</a></li>
           <li><a href="#tabs-execution">Script Execution Arguments</a></li>
+          <li><a href="#tabs-script">Script Loading</a></li>
           <li><a href="#tabs-loading">Additional Files</a></li>
         </ul>
 
@@ -96,13 +98,14 @@
 
                   <div class="inner-cell" ng-if='!config.function.useSQLOnClause'>
                     <p class="inner-label">Input Table</p>
-                    <input required ng-model="config.function.input_table" type="text" data-container="body" data-html="true" title="Input Table"
-                      data-placement="right" />
+                    <input required ng-model="config.function.input_table" type="text" data-container="body" data-html="true" value="config.inputTableName[0]"
+                      title="Input Table" data-placement="right" />
+                    <!-- <select required ng-model="config.function.script_location" data-container="body" data-placement="right" data-html="true">                       -->
+                    <!-- </select> inputDataSets -->
                   </div>
                   <div class="inner-cell" ng-if='config.function.useSQLOnClause'>
                     <p class="inner-label">ON Clause</p>
-                    <textarea required ng-model="config.function.sql_on_clause" title="On Clause"
-                      ></textarea>
+                    <textarea required ng-model="config.function.sql_on_clause" title="On Clause"></textarea>
                   </div>
                 </td>
               </tr>
@@ -115,49 +118,7 @@
                 </td>
               </tr>
 
-              <tr>
-                <td>Script</td>
-                <td>
-                  <div class="inner-cell">
-                    <p class="inner-label">Script Location</p>
-                    <select required ng-model="config.function.script_location" data-container="body" data-placement="right" data-html="true">
-                      <option value="" selected>--No Selection--</option>
-                      <option value="sz" selected>Teradata Server</option>
-                      <option value="cz" selected>Dataiku Managed Folder</option>
-                  </select>
-                  </div>
 
-                  <div class="inner-cell">
-                    <p class="inner-label">Script Alias</p>
-                    <input required ng-model="config.function.script_alias" type="text" data-container="body" data-html="true" title="Script Alias"
-                      data-placement="right" />
-                  </div>
-
-                  <div class="inner-cell" ng-if="config.function.script_location == 'sz'">
-                    <p class="inner-label">Script Filename</p>
-                    <input required ng-model="config.function.script_filename" type="text" data-container="body" data-html="true" title="Script Filename"
-                      data-placement="right" />
-                  </div>
-
-                  <div class="inner-cell" ng-if="config.function.script_location == 'sz'">
-                    <p class="inner-label">Script File Location</p>
-                    <input required ng-model="config.function.script_filelocation" type="text" data-container="body" data-html="true" title="Script File Location"
-                      data-placement="right" />
-                  </div>
-
-                  <div class="inner-cell" ng-if="config.function.script_location == 'cz'">
-                    <p class="inner-label">Script Filename</p>
-                    <select required ng-model="config.function.script_filename" data-container="body" data-placement="right" data-html="true" ng-options="inputFile as inputFile for inputFile in fileList">
-                      <option value="" selected>--No Selection--</option>                      
-                  </select>
-                  </div>
-
-                  <div class="inner-cell">
-                    <p class="inner-label">Replace Script</p>
-                    <input type="checkbox" ng-model="config.function.replace_script"></input> Replace Current Script
-                  </div>
-                </td>
-              </tr>
 
               <tr>
                 <td>Command Type</td>
@@ -189,6 +150,74 @@
             </tbody>
           </table>
 
+        </div>
+
+        <div id="tabs-script">
+          <table class="table table-condensed table-hover" ng-model-options="{ debounce: 200 }">
+
+            <thead>
+              <tr>
+                <th>File Alias</th>
+                <th>File Details</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Script Location</td>
+                <td>
+                  <select required ng-model="config.function.script_location" data-container="body" data-placement="right" data-html="true">
+                      <option value="" selected>--No Selection--</option>
+                      <option value="sz" selected>Teradata Server</option>
+                      <option value="cz" selected>Dataiku Managed Folder</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Script Alias</td>
+                <td>
+                  <input required ng-model="config.function.script_alias" type="text" data-container="body" data-html="true" title="Script Alias"
+                    data-placement="right" />
+                </td>
+              </tr>
+              <tr ng-if="config.function.script_location == 'sz'">
+                <td>
+                  Script Filename
+                </td>
+                <td>
+                  <input required ng-model="config.function.script_filename" type="text" data-container="body" data-html="true" title="Script Filename"
+                    data-placement="right" />
+                </td>
+              </tr>
+              <tr ng-if="config.function.script_location == 'sz'">
+                <td>
+                  Script File Location
+                </td>
+                <td>
+                  <input required ng-model="config.function.script_filelocation" type="text" data-container="body" data-html="true" title="Script File Location"
+                    data-placement="right" />
+                </td>
+              </tr>
+              <tr ng-if="config.function.script_location == 'cz'">
+                <td>
+                  Script Filename
+                </td>
+                <td>
+                  <select required ng-model="config.function.script_filename" data-container="body" data-placement="right" data-html="true"
+                    ng-options="inputFile as inputFile for inputFile in fileList">
+                      <option value="" selected>--No Selection--</option>                      
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Replace Script
+                </td>
+                <td>
+                  <input type="checkbox" ng-model="config.function.replace_script"></input> Replace Current Script
+                </td>
+              </tr>              
+            </tbody>
         </div>
 
         <div id="tabs-loading">

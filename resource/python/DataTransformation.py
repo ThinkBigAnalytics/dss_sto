@@ -90,18 +90,24 @@ def do(payload, config, plugin_config, inputs):
 
     # print('Inputs?')
     print(inputs)
-    inputtablename = inputs[0]['fullName'].split('.')[0]
-    print(inputtablename)
-    inputfoldername = inputs[1]['fullName'].split('.')[1]
-    inputFolderLocation =  dataiku.Folder(inputfoldername)
+    # inputtablename = inputs[0]['fullName'].split('.')[0]
+    inputDataSets = []
+    # print(inputtablename)
+    for input in inputs:
+        if(input.get('role') == 'main'):
+            inputDataSets.append(input['fullName'].split('.')[1])
+        else:
+            inputfoldername = input['fullName'].split('.')[1]       
+            inputFolderLocation =  dataiku.Folder(inputfoldername)
+    
+    # inputSTO = get_input_names_for_role('sto_scripts')
+    # inputfoldername = inputS[0]['fullName'].split('.')[1]
+    # inputFolderLocation =  dataiku.Folder(inputfoldername)
     # inputFolderDetails = []
 
     
     print('inputfoldername')
     print(inputfoldername)
-    filepath = inputFolderLocation.file_path('ex2p.py')
-    print('filepath')
-    print(filepath)
     folderpath = inputFolderLocation.get_path()
     print('Folder path')
     print(folderpath)
@@ -122,4 +128,4 @@ def do(payload, config, plugin_config, inputs):
 
     # return {'choices' : choices, 'schema': schema,x`` 'inputs': inputs, 'inputschemas': inputschemas}
     print('ending')
-    return {'inputfolder':folderpath, 'fileList':fileList,'inputs': inputs}
+    return {'inputfolder':folderpath, 'fileList':fileList, 'inputDataSets':inputDataSets , 'inputs': inputs}
