@@ -19,6 +19,10 @@ from simplecrypt import encrypt, decrypt
 import hashlib
 import hmac
 import base64
+import os
+
+def pathExists(filepath):
+    return os.path.exists(filepath)
 
 def getCurrentConnectionName(inputDataset):
     #input Dataset is the output of dataiku.Dataset("dataset name")
@@ -41,9 +45,10 @@ def getAuthFilePath(filename):
         print('Error getting resource recipe: ' + e)
         return AUTH_FILENAME
 
-def getSignature():
-    message = bytes(SECRET_KEY).encode('utf-8')
-    secret = bytes(MASTER_PASSWORD).encode('utf-8')
+def getSignature(pwd=MASTER_PASSWORD):
+    hostid = os.popen("hostid").read().strip()
+    message = bytes(SECRET_KEY + hostid).encode('utf-8')
+    secret = bytes(pwd).encode('utf-8')
     return base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest()) 
 
 def write_encrypted(filepath, plaintext):
