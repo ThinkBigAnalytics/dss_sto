@@ -77,10 +77,9 @@ print('Checks')
 print(function_config)
 print(output_A_names)
 print(output_A_datasets)
-# print(get_output_names())
 
 # print('Starting handle')
-handle = dataiku.Folder("whitey")
+handle = dataiku.Folder("sto_scripts")
 # filepath = handle.file_path("ex2p.py")
 filepath = "/home/aagdcph/ex2p.py"
 # filepath ="/home/dataiku/dss_data/managed_folders/DT186022_TEST/kA2too62/"
@@ -121,6 +120,18 @@ commandType = function_config.get('command_type')
 returnClause = function_config.get('return_clause')
 scriptArguments = function_config.get('arguments')
 additionalFiles = function_config.get('files')
+
+def getHashClause(hasharg):
+    return hasharg and ('\n             HASH BY {hasharg}'.format(hasharg=hasharg))
+def getPartitionClause(partitionarg):
+    return partitionarg and ('\n             PARTITION BY {partitionarg}'\
+                             .format(partitionarg=partitionarg))
+def getOrderClause(orderarg):
+    return orderarg and ('\n             ORDER BY {orderarg}'.format(orderarg=orderarg))
+
+partitionClause = getPartitionClause(function_config.get('partitionby', ''))
+hashClause = getHashClause(function_config.get('hashby', ''))
+orderClause = getOrderClause(function_config.get('orderby', ''))
 
 database = 'aagdcph'
 script_command = ''
@@ -187,10 +198,15 @@ else:
 
 createTableQuery = """CREATE TABLE aagdcph.DT186022_TEST_pythonrecipe_out AS (
 SELECT *
-FROM SCRIPT (ON ("""+onClause+""") 
-             SCRIPT_COMMAND("""+script_command+""")
-             RETURNS ('"""+returnClause+"""')
-            )) WITH DATA;"""
+FROM SCRIPT (ON ({onClause}) 
+             SCRIPT_COMMAND({script_command}){hashClause}{partitionClause}{orderClause}
+             RETURNS ('{returnClause}')
+            )) WITH DATA;""".format(onClause=onClause,
+                                    script_command=script_command,
+                                    hashClause=hashClause,
+                                    partitionClause=partitionClause,
+                                    orderClause=orderClause,
+                                    returnClause=returnClause)
 
             # RETURNS ('"""oc1 VARCHAR(10), oc2 VARCHAR(10), oc3 VARCHAR(18)"""')
 # some helper function
