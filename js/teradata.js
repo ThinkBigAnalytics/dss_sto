@@ -124,6 +124,7 @@
           .dialog(DIALOG_PARAMETERS);
 
         $dialog.css(DIALOG_CSS_PARAMETERS);
+        delete $scope.config.function.dbpwd;
 
       },
 
@@ -764,7 +765,7 @@
         console.log($scope);
         console.log($scope.inputs);
         // console.log($scope.filepath);
-        $scope.config.function = {};
+        $scope.config.function = $scope.config.function || {};
         $scope.config.function.files = $scope.config.function.files || []
         fileArraySize = $scope.config.function.files.length;
         console.log(fileArraySize)

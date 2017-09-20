@@ -64,6 +64,7 @@
           <li><a href="#tabs-execution">Script Execution Arguments</a></li>
           <li><a href="#tabs-script">Script Loading</a></li>
           <li><a href="#tabs-loading">Additional Files</a></li>
+          <li><a href=#tabs-connection>Connection</a></li>
         </ul>
 
         <div id="tabs-execution">
@@ -215,6 +216,7 @@
                 </td>
               </tr>
             </tbody>
+            </table>
         </div>
 
         <div id="tabs-loading">
@@ -279,6 +281,28 @@
 
         </div>
         <!--End Additional Files-->
+        <div id="tabs-connection">
+          <table class="table table-condensed table-hover" ng-model-options="{ debounce: 200 }">
+
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>DB Connection Password</td>
+                <td>
+                  <input ng-model="config.function.dbpwd" type="password" data-container="body" data-html="true" title="Script Alias"
+                    data-placement="right" />
+                </td>
+              </tr>
+            </tbody>
+            </table>
+        </div>
+        <!--  End of Connection -->
       </div>
 
 

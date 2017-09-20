@@ -18,6 +18,8 @@ from dataiku.customrecipe import *
 #CALL Subprocess for BTEQ script
 from subprocess import call
 
+from auth import *
+
 # Inputs and outputs are defined by roles. In the recipe's I/O tab, the user can associate one
 # or more dataset to each input and output role.
 # Roles need to be defined in recipe.json, in the inputRoles and outputRoles fields.
@@ -78,7 +80,7 @@ print(output_A_datasets)
 # print(get_output_names())
 
 # print('Starting handle')
-handle = dataiku.Folder("sto_scripts")
+handle = dataiku.Folder("whitey")
 # filepath = handle.file_path("ex2p.py")
 filepath = "/home/aagdcph/ex2p.py"
 # filepath ="/home/dataiku/dss_data/managed_folders/DT186022_TEST/kA2too62/"
@@ -217,24 +219,40 @@ def getSelectTableQuery(inputDataset, inputTableName):
 where databasename = {dataset}
 and TableName = {table}
 and TableKind = 'T';""".format(dataset=inputDataset, table=inputTableName)
+
+def getPassword():
+    dbpwd = function_config.get('dbpwd', '')
+    conn_name = getCurrentConnectionName(output_A_datasets[0])
+    filepath = getAuthFilePath(conn_name)
+    print('connection name: ' + conn_name)
+    if dbpwd:
+        print('using password from user input')
+        write_encrypted(filepath, dbpwd)
+    else:
+        print('reading password from text')
+        dbpwd = read_encrypted(getAuthFilePath(conn_name))
+    return dbpwd
+
+db_user = getConnectionUser(output_A_datasets[0])
     
 #PERFORM FILE LOADING
 if function_config.get("replace_script"):
     bteqScript = """bteq << EOF 
-              .LOGON 153.64.211.111/aagdcph,aagdcph;
-              """+setSessionQuery+"""         
-              """+installAdditionalFiles+"""   
-              """+replaceFileQuery+"""              
+              .LOGON 153.64.211.111/{user},{pwd};
+              """.format(user=db_user,pwd=getPassword()) +setSessionQuery+"""
+              """+installAdditionalFiles+"""
+              """+replaceFileQuery+"""
               .QUIT
               EOF"""
 else:
     bteqScript = """bteq << EOF 
-              .LOGON 153.64.211.111/aagdcph,aagdcph;
-              """+setSessionQuery+"""          
-              """+installAdditionalFiles+"""  
+              .LOGON 153.64.211.111/{user},{pwd};
+              """.format(user=db_user,pwd=getPassword()) +setSessionQuery+"""
+              """+installAdditionalFiles+"""
               """+installFileQuery+"""
               .QUIT
               EOF"""
+
 try:
     exitValue = call([bteqScript],shell=True)
     if(exitValue !=0):
