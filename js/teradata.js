@@ -579,9 +579,11 @@
 
         $scope.callPythonDo({}).then(
           data => $.extend($scope, data),
-          () => { }
+          () => {}
+        ).then(
+          () => {delete $scope.config.function.dbpwd;},
+          () => {}
         );
-
       },
 
       /**
@@ -768,9 +770,11 @@
         $scope.config.function = $scope.config.function || {};
         $scope.config.function.files = $scope.config.function.files || []
         fileArraySize = $scope.config.function.files.length;
+
         console.log(fileArraySize)
 
         $scope.communicateWithBackend();
+
         // if ($scope.config.function) {
         //   $scope.getFunctionMetadata($scope.config.function.name);
         // }
