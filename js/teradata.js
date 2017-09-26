@@ -141,6 +141,15 @@
 
       },
 
+      getParamType: function (v) {
+          if (Array.isArray(v)) {
+              return 'array';
+          } else if (typeof v==='object' && v!==null && !(v instanceof Date)) {
+              return 'dictionary';
+          }
+          return 'string'
+      },
+
       /**
        * Gets the static JSON metadata of the given function.
        */
@@ -700,6 +709,17 @@
 
         return rawName.split('_').join(' ').toLowerCase()
 
+      },
+
+      formatConnectionSetting: function(key) {
+          let formattedString = (key.match(/(.*[a-z])((?=[A-Z]).*)/) || []).slice(1)
+            .join(" ") || key;
+          return formattedString.charAt(0).toUpperCase() + formattedString.slice(1);
+      },
+
+      formatNameRuling: function(key) {
+          let formattedString = key.match(/[A-Z]*[^A-Z]+/g).join(" ");
+          return formattedString.charAt(0).toUpperCase() + formattedString.slice(1);
       },
 
       cleanKind: function (rawKind) {

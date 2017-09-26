@@ -4,7 +4,27 @@ import json
 import os
 import logging
 
+
 FUNCTION_CATEGORY="Data Transformation"
+
+def getCurrentConnectionName(inputDataset):
+    #input Dataset is the output of dataiku.Dataset("dataset name"
+    print('getCurrentConnectionName')
+    return inputDataset.get_location_info().get('info', {}).get('connectionName',
+                                                                '')
+
+def getConnectionParams(name):
+    print('getConnectionParams for ' + name)
+    client = dataiku.api_client()
+    print('getConnectionParams -B')
+    mydssconnection = client.get_connection(name)
+    print('getConnectionParams -C')
+    print(mydssconnection)
+    return mydssconnection.get_definition().get('params', {})
+
+def getConnectionParamsFromDataset(inputDataset):
+    name = getCurrentConnectionName(inputDataset)
+    return getConnectionParams(name)
 
 # paylaod is sent from the javascript's callPythonDo()
 # config and plugin_config are the recipe/dataset and plugin configured values
@@ -88,14 +108,19 @@ def do(payload, config, plugin_config, inputs):
     # # Get input table metadata.
     # inputnames = get_input_names_for_role('main')
 
-    # print('Inputs?')
-    print(inputs)
     # inputtablename = inputs[0]['fullName'].split('.')[0]
     inputDataSets = []
     # print(inputtablename)
+    connection = {}
     for input in inputs:
         if(input.get('role') == 'main'):
-            inputDataSets.append(input['fullName'].split('.')[1])
+            inputtablename = input['fullName'].split('.')[1]
+            inputDataSets.append(inputtablename)
+            if not connection:
+                print('GETTING CONNECTION LOL for inputtablename')
+                inputdataset = dataiku.Dataset(inputtablename)
+                print('GETTING CONNECTION LOL for inputtablename - A')
+                connection = getConnectionParamsFromDataset(inputdataset)
         else:
             inputfoldername = input['fullName'].split('.')[1]       
             inputFolderLocation =  dataiku.Folder(inputfoldername)
@@ -104,28 +129,15 @@ def do(payload, config, plugin_config, inputs):
     # inputfoldername = inputS[0]['fullName'].split('.')[1]
     # inputFolderLocation =  dataiku.Folder(inputfoldername)
     # inputFolderDetails = []
-
     
-    print('inputfoldername')
-    print(inputfoldername)
     folderpath = inputFolderLocation.get_path()
-    print('Folder path')
-    print(folderpath)
     fileList = []
-    print('Reached here')
     listdr = os.listdir(folderpath)
     for item in listdr:
-        fileList.append(item)            
-        print(item)
-    # console.log('This should error')
-    # inputschemas = {}
-    # for inputdataset in inputs:
-    #     inputtablename = inputdataset['fullName'].split('.')[1]
-    #     inputdataset = dataiku.Dataset(inputtablename)
-    #     inputschemas[inputtablename] = inputdataset.read_schema()
-    #     console.log('Input Table name')     
-    #     console.log(inputtablename)
+        fileList.append(item)
 
-    # return {'choices' : choices, 'schema': schema,x`` 'inputs': inputs, 'inputschemas': inputschemas}
-    print('ending')
-    return {'inputfolder':folderpath, 'fileList':fileList, 'inputDataSets':inputDataSets , 'inputs': inputs}
+    return {'inputfolder':folderpath,
+            'fileList':fileList,
+            'connection': connection,
+            'inputDataSets':inputDataSets ,
+            'inputs': inputs}

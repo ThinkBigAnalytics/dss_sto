@@ -313,11 +313,31 @@
 
             <tbody>
               <tr>
+                <td>Save Password</td>
+                <td>
+                  <input type="checkbox" ng-model="config.function.savepwd" ng-init="config.function.savepwd=true"></input>
+                </td>
+              </tr>
+              <tr>
                 <td>DB Connection Password</td>
                 <td>
                   <input ng-model="config.function.dbpwd" type="password" data-container="body" data-html="true" title="Script Alias"
                     data-placement="right" />
                 </td>
+              </tr>
+              <tr ng-repeat="(key, value) in connection" ng-if="'password' != key">
+                  <td>
+                    <label>{{formatConnectionSetting(key)}}</label>
+                  </td>
+                  <td>
+                      <label ng-if="'string' === getParamType(value)">{{value}}</label>
+                      <li style="list-style-type: none;"
+                          ng-if="'array' === getParamType(value)"
+                          ng-repeat="x in value track by $index">{{x}}</li>
+                      <li style="list-style-type: none;"
+                          ng-if="'dictionary' === getParamType(value)"
+                          ng-repeat="(dkey, dvalue) in value track by $index">{{formatNameRuling(dkey)}}: &nbsp;&nbsp;&nbsp;{{dvalue}}</li>
+                  </td>
               </tr>
             </tbody>
             </table>

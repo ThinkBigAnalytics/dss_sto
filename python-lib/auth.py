@@ -27,17 +27,19 @@ def pathExists(filepath):
 def getCurrentConnectionName(inputDataset):
     #input Dataset is the output of dataiku.Dataset("dataset name"
     return inputDataset.get_location_info().get('info', {}).get('connectionName',
-                                                                'dt186022teradata')
+                                                                '')
 
-def getUserFromConnectionName(name, inputDataset):
+def getConnectionParams(name):
     client = dataiku.api_client()
     mydssconnection = client.get_connection(name)
-    connectiondef = mydssconnection.get_definition()
-    return connectiondef.get('params', {}).get('user', '')
-    
-def getConnectionUser(inputDataset):
+    return mydssconnection.get_definition().get('params', {})
+
+def getConnectionParamsFromDataset(inputDataset):
     name = getCurrentConnectionName(inputDataset)
-    return getUserFromConnectionName(name, inputDataset)  
+    return getConnectionParams(name)
+
+def getConnectionUser(inputDataset):
+    return getConnectionParamsFromDataset(inputDataset).get('user', '')
 
 def getAuthFilePath(filename):
     filepath = AUTH_FILENAME

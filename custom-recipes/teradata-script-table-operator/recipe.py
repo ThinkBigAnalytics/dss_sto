@@ -241,11 +241,9 @@ def getPassword():
     conn_name = getCurrentConnectionName(output_A_datasets[0])
     filepath = getAuthFilePath(conn_name)
     print('connection name: ' + conn_name)
-    if dbpwd:
-        print('using password from user input')
+    if dbpwd and function_config.get('savepwd', False):
         write_encrypted(filepath, dbpwd)
     else:
-        print('reading password from text')
         dbpwd = read_encrypted(getAuthFilePath(conn_name))
     return dbpwd
 
