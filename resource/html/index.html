@@ -232,13 +232,6 @@
                   </select>
                 </td>
               </tr>
-              <tr>
-                <td>Script Alias</td>
-                <td>
-                  <input required ng-model="config.function.script_alias" type="text" data-container="body" data-html="true" title="Script Alias"
-                    data-placement="right" />
-                </td>
-              </tr>
               <tr ng-if="config.function.script_location == 'sz'">
                 <td>
                   Script Filename
@@ -262,10 +255,18 @@
                   Script Filename
                 </td>
                 <td>
-                  <select required ng-model="config.function.script_filename" data-container="body" data-placement="right" data-html="true"
+                  <select required ng-model="config.function.script_filename"
+                    ng-change="onFilenameChange()"data-container="body" data-placement="right" data-html="true"
                     ng-options="inputFile as inputFile for inputFile in fileList">
                       <option value="" selected>--No Selection--</option>                      
                   </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Script Alias</td>
+                <td>
+                  <input required ng-model="config.function.script_alias" type="text" data-container="body" data-html="true" title="Script Alias"
+                    data-placement="right" />
                 </td>
               </tr>
               <tr>

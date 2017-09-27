@@ -210,6 +210,11 @@
           }
       },
 
+      onFilenameChange() {
+          let filename = $scope.config.function.script_filename || '';
+          $scope.config.function.script_alias = filename.substring(0,filename.lastIndexOf('.'));
+      },
+
       removeFile: function (index) {
         if (index > -1) {
           $scope.config.function.files.splice(index, 1);
