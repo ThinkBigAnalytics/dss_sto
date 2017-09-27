@@ -101,8 +101,6 @@ print("Location info")
 output_location = output_A_datasets[0].get_location_info()['info']
 print(output_location)
 # print(output_A_datasets[0].get_location_info()['info'])
-print(output_location.get('schema'))
-print(output_location.get('table'))
 # empty_table_df = empty_table.get_dataframe()
 
 print("Past empty table")
@@ -116,9 +114,11 @@ if(scriptLocation == 'sz'):
 else:
     scriptFileLocation = handle.file_path(scriptFileName)
 
-commandType = function_config.get('command_type')
-returnClause = function_config.get('return_clause')
-scriptArguments = function_config.get('arguments')
+commandType = function_config.get('command_type', '')
+returnClause = ', '.join((x.get('name', '') + ' ' + x.get('type', ''))
+                         for x in function_config.get('return_clause', []))
+scriptArguments = ', '.join(x.get('value', '')
+                            for x in function_config.get('arguments', []))
 additionalFiles = function_config.get('files')
 
 def getHashClause(hasharg):
@@ -240,7 +240,6 @@ def getPassword():
     dbpwd = function_config.get('dbpwd', '')
     conn_name = getCurrentConnectionName(output_A_datasets[0])
     filepath = getAuthFilePath(conn_name)
-    print('connection name: ' + conn_name)
     if dbpwd and function_config.get('savepwd', False):
         write_encrypted(filepath, dbpwd)
     else:

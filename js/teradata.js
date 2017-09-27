@@ -124,6 +124,7 @@
           .dialog(DIALOG_PARAMETERS);
 
         $dialog.css(DIALOG_CSS_PARAMETERS);
+        $scope.config.function.savepwd = false;
         delete $scope.config.function.dbpwd;
 
       },
@@ -185,13 +186,28 @@
       },
 
       addMoreFilesClick: function () {
-
         $scope.config.function.files.push({});
         fileArraySize = $scope.config.function.files.length;
-        console.log('This button was clicked');
-        console.log(fileArraySize);
-        console.log($scope.config.function.files);
+      },
 
+      addReturnClause: function() {
+          $scope.config.function.return_clause.push({});
+      },
+
+      removeReturnClause: function(index) {
+          if (index > -1) {
+              $scope.config.function.return_clause.splice(index, 1);
+          }
+      },
+
+      addScriptArgument: function() {
+          $scope.config.function.arguments.push({});
+      },
+
+      removeScriptArgument: function(index) {
+          if (index > -1) {
+              $scope.config.function.arguments.splice(index, 1);
+          }
       },
 
       removeFile: function (index) {
@@ -788,10 +804,11 @@
         console.log($scope.inputs);
         // console.log($scope.filepath);
         $scope.config.function = $scope.config.function || {};
-        $scope.config.function.files = $scope.config.function.files || []
+        $scope.config.function.savepwd = false;
+        $scope.config.function.files = $scope.config.function.files || [];
+        $scope.config.function.arguments = $scope.config.function.arguments || [{'value':''}];
+        $scope.config.function.return_clause = $scope.config.function.return_clause || [{'name':'','type':''}];
         fileArraySize = $scope.config.function.files.length;
-
-        console.log(fileArraySize)
 
         $scope.communicateWithBackend();
 
