@@ -196,12 +196,13 @@ else:
     onClause = """SELECT * FROM """ + function_config.get('input_table')
 
 
-createTableQuery = """CREATE TABLE aagdcph.DT186022_TEST_pythonrecipe_out AS (
+createTableQuery = """CREATE {tabletype} TABLE aagdcph.DT186022_TEST_pythonrecipe_out AS (
 SELECT *
 FROM SCRIPT (ON ({onClause}) 
              SCRIPT_COMMAND({script_command}){hashClause}{partitionClause}{orderClause}
              RETURNS ('{returnClause}')
-            )) WITH DATA;""".format(onClause=onClause,
+            )) WITH DATA;""".format(tabletype=function_config.get('table_type', ''),
+                                    onClause=onClause,
                                     script_command=script_command,
                                     hashClause=hashClause,
                                     partitionClause=partitionClause,
