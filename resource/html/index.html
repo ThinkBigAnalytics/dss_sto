@@ -68,6 +68,46 @@
           <li><a href=#tabs-connection>Connection</a></li>
         </ul>
 
+        <div id="tabs-table">
+
+          <!--<table class="table table-condensed table-hover" ng-model-options="{ debounce: 200 }">-->
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Value</th>
+                <!--<th>Message</th>-->
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Table Type</td>
+                <td>
+                  <select ng-model="config.function.table_type" data-container="body" data-placement="right" data-html="true">
+                      <option value="" selected>--No Selection--</option>
+                      <option value="python" selected>SET</option>
+                      <option value="r" selected>MULTISET</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Order By</td>
+                <td>
+                  <input ng-model="config.function.out_orderby" type="text" data-container="body" data-html="true"
+                    data-placement="right" />
+                </td>
+              </tr>
+              <tr>
+                <td>Additional Clauses</td>
+                <td>
+                  <textarea rows="4" cols="200" ng-model="config.function.add_clauses"></textarea>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <div id="tabs-execution">
 
           <!--<table class="table table-condensed table-hover" ng-model-options="{ debounce: 200 }">-->
@@ -283,6 +323,12 @@
 
         <div id="tabs-loading">
 
+          <div>
+            <button ng-click="addMoreFilesClick()">Add More Files</button>
+            <label style="display: inline-block">&emsp;&emsp;&emsp;&emsp;
+              Added files will be installed in the following path:
+              <em>.&#47;{{connection.user}}&#47;&#60;filename&#62;</em></label>
+          </div>
           <table class="table table-condensed table-hover" ng-model-options="{ debounce: 200 }">
 
             <thead>
@@ -338,7 +384,6 @@
                 </td>
               </tr>
             </tbody>
-            <button style="align:right" ng-click="addMoreFilesClick()">Add More Files</button>
           </table>
 
         </div>
