@@ -129,6 +129,9 @@ def getPartitionClause(partitionarg):
 def getOrderClause(orderarg):
     return orderarg and ('\n             ORDER BY {orderarg}'.format(orderarg=orderarg))
 
+def getAdditionalClauses(arg):
+    return arg and ('\n{arg}'.format(arg=arg))
+
 partitionClause = getPartitionClause(function_config.get('partitionby', ''))
 hashClause = getHashClause(function_config.get('hashby', ''))
 orderClause = getOrderClause(function_config.get('orderby', ''))
@@ -201,13 +204,15 @@ SELECT *
 FROM SCRIPT (ON ({onClause}) 
              SCRIPT_COMMAND({script_command}){hashClause}{partitionClause}{orderClause}
              RETURNS ('{returnClause}')
-            )) WITH DATA;""".format(tabletype=function_config.get('table_type', ''),
-                                    onClause=onClause,
-                                    script_command=script_command,
-                                    hashClause=hashClause,
-                                    partitionClause=partitionClause,
-                                    orderClause=orderClause,
-                                    returnClause=returnClause)
+            )) WITH DATA {additionalClauses};""".\
+            format(tabletype=function_config.get('table_type', ''),
+                   onClause=onClause,
+                   script_command=script_command,
+                   hashClause=hashClause,
+                   partitionClause=partitionClause,
+                   orderClause=orderClause,
+                   returnClause=returnClause,
+                   additionalClauses=getAdditionalClauses(function_config.get('add_clauses','')))
 
             # RETURNS ('"""oc1 VARCHAR(10), oc2 VARCHAR(10), oc3 VARCHAR(18)"""')
 # some helper function
