@@ -246,13 +246,18 @@ def getPassword():
         dbpwd = read_encrypted(getAuthFilePath(conn_name))
     return dbpwd
 
-db_user = getConnectionUser(output_A_datasets[0])
+def db_user():
+    return getConnectionUser(output_A_datasets[0])
+
+def database():
+    # for now, database name = db user name
+    return db_user()
     
 #PERFORM FILE LOADING
 if function_config.get("replace_script"):
     bteqScript = """bteq << EOF 
               .LOGON 153.64.211.111/{user},{pwd};
-              """.format(user=db_user,pwd=getPassword()) +setSessionQuery+"""
+              """.format(user=db_user(),pwd=getPassword()) +setSessionQuery+"""
               """+installAdditionalFiles+"""
               """+replaceFileQuery+"""
               .QUIT
@@ -260,7 +265,7 @@ if function_config.get("replace_script"):
 else:
     bteqScript = """bteq << EOF 
               .LOGON 153.64.211.111/{user},{pwd};
-              """.format(user=db_user,pwd=getPassword()) +setSessionQuery+"""
+              """.format(user=db_user(),pwd=getPassword()) +setSessionQuery+"""
               """+installAdditionalFiles+"""
               """+installFileQuery+"""
               .QUIT
