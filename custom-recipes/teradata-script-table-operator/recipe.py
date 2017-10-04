@@ -19,6 +19,7 @@ from dataiku.customrecipe import *
 from subprocess import call
 
 from auth import *
+from re import search
 
 # Inputs and outputs are defined by roles. In the recipe's I/O tab, the user can associate one
 # or more dataset to each input and output role.
@@ -81,9 +82,8 @@ print(output_A_datasets)
 # print('Starting handle')
 handle = dataiku.Folder("sto_scripts")
 # filepath = handle.file_path("ex2p.py")
-filepath = "/home/aagdcph/ex2p.py"
 # filepath ="/home/dataiku/dss_data/managed_folders/DT186022_TEST/kA2too62/"
-print(filepath) 
+
 # path = handle.get_path()
 
 # print('Check folder directory')
@@ -96,18 +96,17 @@ print(filepath)
 # print(jsonfile)
 # Recipe inputs
 # empty_table = dataiku.Dataset("empty_table")
+def db_user():
+    return getConnectionUser(output_A_datasets[0])
 empty_table = input_A_datasets[0]
-print("Location info")
 output_location = output_A_datasets[0].get_location_info()['info']
-print(output_location)
-# print(output_A_datasets[0].get_location_info()['info'])
-# empty_table_df = empty_table.get_dataframe()
-
-print("Past empty table")
 
 scriptAlias = function_config.get('script_alias')
 scriptFileName = function_config.get('script_filename')
 scriptLocation = function_config.get('script_location')
+searchPath = db_user()
+outputTable = output_A_datasets[0].get_location_info()['info'].get('table', '')
+
 
 if(scriptLocation == 'sz'):
     scriptFileLocation = function_config.get('script_filelocation')
@@ -136,12 +135,11 @@ partitionClause = getPartitionClause(function_config.get('partitionby', ''))
 hashClause = getHashClause(function_config.get('hashby', ''))
 orderClause = getOrderClause(function_config.get('orderby', ''))
 
-database = 'aagdcph'
 script_command = ''
 if commandType == 'python':
-    script_command = """'export PATH; python ./"""+database+"""/"""+scriptFileName+""" """+scriptArguments+"""'"""
+    script_command = """'export PATH; python ./"""+searchPath+"""/"""+scriptFileName+""" """+scriptArguments+"""'"""
 elif commandType == 'r':
-    script_command = """'R --vanilla --slave -f ./"""+database+"""/"""+scriptFileName+"""'"""
+    script_command = """'R --vanilla --slave -f ./"""+searchPath+"""/"""+scriptFileName+"""'"""
 
 #INSTALL Additional files
 installAdditionalFiles = """"""
@@ -152,7 +150,7 @@ for item in additionalFiles:
         installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('file_address').rstrip()+"""');"""
 
 # select query
-setSessionQuery = 'SET SESSION SEARCHUIFDBPATH = aagdcph;'
+setSessionQuery = 'SET SESSION SEARCHUIFDBPATH = {searchPath};'.format(searchPath=searchPath)
 etQuery = 'COMMIT WORK;'
 removeFileQuery = """CALL SYSUIF.REMOVE_FILE('""" + scriptAlias + """',1);"""
 # installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + function_config.get('script_alias') + """','""" + function_config.get('script_filename') + """','cz!"""+filepath+"""');"""
@@ -160,36 +158,10 @@ installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + scriptAlias + """','""" + 
 
 #sz if in DB
 replaceFileQuery = """CALL SYSUIF.REPLACE_FILE('""" + scriptAlias + """','""" + scriptFileName + """','"""+scriptLocation+"""!"""+scriptFileLocation.rstrip()+"""', 0);"""
-createOutputTableQuery = """CREATE TABLE aagdcph.DT186022_TEST_pythonrecipe_out AS (
-SELECT COUNT(*) AS nSims,
-       AVG(CAST (oc1 AS INT)) AS AvgCustomers, 
-       AVG(CAST (oc2 AS INT)) AS AvgReneged,
-       AVG(CAST (oc3 AS FLOAT)) AS AvgWaitTime
-FROM SCRIPT (ON (SELECT * FROM ex2tbl) 
-             SCRIPT_COMMAND('export PATH; """ + commandType + """ ./aagdcph/"""+scriptFileName+""" 4 5 10 6 480')
-             RETURNS ('oc1 VARCHAR(10), oc2 VARCHAR(10), oc3 VARCHAR(18)')
-            )) WITH DATA;"""
 scriptDoesExist = """select * from dbc.tables
-where databasename = 'aagdcph'
-and TableKind = 'Z';"""
-insertIntoOutputTableQuery = """select 1 from dbc.Tables where databasename LIKE 'AAGDCPH' and TableName = 'DT186022_TEST_pythonrecipe_out';
-IF ACTIVITYCOUNT = 0 THEN .GOTO ok;
-DROP TABLE aagdch.DT186022_TEST_pythonrecipe_out;
-.label ok
-CREATE SET TABLE aagdcph.DT186022_TEST_pythonrecipe_out
-( EmpID INT,
- EmpName VARCHAR(20)
-);
-INSERT INTO aagdcph.DT186022_TEST_pythonrecipe_out
-SELECT COUNT(*) AS nSims,
-       AVG(CAST (oc1 AS INT)) AS AvgCustomers, 
-       AVG(CAST (oc2 AS INT)) AS AvgReneged,
-       AVG(CAST (oc3 AS FLOAT)) AS AvgWaitTime
-FROM SCRIPT (ON (SELECT * FROM ex2tbl) 
-             SCRIPT_COMMAND("""'export PATH; """ + commandType + """ ./aagdcph/ex2p.py 4 5 10 6 480'""")
-             RETURNS ('oc1 VARCHAR(10), oc2 VARCHAR(10), oc3 VARCHAR(18)')
-            );"""
-print("Output names")
+where databasename = '{searchPath}'
+and TableKind = 'Z';""".format(searchPath=searchPath)
+
 print(output_A_names[0])
 useSQLOnClause = function_config.get('useSQLOnClause')
 
@@ -199,13 +171,15 @@ else:
     onClause = """SELECT * FROM """ + function_config.get('input_table')
 
 
-createTableQuery = """CREATE {tabletype} TABLE aagdcph.DT186022_TEST_pythonrecipe_out AS (
+createTableQuery = """CREATE {tabletype} TABLE {searchPath}.{outputTable} AS (
 SELECT *
 FROM SCRIPT (ON ({onClause}) 
              SCRIPT_COMMAND({script_command}){hashClause}{partitionClause}{orderClause}
              RETURNS ('{returnClause}')
             )) WITH DATA {additionalClauses};""".\
             format(tabletype=function_config.get('table_type', ''),
+                   searchPath=searchPath,
+                   outputTable=outputTable,
                    onClause=onClause,
                    script_command=script_command,
                    hashClause=hashClause,
@@ -238,8 +212,8 @@ def getReplaceFunctionQuery():
 
 def getSelectTableQuery(inputDataset, inputTableName):
     return """select * from dbc.tables
-where databasename = {dataset}
-and TableName = {table}
+where databasename = '{dataset}'
+and TableName = '{table}'
 and TableKind = 'T';""".format(dataset=inputDataset, table=inputTableName)
 
 def getPassword():
@@ -251,9 +225,6 @@ def getPassword():
     else:
         dbpwd = read_encrypted(getAuthFilePath(conn_name))
     return dbpwd
-
-def db_user():
-    return getConnectionUser(output_A_datasets[0])
 
 def database():
     # for now, database name = db user name
@@ -295,10 +266,14 @@ print(query)
 executor = SQLExecutor2(dataset=empty_table)
 # executor = SQLExecutor2(dataset=input_A_datasets[0])
 
-existingtable = executor.query_to_df(getSelectTableQuery("'aagdcph'", "'DT186022_TEST_pythonrecipe_out'"))
+existingtable = executor.query_to_df(getSelectTableQuery(searchPath,
+                                                         outputTable))
 print(len(existingtable.index))
 if len(existingtable.index):
-    executor.query_to_df('COMMIT WORK',['DROP TABLE aagdcph.DT186022_TEST_pythonrecipe_out']);
+    executor.query_to_df('COMMIT WORK',
+                         ['DROP TABLE {searchPath}.{outputTable}'
+                          .format(searchPath=searchPath,
+                                  outputTable=outputTable)]);
 # existingScript = executor.query_to_df(scriptDoesExist);
 # if len(existingScript.index):
 #     if function_config.get("replace_script"):
@@ -309,12 +284,14 @@ if len(existingtable.index):
 #     query = getFunctionQuery(input_A_datasets[0], None) 
 # lenquery = len(query) - 1
 # executor.query_to_df(query[lenquery], query[-lenquery:])
-executor.query_to_df('COMMIT WORK', ['SET SESSION SEARCHUIFDBPATH = aagdcph;', createTableQuery])
+executor.query_to_df('COMMIT WORK',
+                     ['SET SESSION SEARCHUIFDBPATH = {searchPath};'.format(searchPath=searchPath),
+                      createTableQuery])
 #executor.query_to_df('\n'.join(query))
 
 # Recipe outputs
-nQuery = """SELECT * FROM {};""".format('aagdcph.DT186022_TEST_pythonrecipe_out')
+nQuery = """SELECT * FROM {searchPath}.{table};""".format(searchPath=searchPath,
+                                                          table=outputTable)
 selectResult = executor.query_to_df(nQuery);
 pythonrecipe_out = output_A_datasets[0]
 pythonrecipe_out.write_with_schema(selectResult)
-
