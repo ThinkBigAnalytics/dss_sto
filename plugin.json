@@ -11,7 +11,7 @@
     // Meta data for display purposes
     "meta" : {
         // Name of this plugin that appears in the interface.
-        "label" : "Plugin KC_TestPlugins",
+        "label" : "Teradata Plugins",
 
         "description" : "A longer string explaining what the plugin does",
         "author" : "kc186029",
