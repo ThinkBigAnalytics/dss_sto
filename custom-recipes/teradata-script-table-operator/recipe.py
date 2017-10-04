@@ -173,8 +173,8 @@ else:
 
 createTableQuery = """CREATE {tabletype} TABLE {searchPath}.{outputTable} AS (
 SELECT *
-FROM SCRIPT (ON ({onClause}) 
-             SCRIPT_COMMAND({script_command}){hashClause}{partitionClause}{orderClause}
+FROM SCRIPT (ON ({onClause}){hashClause}{partitionClause}{orderClause}
+             SCRIPT_COMMAND({script_command})
              RETURNS ('{returnClause}')
             )) WITH DATA {additionalClauses};""".\
             format(tabletype=function_config.get('table_type', ''),
