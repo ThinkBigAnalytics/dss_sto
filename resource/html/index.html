@@ -132,9 +132,7 @@
                   </div>
 
                   <div class="inner-cell" ng-if='!config.function.useSQLOnClause'>
-                    <p class="inner-label">Input Table</p>
-                    <input required ng-model="config.function.input_table" type="text" data-container="body" data-html="true" value="config.inputTableName[0]"
-                      title="Input Table" data-placement="right" />
+                    <p class="inner-label">Input Table: &emsp;&emsp;{{config.function.input_table}}</p>
                     <!-- <select required ng-model="config.function.script_location" data-container="body" data-placement="right" data-html="true">                       -->
                     <!-- </select> inputDataSets -->
                   </div>

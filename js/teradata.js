@@ -611,7 +611,11 @@
           data => $.extend($scope, data),
           () => {}
         ).then(
-          () => {delete $scope.config.function.dbpwd;},
+          () => {delete $scope.config.function.dbpwd;
+                $scope.config.function.input_table = $scope.inputs.find(
+                        (x => ('main' === x.role) && x.fullName) || {'fullName':''}).
+                        fullName.split('.').pop();
+                },
           () => {}
         );
       },
@@ -804,10 +808,6 @@
        * Initializes this plugin.
        */
       initialize: function () {
-        console.log('Did this even run?');
-        console.log($scope);
-        console.log($scope.inputs);
-        // console.log($scope.filepath);
         $scope.config.function = $scope.config.function || {};
         $scope.config.function.savepwd = false;
         $scope.config.function.files = $scope.config.function.files || [];
@@ -816,7 +816,6 @@
         fileArraySize = $scope.config.function.files.length;
 
         $scope.communicateWithBackend();
-
         // if ($scope.config.function) {
         //   $scope.getFunctionMetadata($scope.config.function.name);
         // }
