@@ -277,7 +277,9 @@
                   Script File Location
                 </td>
                 <td>
-                  <input required ng-model="config.function.script_filelocation" type="text" data-container="body" data-html="true" title="Script File Location"
+                  <input required ng-model="config.function.script_filelocation"
+                    ng-change="onFilenameChange()"
+                    type="text" data-container="body" data-html="true" title="Script File Location"
                     data-placement="right" />
                 </td>
               </tr>
@@ -287,7 +289,8 @@
                 </td>
                 <td>
                   <select required ng-model="config.function.script_filename"
-                    ng-change="onFilenameChange()"data-container="body" data-placement="right" data-html="true"
+                    ng-change="onFilenameChange()"
+                    data-container="body" data-placement="right" data-html="true"
                     ng-options="inputFile as inputFile for inputFile in fileList">
                       <option value="" selected>--No Selection--</option>                      
                   </select>
@@ -363,8 +366,8 @@
                     <div class="inner-cell">
                       <p class="inner-label">File Format</p>
                       <select required ng-model="file.file_format" data-container="body" data-placement="right" data-html="true">                      
-                        <option value="s" selected>Text File</option>
-                        <option value="c" selected>Binary File</option>
+                        <option value="z" selected>Text File</option>
+                        <option value="b" selected>Binary File</option>
                       </select>
                     </div>
                     <div class="inner-cell">
