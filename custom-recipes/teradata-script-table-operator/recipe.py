@@ -222,8 +222,10 @@ def getPassword():
     filepath = getAuthFilePath(conn_name)
     if dbpwd and function_config.get('savepwd', False):
         write_encrypted(filepath, dbpwd)
-    else:
+    elif not dpwd:
         dbpwd = read_encrypted(getAuthFilePath(conn_name))
+    else:
+        pass
     return dbpwd
 
 def database():
