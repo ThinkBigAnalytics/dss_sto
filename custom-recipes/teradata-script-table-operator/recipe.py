@@ -101,9 +101,9 @@ def db_user():
 empty_table = input_A_datasets[0]
 output_location = output_A_datasets[0].get_location_info()['info']
 
-scriptAlias = function_config.get('script_alias')
-scriptFileName = function_config.get('script_filename')
-scriptLocation = function_config.get('script_location')
+scriptAlias = function_config.get('script_alias', '')
+scriptFileName = function_config.get('script_filename', '')
+scriptLocation = function_config.get('script_location', '')
 searchPath = db_user()
 outputTable = output_A_datasets[0].get_location_info()['info'].get('table', '')
 
@@ -144,10 +144,12 @@ elif commandType == 'r':
 #INSTALL Additional files
 installAdditionalFiles = """"""
 for item in additionalFiles:
+    address = item.get('file_address', '').rstrip() if\
+        ('s' == item.get('file_location', '')) else handle.file_path(item.get('filename', ''))
     if item.get('replace_file'):
-        installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.REPLACE_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('file_address').rstrip()+"""',0);"""        
+        installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.REPLACE_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+address+"""',0);"""
     else:
-        installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('file_address').rstrip()+"""');"""
+        installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+address+"""');"""
 
 # select query
 setSessionQuery = 'SET SESSION SEARCHUIFDBPATH = {searchPath};'.format(searchPath=searchPath)

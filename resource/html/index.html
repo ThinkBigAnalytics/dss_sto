@@ -346,12 +346,20 @@
                   <button ng-click="removeFile($index)">Remove File</button>
                 </td>
                 <td>
-                  <div class="inner-cell">
+                  <div class="inner-cell" ng-if="'c'===file.file_location">
+                    <select required ng-model="file.filename"
+                      data-container="body"
+                      data-placement="right" data-html="true"
+                      ng-options="inputFile as inputFile for inputFile in fileList">
+                        <option value="" selected>--No Selection--</option>
+                    </select>
+                  </div>
+                  <div class="inner-cell" ng-if="'s'===file.file_location">
                     <p class="inner-label">File Name</p>
                     <input required ng-model="file.filename" type="text" data-container="body" data-html="true" title="Filename" data-placement="right"
                     />
                   </div>
-                  <div class="inner-cell">
+                  <div class="inner-cell" ng-if="'s'===file.file_location">
                     <p class="inner-label">File Address</p>
                     <input required ng-model="file.file_address" type="text" data-container="body" data-html="true" title="File Location" data-placement="right"
                     />
