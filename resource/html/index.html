@@ -256,7 +256,8 @@
               <tr>
                 <td>Script Location</td>
                 <td>
-                  <select required ng-model="config.function.script_location" data-container="body" data-placement="right" data-html="true">
+                  <select required ng-model="config.function.script_location"data-container="body"
+                    ng-change="onFileLocationChange()" data-placement="right" data-html="true">
                       <option value="" selected>--No Selection--</option>
                       <option value="sz" selected>Teradata Server</option>
                       <option value="cz" selected>Dataiku Managed Folder</option>
@@ -268,7 +269,9 @@
                   Script Filename
                 </td>
                 <td>
-                  <input required ng-model="config.function.script_filename" type="text" data-container="body" data-html="true" title="Script Filename"
+                  <input required ng-model="config.function.script_filename" type="text"
+                    ng-change="onFilenameChange()"
+                    data-container="body" data-html="true" title="Script Filename"
                     data-placement="right" />
                 </td>
               </tr>
@@ -278,7 +281,6 @@
                 </td>
                 <td>
                   <input required ng-model="config.function.script_filelocation"
-                    ng-change="onFilenameChange()"
                     type="text" data-container="body" data-html="true" title="Script File Location"
                     data-placement="right" />
                 </td>

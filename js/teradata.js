@@ -212,7 +212,13 @@
 
       onFilenameChange() {
           let filename = $scope.config.function.script_filename || '';
-          $scope.config.function.script_alias = filename.substring(0,filename.lastIndexOf('.'));
+          $scope.config.function.script_alias = filename.substring(0,filename.lastIndexOf('.')) ||
+              filename;
+      },
+
+      onFileLocationChange() {
+          $scope.config.function.script_filename = '';
+          $scope.config.function.script_alias = '';
       },
 
       removeFile: function (index) {
