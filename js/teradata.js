@@ -216,9 +216,34 @@
               filename;
       },
 
+      onAdditionalFilenameChange: function(index) {
+          if (!$scope || index < 0 ||
+                  !$scope.config ||
+                  !$scope.config.function ||
+                  !$scope.config.function.files ||
+                  index >= $scope.config.function.files.length) {
+              return;
+          }
+          let filename = $scope.config.function.files[index].filename || '';
+          $scope.config.function.files[index].file_alias = filename
+              .substring(0,filename.lastIndexOf('.')) || filename;
+      },
+
       onFileLocationChange() {
           $scope.config.function.script_filename = '';
           $scope.config.function.script_alias = '';
+      },
+
+      onAdditionalFileLocationChange: function(index) {
+          if (!$scope || index < 0 ||
+                  !$scope.config ||
+                  !$scope.config.function ||
+                  !$scope.config.function.files ||
+                  index >= $scope.config.function.files.length) {
+              return;
+          }
+          $scope.config.function.files[index].filename = '';
+          $scope.config.function.files[index].file_alias = '';
       },
 
       removeFile: function (index) {
