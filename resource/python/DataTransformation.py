@@ -9,17 +9,12 @@ FUNCTION_CATEGORY="Data Transformation"
 
 def getCurrentConnectionName(inputDataset):
     #input Dataset is the output of dataiku.Dataset("dataset name"
-    print('getCurrentConnectionName')
     return inputDataset.get_location_info().get('info', {}).get('connectionName',
                                                                 '')
 
 def getConnectionParams(name):
-    print('getConnectionParams for ' + name)
     client = dataiku.api_client()
-    print('getConnectionParams -B')
     mydssconnection = client.get_connection(name)
-    print('getConnectionParams -C')
-    print(mydssconnection)
     return mydssconnection.get_definition().get('params', {})
 
 def getConnectionParamsFromDataset(inputDataset):
@@ -117,9 +112,7 @@ def do(payload, config, plugin_config, inputs):
             inputtablename = input['fullName'].split('.')[1]
             inputDataSets.append(inputtablename)
             if not connection:
-                print('GETTING CONNECTION LOL for inputtablename')
                 inputdataset = dataiku.Dataset(inputtablename)
-                print('GETTING CONNECTION LOL for inputtablename - A')
                 connection = getConnectionParamsFromDataset(inputdataset)
         else:
             inputfoldername = input['fullName'].split('.')[1]       
