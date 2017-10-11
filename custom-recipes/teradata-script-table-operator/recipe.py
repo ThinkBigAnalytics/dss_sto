@@ -207,10 +207,10 @@ def getReplaceFunctionQuery():
             #Look for complex Orange book example
             #Tabs for input, output, and script
 
-def removePasswordFromRecipe(projectname):
+def removePasswordFromRecipe(projectname, outputdatasetname):
     client = dataiku.api_client()
     project = client.get_project(projectname)
-    r = project.get_recipe("compute_ex1tbl_out")
+    r = project.get_recipe("compute_{}".format(outputdatasetname))
     defr = r.get_definition_and_payload()
     if defr:
         params = defr.get_recipe_params()
@@ -308,4 +308,4 @@ selectResult = executor.query_to_df(nQuery);
 pythonrecipe_out = output_A_datasets[0]
 pythonrecipe_out.write_with_schema(selectResult)
 
-removePasswordFromRecipe(output_A_names[0].split('.')[0])
+removePasswordFromRecipe(output_A_names[0].split('.')[0], output_A_names[0].split('.')[1])
