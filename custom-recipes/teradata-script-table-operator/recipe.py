@@ -93,7 +93,12 @@ handle = dataiku.Folder("sto_scripts")
 # empty_table = dataiku.Dataset("empty_table")
 def db_user():
     return getConnectionUser(output_A_datasets[0])
+
 empty_table = input_A_datasets[0]
+
+if db_user() != getConnectionUser(input_A_datasets[0]):
+    raise RuntimeError('Input dataset and output dataset have different connection details')
+
 output_location = output_A_datasets[0].get_location_info()['info']
 
 scriptAlias = function_config.get('script_alias', '')
