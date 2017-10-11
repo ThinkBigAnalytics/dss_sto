@@ -64,6 +64,9 @@
       modal: true,
       width: '33%',
       minHeight: 250,
+      close : function(){
+          window.location.reload();
+      }
     }
 
     /**
@@ -124,8 +127,6 @@
           .dialog(DIALOG_PARAMETERS);
 
         $dialog.css(DIALOG_CSS_PARAMETERS);
-        $scope.config.function.savepwd = false;
-        delete $scope.config.function.dbpwd;
 
       },
 
@@ -642,8 +643,7 @@
           data => $.extend($scope, data),
           () => {}
         ).then(
-          () => {delete $scope.config.function.dbpwd;
-                $scope.config.function.input_table = $scope.inputs.find(
+          () => { $scope.config.function.input_table = $scope.inputs.find(
                         (x => ('main' === x.role) && x.fullName) || {'fullName':''}).
                         fullName.split('.').pop();
                 },
@@ -840,7 +840,6 @@
        */
       initialize: function () {
         $scope.config.function = $scope.config.function || {};
-        $scope.config.function.savepwd = false;
         $scope.config.function.files = $scope.config.function.files || [];
         $scope.config.function.arguments = $scope.config.function.arguments || [{'value':''}];
         $scope.config.function.return_clause = $scope.config.function.return_clause || [{'name':'','type':''}];

@@ -74,11 +74,6 @@ import os
 from dataiku import pandasutils as pdu
 from dataiku.core.sql import SQLExecutor2
 
-print('Checks')
-print(function_config)
-print(output_A_names)
-print(output_A_datasets)
-
 # print('Starting handle')
 handle = dataiku.Folder("sto_scripts")
 # filepath = handle.file_path("ex2p.py")
@@ -212,6 +207,18 @@ def getReplaceFunctionQuery():
             #Look for complex Orange book example
             #Tabs for input, output, and script
 
+def removePasswordFromRecipe(projectname):
+    client = dataiku.api_client()
+    project = client.get_project(projectname)
+    r = project.get_recipe("compute_ex1tbl_out")
+    defr = r.get_definition_and_payload()
+    if defr:
+        params = defr.get_recipe_params()
+        if 'customConfig' in defr.get_recipe_params() and 'function' in defr.get_recipe_params()['customConfig']:
+            defr.get_recipe_params()['customConfig']['function'].pop('dbpwd', None)
+            defr.get_recipe_params()['customConfig']['function'].pop('savepwd', None)
+            r.set_definition_and_payload(defr)
+
 def getSelectTableQuery(inputDataset, inputTableName):
     return """select * from dbc.tables
 where databasename = '{dataset}'
@@ -297,5 +304,8 @@ executor.query_to_df('COMMIT WORK',
 nQuery = """SELECT * FROM {searchPath}.{table};""".format(searchPath=searchPath,
                                                           table=outputTable)
 selectResult = executor.query_to_df(nQuery);
+
 pythonrecipe_out = output_A_datasets[0]
 pythonrecipe_out.write_with_schema(selectResult)
+
+removePasswordFromRecipe(output_A_names[0].split('.')[0])
