@@ -19,6 +19,7 @@ from dataiku.customrecipe import *
 from subprocess import call
 
 from auth import *
+from pynbExtractor import *
 from re import search
 
 # Inputs and outputs are defined by roles. In the recipe's I/O tab, the user can associate one
@@ -110,8 +111,13 @@ outputTable = output_A_datasets[0].get_location_info()['info'].get('table', '')
 
 if(scriptLocation == 'sz'):
     scriptFileLocation = function_config.get('script_filelocation')
+elif 'czp' == scriptLocation:
+    scriptFileLocation = pynbDestinationPath(scriptFileName)
+    writePythonNotebookToResourceFolder(output_A_names[0].split('.')[0], scriptFileName)
 else:
     scriptFileLocation = handle.file_path(scriptFileName)
+
+scriptLocation = scriptLocation[:2]
 
 commandType = function_config.get('command_type', '')
 returnClause = ', '.join((x.get('name', '') + ' ' + x.get('type', ''))
@@ -271,6 +277,7 @@ try:
         raise RuntimeError('Error during BTEQ Loading, please check logs for more information')
 except Exception as error:
     print('Error during BTEQ File loading. Please check the logs')
+    removePasswordFromRecipe(output_A_names[0].split('.')[0], output_A_names[0].split('.')[1])
     raise 
 
 

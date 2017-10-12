@@ -762,7 +762,6 @@
       },
 
       cleanName: function (rawName) {
-
         return rawName.split('_').join(' ').toLowerCase()
 
       },

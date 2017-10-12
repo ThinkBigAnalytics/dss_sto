@@ -261,6 +261,7 @@
                       <option value="" selected>--No Selection--</option>
                       <option value="sz" selected>Teradata Server</option>
                       <option value="cz" selected>Dataiku Managed Folder</option>
+                      <option value="czp" selected>Python Notebooks</option>
                   </select>
                 </td>
               </tr>
@@ -295,6 +296,19 @@
                     data-container="body" data-placement="right" data-html="true"
                     ng-options="inputFile as inputFile for inputFile in fileList">
                       <option value="" selected>--No Selection--</option>                      
+                  </select>
+                </td>
+              </tr>
+              <tr ng-if="config.function.script_location == 'czp'">
+                <td>
+                  Script Filename
+                </td>
+                <td>
+                  <select required ng-model="config.function.script_filename"
+                    ng-change="onFilenameChange()"
+                    data-container="body" data-placement="right" data-html="true"
+                    ng-options="inputFile as inputFile for inputFile in nbList">
+                      <option value="" selected>--No Selection--</option>
                   </select>
                 </td>
               </tr>
