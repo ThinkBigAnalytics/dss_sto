@@ -22,6 +22,7 @@ from auth import *
 from pynbExtractor import *
 from re import search
 
+
 # Inputs and outputs are defined by roles. In the recipe's I/O tab, the user can associate one
 # or more dataset to each input and output role.
 # Roles need to be defined in recipe.json, in the inputRoles and outputRoles fields.
@@ -114,8 +115,11 @@ if(scriptLocation == 'sz'):
 elif 'czp' == scriptLocation:
     scriptFileLocation = pynbDestinationPath(scriptFileName)
     writePythonNotebookToResourceFolder(output_A_names[0].split('.')[0], scriptFileName)
+    scriptFileName = scriptFileName.replace("'", "")
+    scriptFileName = scriptFileName.replace(" ", "")
 else:
     scriptFileLocation = handle.file_path(scriptFileName)
+
 
 scriptLocation = scriptLocation[:2]
 
@@ -141,6 +145,7 @@ partitionClause = getPartitionClause(function_config.get('partitionby', ''))
 hashClause = getHashClause(function_config.get('hashby', ''))
 orderClause = getOrderClause(function_config.get('orderby', ''))
 
+
 script_command = ''
 if commandType == 'python':
     script_command = """'export PATH; python ./"""+searchPath+"""/"""+scriptFileName+""" """+scriptArguments+"""'"""
@@ -162,10 +167,10 @@ setSessionQuery = 'SET SESSION SEARCHUIFDBPATH = {searchPath};'.format(searchPat
 etQuery = 'COMMIT WORK;'
 removeFileQuery = """CALL SYSUIF.REMOVE_FILE('""" + scriptAlias + """',1);"""
 # installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + function_config.get('script_alias') + """','""" + function_config.get('script_filename') + """','cz!"""+filepath+"""');"""
-installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + scriptAlias + """','""" + scriptFileName + """','"""+scriptLocation+"""!"""+scriptFileLocation.rstrip()+"""');"""
+installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + escape(scriptAlias) + """','""" + escape(scriptFileName) + """','"""+escape(scriptLocation)+"""!"""+escape(scriptFileLocation.rstrip())+"""');"""
 
 #sz if in DB
-replaceFileQuery = """CALL SYSUIF.REPLACE_FILE('""" + scriptAlias + """','""" + scriptFileName + """','"""+scriptLocation+"""!"""+scriptFileLocation.rstrip()+"""', 0);"""
+replaceFileQuery = """CALL SYSUIF.REPLACE_FILE('""" + escape(scriptAlias) + """','""" + escape(scriptFileName) + """','"""+escape(scriptLocation)+"""!"""+escape(scriptFileLocation.rstrip())+"""', 0);"""
 scriptDoesExist = """select * from dbc.tables
 where databasename = '{searchPath}'
 and TableKind = 'Z';""".format(searchPath=searchPath)

@@ -5,7 +5,6 @@ Created on 12 Oct 2017
 '''
 
 import os
-import json
 import dataiku
 from dataiku.customrecipe import *
 
@@ -18,6 +17,9 @@ SOURCE = 'source'
 CODE = 'code'
 CELL_TYPE = 'cell_type'
 
+def escape(s):
+    return s.replace("'", "''")
+
 def readfile(pynbpath):
     data = {}
     with open(pynbpath, 'r') as file:
@@ -29,12 +31,7 @@ def writefile(destinationpath, lines):
         f.write('\n'.join(lines))
 
 def pynbDestinationPath(pynb):
-    print('pynb: ==================')
-    print(pynb)
-    print("path: ")
-    print(os.path.join(get_recipe_resource(), pynb))
-    print(json.dumps(os.path.join(get_recipe_resource(), pynb)))
-    return os.path.join(get_recipe_resource(), pynb)
+    return os.path.join(get_recipe_resource(), pynb).replace("'", "").replace(" ", "")
 
 def writePythonNotebookToResourceFolder(project, pynb):
     pynbpath = os.path.join(DATA_DIR, PYNBDIR, project, pynb)
