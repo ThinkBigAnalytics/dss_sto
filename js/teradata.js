@@ -213,8 +213,8 @@
 
       onFilenameChange() {
           let filename = $scope.config.function.script_filename || '';
-          $scope.config.function.script_alias = filename.substring(0,filename.lastIndexOf('.')) ||
-              filename;
+          $scope.config.function.script_alias = (filename.substring(0,filename.lastIndexOf('.')) ||
+              filename).replace(/("| |')/g, "");
       },
 
       onAdditionalFilenameChange: function(index) {
@@ -226,8 +226,8 @@
               return;
           }
           let filename = $scope.config.function.files[index].filename || '';
-          $scope.config.function.files[index].file_alias = filename
-              .substring(0,filename.lastIndexOf('.')) || filename;
+          $scope.config.function.files[index].file_alias = (filename
+              .substring(0,filename.lastIndexOf('.')) || filename).replace(/("| |')/g, "");
       },
 
       onFileLocationChange() {
