@@ -96,9 +96,12 @@ handle = dataiku.Folder("sto_scripts")
 def db_user():
     return getConnectionUser(output_A_datasets[0])
 
+def default_database(dataset=output_A_datasets[0]):
+    return getConnectionParamsFromDataset(output_A_datasets[0]).get('defaultDatabase', "");
+
 empty_table = input_A_datasets[0]
 
-if db_user() != getConnectionUser(input_A_datasets[0]):
+if default_database(input_A_datasets[0]) != default_database():
     raise RuntimeError('Input dataset and output dataset have different connection details')
 
 output_location = output_A_datasets[0].get_location_info()['info']
@@ -106,7 +109,7 @@ output_location = output_A_datasets[0].get_location_info()['info']
 scriptAlias = function_config.get('script_alias', '')
 scriptFileName = function_config.get('script_filename', '')
 scriptLocation = function_config.get('script_location', '')
-searchPath = db_user()
+searchPath = default_database()
 outputTable = output_A_datasets[0].get_location_info()['info'].get('table', '')
 
 
@@ -163,6 +166,7 @@ for item in additionalFiles:
         installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+address+"""');"""
 
 # select query
+databaseQuery = 'DATABASE {database};'.format(database=default_database())
 setSessionQuery = 'SET SESSION SEARCHUIFDBPATH = {searchPath};'.format(searchPath=searchPath)
 etQuery = 'COMMIT WORK;'
 removeFileQuery = """CALL SYSUIF.REMOVE_FILE('""" + scriptAlias + """',1);"""
@@ -255,25 +259,27 @@ def getPassword():
 
 def database():
     # for now, database name = db user name
-    return db_user()
+    return default_database()
     
 #PERFORM FILE LOADING
 if function_config.get("replace_script"):
     bteqScript = """bteq << EOF 
               .LOGON 153.64.211.111/{user},{pwd};
               """.format(user=db_user(),pwd=getPassword()) +setSessionQuery+"""
+              """+databaseQuery+"""
               """+installAdditionalFiles+"""
               """+replaceFileQuery+"""
               .QUIT
-              EOF"""
+EOF"""
 else:
     bteqScript = """bteq << EOF 
               .LOGON 153.64.211.111/{user},{pwd};
               """.format(user=db_user(),pwd=getPassword()) +setSessionQuery+"""
+              """+databaseQuery+"""
               """+installAdditionalFiles+"""
               """+installFileQuery+"""
               .QUIT
-              EOF"""
+EOF"""
 
 try:
     exitValue = call([bteqScript],shell=True)
@@ -312,8 +318,10 @@ if len(existingtable.index):
 #     query = getFunctionQuery(input_A_datasets[0], None) 
 # lenquery = len(query) - 1
 # executor.query_to_df(query[lenquery], query[-lenquery:])
-executor.query_to_df('COMMIT WORK',
+executor.query_to_df('COMMIT WORK;',
                      ['SET SESSION SEARCHUIFDBPATH = {searchPath};'.format(searchPath=searchPath),
+                      databaseQuery,
+                      'COMMIT WORK;',
                       createTableQuery])
 #executor.query_to_df('\n'.join(query))
 
