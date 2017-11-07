@@ -8,7 +8,7 @@ import os
 import dataiku
 from dataiku.customrecipe import *
 
-DATA_DIR = "/home/dataiku/dss_data/"
+
 PYNBDIR = "config/ipython_notebooks/"
 PLUGINS_DIR = "plugins/installed"
 
@@ -34,6 +34,7 @@ def pynbDestinationPath(pynb):
     return os.path.join(get_recipe_resource(), pynb).replace("'", "").replace(" ", "")
 
 def writePythonNotebookToResourceFolder(project, pynb):
+    DATA_DIR = os.environ["DIP_HOME"]
     pynbpath = os.path.join(DATA_DIR, PYNBDIR, project, pynb)
     # get cells from Python notebook
     cells = readfile(pynbpath).get(CELLS, [])
