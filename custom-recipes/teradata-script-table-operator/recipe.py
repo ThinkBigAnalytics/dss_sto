@@ -93,9 +93,10 @@ handle = dataiku.Folder("sto_scripts")
 # print(jsonfile)
 # Recipe inputs
 # empty_table = dataiku.Dataset("empty_table")
+print('Getting DB User')
 def db_user():
     return getConnectionUser(output_A_datasets[0])
-
+print('Getting Default Database')
 def default_database(dataset=output_A_datasets[0]):
     return getConnectionParamsFromDataset(output_A_datasets[0]).get('defaultDatabase', "");
 
@@ -106,6 +107,7 @@ if default_database(input_A_datasets[0]) != default_database():
 
 output_location = output_A_datasets[0].get_location_info()['info']
 
+print('Getting Function Config')
 scriptAlias = function_config.get('script_alias', '')
 scriptFileName = function_config.get('script_filename', '')
 scriptLocation = function_config.get('script_location', '')
@@ -148,14 +150,15 @@ partitionClause = getPartitionClause(function_config.get('partitionby', ''))
 hashClause = getHashClause(function_config.get('hashby', ''))
 orderClause = getOrderClause(function_config.get('orderby', ''))
 
-
+print('Building STO Script Command')
 script_command = ''
 if commandType == 'python':
     script_command = """'export PATH; python ./"""+searchPath+"""/"""+scriptFileName+""" """+scriptArguments+"""'"""
 elif commandType == 'r':
     script_command = """'R --vanilla --slave -f ./"""+searchPath+"""/"""+scriptFileName+"""'"""
-
+print("""Script Command: """+script_command)
 #INSTALL Additional files
+print('Building Additional File INSTALLATION/REPLACEMENT')
 installAdditionalFiles = """"""
 for item in additionalFiles:
     address = item.get('file_address', '').rstrip() if\
@@ -165,14 +168,19 @@ for item in additionalFiles:
     else:
         installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+address+"""');"""
 
+print("""Additional Files Installation Query/ies: """+installAdditionalFiles)
 # select query
+print('Building Database Query')
 databaseQuery = 'DATABASE {database};'.format(database=default_database())
+print("""Database Query: """+databaseQuery)
+print('Build Session SearchUIFDBPath Query')
 setSessionQuery = 'SET SESSION SEARCHUIFDBPATH = {searchPath};'.format(searchPath=searchPath)
+print("""Set Session Query: """ + setSessionQuery)
 etQuery = 'COMMIT WORK;'
 removeFileQuery = """CALL SYSUIF.REMOVE_FILE('""" + scriptAlias + """',1);"""
 # installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + function_config.get('script_alias') + """','""" + function_config.get('script_filename') + """','cz!"""+filepath+"""');"""
+print('Building Script installation query')
 installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + escape(scriptAlias) + """','""" + escape(scriptFileName) + """','"""+escape(scriptLocation)+"""!"""+escape(scriptFileLocation.rstrip())+"""');"""
-
 #sz if in DB
 replaceFileQuery = """CALL SYSUIF.REPLACE_FILE('""" + escape(scriptAlias) + """','""" + escape(scriptFileName) + """','"""+escape(scriptLocation)+"""!"""+escape(scriptFileLocation.rstrip())+"""', 0);"""
 scriptDoesExist = """select * from dbc.tables
@@ -205,27 +213,27 @@ FROM SCRIPT (ON ({onClause}){hashClause}{partitionClause}{orderClause}
                    returnClause=returnClause,
                    additionalClauses=getAdditionalClauses(function_config.get('add_clauses','')))
 
-            # RETURNS ('"""oc1 VARCHAR(10), oc2 VARCHAR(10), oc3 VARCHAR(18)"""')
-# some helper function
-def getFunctionQuery(inputDataset, outputDataset):
-    return [installAdditionalFiles,
-            setSessionQuery,
-            etQuery,
-            #installFileQuery,
-            etQuery]
+#             # RETURNS ('"""oc1 VARCHAR(10), oc2 VARCHAR(10), oc3 VARCHAR(18)"""')
+# # some helper function
+# def getFunctionQuery(inputDataset, outputDataset):
+#     return [installAdditionalFiles,
+#             setSessionQuery,
+#             etQuery,
+#             #installFileQuery,
+#             etQuery]
 
-def getReplaceFunctionQuery():
-    return [installAdditionalFiles,
-            setSessionQuery,#Add UI option
-            etQuery,
-            # removeFileQuery,
-            # etQuery,
-            # installFileQuery,
-            replaceFileQuery,
-            etQuery]
+# def getReplaceFunctionQuery():
+#     return [installAdditionalFiles,
+#             setSessionQuery,#Add UI option
+#             etQuery,
+#             # removeFileQuery,
+#             # etQuery,
+#             # installFileQuery,
+#             replaceFileQuery,
+#             etQuery]
 
-            #Look for complex Orange book example
-            #Tabs for input, output, and script
+#             #Look for complex Orange book example
+#             #Tabs for input, output, and script
 
 def removePasswordFromRecipe(projectname, outputdatasetname):
     client = dataiku.api_client()
@@ -262,6 +270,7 @@ def database():
     return default_database()
     
 #PERFORM FILE LOADING
+print('BTEQ file loading starting...')
 if function_config.get("replace_script"):
     bteqScript = """bteq << EOF 
               .LOGON 153.64.211.111/{user},{pwd};
@@ -292,18 +301,20 @@ except Exception as error:
     raise 
 
 
-# actual query
-print("Actual query")
-query = getFunctionQuery(empty_table, None)
-# query = getFunctionQuery(input_A_datasets[0], None)
-print(query)
+# # actual query
+# print("Actual query")
+# query = getFunctionQuery(empty_table, None)
+# # query = getFunctionQuery(input_A_datasets[0], None)
+# print(query)
 executor = SQLExecutor2(dataset=empty_table)
 # executor = SQLExecutor2(dataset=input_A_datasets[0])
-
+print('Checking for existing table')
 existingtable = executor.query_to_df(getSelectTableQuery(searchPath,
                                                          outputTable))
+print('Existing Tables:')
 print(len(existingtable.index))
 if len(existingtable.index):
+    print('Dropping tables')
     executor.query_to_df('COMMIT WORK',
                          ['DROP TABLE {searchPath}.{outputTable}'
                           .format(searchPath=searchPath,
@@ -318,6 +329,8 @@ if len(existingtable.index):
 #     query = getFunctionQuery(input_A_datasets[0], None) 
 # lenquery = len(query) - 1
 # executor.query_to_df(query[lenquery], query[-lenquery:])
+print('Creating table...')
+print("""Create table statement: """+createTableQuery)
 executor.query_to_df('COMMIT WORK;',
                      ['SET SESSION SEARCHUIFDBPATH = {searchPath};'.format(searchPath=searchPath),
                       databaseQuery,
@@ -326,11 +339,15 @@ executor.query_to_df('COMMIT WORK;',
 #executor.query_to_df('\n'.join(query))
 
 # Recipe outputs
+print('Preparing SELECT Query for DSS Results...')
 nQuery = """SELECT * FROM {searchPath}.{table};""".format(searchPath=searchPath,
                                                           table=outputTable)
-selectResult = executor.query_to_df(nQuery);
-
+print("""SELECT Query: """+nQuery)
+print('Executing SELECT Query...')
+selectResult = executor.query_to_df(nQuery)
+print('Moving results to output...')
 pythonrecipe_out = output_A_datasets[0]
 pythonrecipe_out.write_with_schema(selectResult)
-
+print('Cleaning password from Recipe')
 removePasswordFromRecipe(output_A_names[0].split('.')[0], output_A_names[0].split('.')[1])
+print('Complete!')
