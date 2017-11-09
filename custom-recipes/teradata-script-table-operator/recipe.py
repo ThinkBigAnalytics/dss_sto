@@ -34,6 +34,7 @@ input_A_datasets = [dataiku.Dataset(name) for name in input_A_names]
 
 # To  retrieve the datasets of an input role named 'input_A' as an array of dataset names:
 input_B_names = get_input_names_for_role('sto_scripts')
+
 # The dataset objects themselves can then be created like this:
 input_B_datasets = [dataiku.Dataset(name) for name in input_B_names]
 
@@ -77,7 +78,7 @@ from dataiku import pandasutils as pdu
 from dataiku.core.sql import SQLExecutor2
 
 # print('Starting handle')
-handle = dataiku.Folder("sto_scripts")
+handle = dataiku.Folder("sto_scripts") if input_B_names else None
 # filepath = handle.file_path("ex2p.py")
 # filepath ="/home/dataiku/dss_data/managed_folders/DT186022_TEST/kA2too62/"
 

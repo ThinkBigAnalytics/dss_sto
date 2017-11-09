@@ -29,6 +29,7 @@ def do(payload, config, plugin_config, inputs):
     # print(inputtablename)
     connection = {}
     project = ''
+    inputFolderLocation = None
     for input in inputs:
         if(input.get('role') == 'main'):
             inputtablename = input['fullName'].split('.')[1]
@@ -41,9 +42,9 @@ def do(payload, config, plugin_config, inputs):
             inputfoldername = input['fullName'].split('.')[1]       
             inputFolderLocation =  dataiku.Folder(inputfoldername)
 
-    folderpath = inputFolderLocation.get_path()
+    folderpath = inputFolderLocation.get_path() if inputFolderLocation else ''
 
-    fileList = os.listdir(folderpath)
+    fileList = os.listdir(folderpath) if folderpath else []
     DATA_DIR = "/home/dataiku/dss_data/"
     PYNBDIR = "config/ipython_notebooks/"
     pypath = os.path.join(DATA_DIR, PYNBDIR, project)
