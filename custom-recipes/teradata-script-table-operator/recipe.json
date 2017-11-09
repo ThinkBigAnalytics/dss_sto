@@ -24,6 +24,7 @@
         },
         {
             "name": "sto_scripts",
+            "label": "Script Folder. Choose the Managed Folder that contains your script.",
             "arity": "UNARY",
             "required": true,
             "acceptsDataset": false,
