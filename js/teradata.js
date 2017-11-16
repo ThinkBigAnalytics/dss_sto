@@ -732,7 +732,7 @@
 
         const $a = $('.mainPane > div:first > div:first > div.recipe-settings-section2 > a');
         $a
-          .text('Learn more about Teradata Script Table Operator')
+          .text('Learn more about Teradata SCRIPT Table Operator')
           .css('color', 'orange')
           .attr('target', '_blank');
         $a.parent().css('text-align', 'center');
