@@ -22,7 +22,7 @@
         "licenseInfo" : "Apache Software License",
 
         // URL where the user can learn more about the plugin
-        "url" : "http://community.teradata.com/t5/Analytics/Teradata-In-database-R-and-Python-Analytics-with-the-SCRIPT/td-p/55164",
+        "url" : "https://info.teradata.com/download.cfm?ItemID=1013063",
 
         // List of tags for filtering the list of plugins
         "tags" : ["nicedataset", "dev"]
