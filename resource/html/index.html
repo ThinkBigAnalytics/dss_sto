@@ -63,8 +63,7 @@
         <ul>
           <li><a href="#tabs-execution">STO Arguments</a></li>
           <li><a href="#tabs-table">Other SQL Arguments</a></li>
-          <li><a href="#tabs-script">Script Loading</a></li>
-          <li><a href="#tabs-loading">Additional Files</a></li>
+          <li><a href="#tabs-loading">Script Loading</a></li>
           <li><a href=#tabs-connection>Connection</a></li>
         </ul>
 
@@ -237,97 +236,79 @@
 
         </div>
 
-        <div id="tabs-script">
+        <div id="tabs-loading">
           <table class="table table-condensed table-hover" ng-model-options="{ debounce: 200 }">
 
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Value</th>
+                <th>File Alias</th>
+                <th>File Details</th>
               </tr>
             </thead>
 
             <tbody>
               <tr>
-                <td>Script Location</td>
                 <td>
-                  <select required ng-model="config.function.script_location"data-container="body"
-                    ng-change="onFileLocationChange()" data-placement="right" data-html="true">
-                      <option value="" selected>--No Selection--</option>
+                  <div class="inner-cell" ng-if="config.function.script_location == 'cz'">
+                    <p class="inner-label">File Name</p>
+                    <select required ng-model="config.function.script_filename"
+                      ng-change="onFilenameChange()"
+                      data-container="body"
+                      data-placement="right" data-html="true"
+                      ng-options="inputFile as inputFile for inputFile in fileList">
+                        <option value="" selected>--No Selection--</option>
+                    </select>
+                  </div>
+                  <div class="inner-cell" ng-if="config.function.script_location == 'czp'">
+                    <p class="inner-label">File Name</p>
+                    <select required ng-model="config.function.script_filename"
+                      ng-change="onFilenameChange()"
+                      data-container="body"
+                      data-placement="right" data-html="true"
+                      ng-options="inputFile as inputFile for inputFile in nbList">
+                        <option value="" selected>--No Selection--</option>
+                    </select>
+                  </div>
+                  <div class="inner-cell" ng-if="config.function.script_location == 'sz'">
+                    <p class="inner-label">File Name</p>
+                    <input required ng-model="config.function.script_filename" type="text"
+                     ng-change="onFilenameChange()"
+                     data-container="body" data-html="true" title="Filename" data-placement="right"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <div class="inner-cell">
+                    <p class="inner-label">File Alias</p>
+                    <input required ng-model="config.function.script_alias" type="text" data-container="body" data-html="true" title="File Alias" data-placement="right"
+                    />
+                  </div>
+                  <div class="inner-cell" ng-if="'sz'===config.function.script_location">
+                    <p class="inner-label">File Address</p>
+                    <input required ng-model="config.function.script_filelocation" type="text" data-container="body" data-html="true" title="File Location" data-placement="right"
+                    />
+                  </div>
+                  <div class="inner-cell">
+                    <div class="inner-cell">
+                      <p class="inner-label">File Location</p>
+                      <select required ng-model="config.function.script_location" data-container="body"
+                         ng-change="onFileLocationChange()"
+                         data-placement="right" data-html="true">
                       <option value="sz" selected>Teradata Server</option>
                       <option value="cz" selected>Dataiku Managed Folder</option>
                       <option value="czp" selected>Python Notebooks</option>
-                  </select>
-                </td>
-              </tr>
-              <tr ng-if="config.function.script_location == 'sz'">
-                <td>
-                  Script Filename
-                </td>
-                <td>
-                  <input required ng-model="config.function.script_filename" type="text"
-                    ng-change="onFilenameChange()"
-                    data-container="body" data-html="true" title="Script Filename"
-                    data-placement="right" />
-                </td>
-              </tr>
-              <tr ng-if="config.function.script_location == 'sz'">
-                <td>
-                  Script File Location
-                </td>
-                <td>
-                  <input required ng-model="config.function.script_filelocation"
-                    type="text" data-container="body" data-html="true" title="Script File Location"
-                    data-placement="right" />
-                </td>
-              </tr>
-              <tr ng-if="config.function.script_location == 'cz'">
-                <td>
-                  Script Filename
-                </td>
-                <td>
-                  <select required ng-model="config.function.script_filename"
-                    ng-change="onFilenameChange()"
-                    data-container="body" data-placement="right" data-html="true"
-                    ng-options="inputFile as inputFile for inputFile in fileList">
-                      <option value="" selected>--No Selection--</option>                      
-                  </select>
-                </td>
-              </tr>
-              <tr ng-if="config.function.script_location == 'czp'">
-                <td>
-                  Script Filename
-                </td>
-                <td>
-                  <select required ng-model="config.function.script_filename"
-                    ng-change="onFilenameChange()"
-                    data-container="body" data-placement="right" data-html="true"
-                    ng-options="inputFile as inputFile for inputFile in nbList">
-                      <option value="" selected>--No Selection--</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>Script Alias</td>
-                <td>
-                  <input required ng-model="config.function.script_alias" type="text" data-container="body" data-html="true" title="Script Alias"
-                    data-placement="right" />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Replace Script
-                </td>
-                <td>
-                  <input type="checkbox" ng-model="config.function.replace_script"></input> Replace Current Script
+                      </select>
+                    </div>
+                    <div class="inner-cell">
+                      <p class="inner-label">Replace File</p>
+                      <input type="checkbox" ng-model="config.function.replace_script"></input> Replace Current Script
+                    </div>
+                  </div>
                 </td>
               </tr>
             </tbody>
-            </table>
-        </div>
-
-        <div id="tabs-loading">
-
+          </table>
+          <p><br><br><br></p>
           <div>
             <button ng-click="addMoreFilesClick()">Add More Files</button>
             <label style="display: inline-block">&emsp;&emsp;&emsp;&emsp;
