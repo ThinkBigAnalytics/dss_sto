@@ -21,6 +21,7 @@ from subprocess import call
 from auth import *
 from pynbExtractor import *
 from re import search
+from shutil import copyfile
 
 
 # Inputs and outputs are defined by roles. In the recipe's I/O tab, the user can associate one
@@ -158,18 +159,7 @@ if commandType == 'python':
 elif commandType == 'r':
     script_command = """'R --vanilla --slave -f ./"""+searchPath+"""/"""+scriptFileName+"""'"""
 print("""Script Command: """+script_command)
-#INSTALL Additional files
-print('Building Additional File INSTALLATION/REPLACEMENT')
-installAdditionalFiles = """"""
-for item in additionalFiles:
-    address = item.get('file_address', '').rstrip() if\
-        ('s' == item.get('file_location', '')) else handle.file_path(item.get('filename', ''))
-    if item.get('replace_file'):
-        installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.REPLACE_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+address+"""',0);"""
-    else:
-        installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+address+"""');"""
 
-print("""Additional Files Installation Query/ies: """+installAdditionalFiles)
 # select query
 print('Building Database Query')
 databaseQuery = 'DATABASE {database};'.format(database=default_database())
@@ -178,15 +168,53 @@ print('Build Session SearchUIFDBPath Query')
 setSessionQuery = 'SET SESSION SEARCHUIFDBPATH = {searchPath};'.format(searchPath=searchPath)
 print("""Set Session Query: """ + setSessionQuery)
 etQuery = 'COMMIT WORK;'
+
+#File Related:
+
 removeFileQuery = """CALL SYSUIF.REMOVE_FILE('""" + scriptAlias + """',1);"""
 # installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + function_config.get('script_alias') + """','""" + function_config.get('script_filename') + """','cz!"""+filepath+"""');"""
 print('Building Script installation query')
-installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + escape(scriptAlias) + """','""" + escape(scriptFileName) + """','"""+escape(scriptLocation)+"""!"""+escape(scriptFileLocation.rstrip())+"""');"""
+installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + escape(scriptAlias) + """','""" + escape(scriptFileName) + """','"""+escape(scriptLocation)+"""!"""+escape(scriptFileName)+"""');"""
 #sz if in DB
-replaceFileQuery = """CALL SYSUIF.REPLACE_FILE('""" + escape(scriptAlias) + """','""" + escape(scriptFileName) + """','"""+escape(scriptLocation)+"""!"""+escape(scriptFileLocation.rstrip())+"""', 0);"""
+replaceFileQuery = """CALL SYSUIF.REPLACE_FILE('""" + escape(scriptAlias) + """','""" + escape(scriptFileName) + """','"""+escape(scriptLocation)+"""!"""+escape(scriptFileName)+"""', 0);"""
 scriptDoesExist = """select * from dbc.tables
 where databasename = '{searchPath}'
 and TableKind = 'Z';""".format(searchPath=searchPath)
+
+#File Copy to DIST
+dkuinstalldir = os.environ['DKUINSTALLDIR']
+newPath = dkuinstalldir + """/dist/"""+scriptFileName
+print(newPath)
+print(replaceFileQuery)
+#COPY FILE TEST
+copyfile(escape(scriptFileLocation.rstrip()), newPath)
+
+
+#ADDITIONAL FILES
+#INSTALL Additional files
+print('Building Additional File INSTALLATION/REPLACEMENT')
+# installAdditionalFiles = """"""
+installAdditionalFilesArray = []
+for item in additionalFiles:
+    address = item.get('file_address', '').rstrip() if\
+        ('s' == item.get('file_location', '')) else handle.file_path(item.get('filename', ''))
+    newPath = dkuinstalldir + """/dist/"""+item.get('filename')
+    print(newPath)
+    print(replaceFileQuery)
+    print(address)
+    #COPY FILE TEST
+    copyfile(address, newPath)
+    if item.get('replace_file'):
+        # installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.REPLACE_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+address+"""',0);"""
+        installAdditionalFilesArray.append("""\nCALL SYSUIF.REPLACE_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('filename')+"""',0);""")
+    else:
+        # installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+address+"""');"""
+        installAdditionalFilesArray.append("""\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('filename')+"""');""")
+print("""Additional Files Installation Query/ies: """)
+print(installAdditionalFilesArray)
+
+#MOVE ADDITIONAL FILES
+
 
 print(output_A_names[0])
 useSQLOnClause = function_config.get('useSQLOnClause')
@@ -214,27 +242,6 @@ FROM SCRIPT (ON ({onClause}){hashClause}{partitionClause}{orderClause}
                    returnClause=returnClause,
                    additionalClauses=getAdditionalClauses(function_config.get('add_clauses','')))
 
-#             # RETURNS ('"""oc1 VARCHAR(10), oc2 VARCHAR(10), oc3 VARCHAR(18)"""')
-# # some helper function
-# def getFunctionQuery(inputDataset, outputDataset):
-#     return [installAdditionalFiles,
-#             setSessionQuery,
-#             etQuery,
-#             #installFileQuery,
-#             etQuery]
-
-# def getReplaceFunctionQuery():
-#     return [installAdditionalFiles,
-#             setSessionQuery,#Add UI option
-#             etQuery,
-#             # removeFileQuery,
-#             # etQuery,
-#             # installFileQuery,
-#             replaceFileQuery,
-#             etQuery]
-
-#             #Look for complex Orange book example
-#             #Tabs for input, output, and script
 
 def removePasswordFromRecipe(projectname, outputdatasetname):
     client = dataiku.api_client()
@@ -271,36 +278,42 @@ def database():
     return default_database()
     
 #PERFORM FILE LOADING
-print('BTEQ file loading starting...')
-if function_config.get("replace_script"):
-    bteqScript = """bteq << EOF 
-              .LOGON 153.64.211.111/{user},{pwd};
-              """.format(user=db_user(),pwd=getPassword()) +setSessionQuery+"""
-              """+databaseQuery+"""
-              """+installAdditionalFiles+"""
-              """+replaceFileQuery+"""
-              .QUIT
-EOF"""
-else:
-    bteqScript = """bteq << EOF 
-              .LOGON 153.64.211.111/{user},{pwd};
-              """.format(user=db_user(),pwd=getPassword()) +setSessionQuery+"""
-              """+databaseQuery+"""
-              """+installAdditionalFiles+"""
-              """+installFileQuery+"""
-              .QUIT
-EOF"""
+# print('BTEQ file loading starting...')
+# if function_config.get("replace_script"):
+#     bteqScript = """bteq << EOF 
+#               .LOGON 153.64.211.111/{user},{pwd};
+#               """.format(user=db_user(),pwd=getPassword()) +setSessionQuery+"""
+#               """+databaseQuery+"""
+#               """+installAdditionalFiles+"""
+#               """+replaceFileQuery+"""
+#               .QUIT
+# EOF"""
+# else:
+#     bteqScript = """bteq << EOF 
+#               .LOGON 153.64.211.111/{user},{pwd};
+#               """.format(user=db_user(),pwd=getPassword()) +setSessionQuery+"""
+#               """+databaseQuery+"""
+#               """+installAdditionalFiles+"""
+#               """+installFileQuery+"""
+#               .QUIT
+# EOF"""
 
-try:
-    exitValue = call([bteqScript],shell=True)
-    if(exitValue !=0):
-        print(exitValue)
-        raise RuntimeError('Error during BTEQ Loading, please check logs for more information')
-except Exception as error:
-    print('Error during BTEQ File loading. Please check the logs')
-    removePasswordFromRecipe(output_A_names[0].split('.')[0], output_A_names[0].split('.')[1])
-    raise 
+# try:
+#     exitValue = call([bteqScript],shell=True)
+#     if(exitValue !=0):
+#         print(exitValue)
+#         raise RuntimeError('Error during BTEQ Loading, please check logs for more information')
+# except Exception as error:
+#     print('Error during BTEQ File loading. Please check the logs')
+#     removePasswordFromRecipe(output_A_names[0].split('.')[0], output_A_names[0].split('.')[1])
+#     raise 
 
+
+# print('Performing nquery')
+# selectResult = executor.query_to_df(nQuery,[setSessionQuery]);
+
+# print('Results')
+# print(selectResult)
 
 # # actual query
 # print("Actual query")
@@ -308,6 +321,20 @@ except Exception as error:
 # # query = getFunctionQuery(input_A_datasets[0], None)
 # print(query)
 executor = SQLExecutor2(dataset=empty_table)
+
+
+
+# if function_config.get("replace_script"):
+if function_config.get("replace_script"):
+    print('performing replacefile')
+    executor.query_to_df(replaceFileQuery,[setSessionQuery]);
+else:
+    executor.query_to_df(installFileQuery,[setSessionQuery]);
+
+if(installAdditionalFilesArray != []):
+    print('Installing additional files...')
+    executor.query_to_df(installAdditionalFilesArray,[setSessionQuery])
+    
 # executor = SQLExecutor2(dataset=input_A_datasets[0])
 print('Checking for existing table')
 existingtable = executor.query_to_df(getSelectTableQuery(searchPath,
@@ -343,12 +370,17 @@ executor.query_to_df('COMMIT WORK;',
 print('Preparing SELECT Query for DSS Results...')
 nQuery = """SELECT * FROM {searchPath}.{table};""".format(searchPath=searchPath,
                                                           table=outputTable)
+                                                          
+print('setSessionQuery')
+print(setSessionQuery)
+print('replaceFileQuery')
+print(replaceFileQuery)
 print("""SELECT Query: """+nQuery)
 print('Executing SELECT Query...')
 selectResult = executor.query_to_df(nQuery)
 print('Moving results to output...')
 pythonrecipe_out = output_A_datasets[0]
 pythonrecipe_out.write_with_schema(selectResult)
-print('Cleaning password from Recipe')
-removePasswordFromRecipe(output_A_names[0].split('.')[0], output_A_names[0].split('.')[1])
+# print('Cleaning password from Recipe')
+# removePasswordFromRecipe(output_A_names[0].split('.')[0], output_A_names[0].split('.')[1])
 print('Complete!')
