@@ -154,18 +154,13 @@
                 <!--Add checkbox-->
                 <td>
                   <div class="inner-cell">
-                    <p class="inner-label">SQL ON Clause</p>
-                    <input type="checkbox" ng-model="config.function.useSQLOnClause"></input> Customize the ON clause
+                    <textarea required ng-readonly="!config.function.useSQLOnClause"
+                     ng-model="config.function.sql_on_clause"
+                     placeholder="SELECT * FROM {{config.function.input_table}}" title="On Clause"></textarea>
                   </div>
-
-                  <div class="inner-cell" ng-if='!config.function.useSQLOnClause'>
-                    <p class="inner-label">Input Table: &emsp;&emsp;{{config.function.input_table}}</p>
-                    <!-- <select required ng-model="config.function.script_location" data-container="body" data-placement="right" data-html="true">                       -->
-                    <!-- </select> inputDataSets -->
-                  </div>
-                  <div class="inner-cell" ng-if='config.function.useSQLOnClause'>
-                    <p class="inner-label">ON Clause</p>
-                    <textarea required ng-model="config.function.sql_on_clause" title="On Clause"></textarea>
+                  <div class="inner-cell">
+                    <input type="checkbox" ng-model="config.function.useSQLOnClause"
+                     ng-change="config.function.sql_on_clause=''"></input> Customize the ON clause
                   </div>
                 </td>
               </tr>
