@@ -219,18 +219,17 @@ print(installAdditionalFilesArray)
 print(output_A_names[0])
 useSQLOnClause = function_config.get('useSQLOnClause')
 
-if useSQLOnClause:
-    onClause = function_config.get('sql_on_clause')
-else:
-    onClause = """SELECT * FROM """ + function_config.get('input_table')
+# if useSQLOnClause:
+onClause = function_config.get('sql_on_clause')
+# else:
+    # onClause = """SELECT * FROM """ + function_config.get('input_table')
 
 
-createTableQuery = """CREATE {tabletype} TABLE {searchPath}.{outputTable} AS (
-SELECT *
+createTableQuery = """SELECT *
 FROM SCRIPT (ON ({onClause}){hashClause}{partitionClause}{orderClause}
              SCRIPT_COMMAND({script_command})
              RETURNS ('{returnClause}')
-            )) WITH DATA {additionalClauses};""".\
+            ) {additionalClauses};""".\
             format(tabletype=function_config.get('table_type', ''),
                    searchPath=searchPath,
                    outputTable=outputTable,
@@ -336,17 +335,22 @@ if(installAdditionalFilesArray != []):
     executor.query_to_df(installAdditionalFilesArray,[setSessionQuery])
     
 # executor = SQLExecutor2(dataset=input_A_datasets[0])
-print('Checking for existing table')
-existingtable = executor.query_to_df(getSelectTableQuery(searchPath,
-                                                         outputTable))
-print('Existing Tables:')
-print(len(existingtable.index))
-if len(existingtable.index):
-    print('Dropping tables')
-    executor.query_to_df('COMMIT WORK',
-                         ['DROP TABLE {searchPath}.{outputTable}'
-                          .format(searchPath=searchPath,
-                                  outputTable=outputTable)]);
+
+#November 20, 2017 3:55PM REMOVING TO MOVE TO SELECT ONLY
+# print('Checking for existing table')
+# existingtable = executor.query_to_df(getSelectTableQuery(searchPath,
+#                                                          outputTable))
+
+# print('Existing Tables:')
+# print(len(existingtable.index))
+# if len(existingtable.index):
+#     print('Dropping tables')
+#     executor.query_to_df('COMMIT WORK',
+#                          ['DROP TABLE {searchPath}.{outputTable}'
+#                           .format(searchPath=searchPath,
+#                                   outputTable=outputTable)]);
+
+
 # existingScript = executor.query_to_df(scriptDoesExist);
 # if len(existingScript.index):
 #     if function_config.get("replace_script"):
@@ -357,27 +361,29 @@ if len(existingtable.index):
 #     query = getFunctionQuery(input_A_datasets[0], None) 
 # lenquery = len(query) - 1
 # executor.query_to_df(query[lenquery], query[-lenquery:])
-print('Creating table...')
-print("""Create table statement: """+createTableQuery)
-executor.query_to_df('COMMIT WORK;',
-                     ['SET SESSION SEARCHUIFDBPATH = {searchPath};'.format(searchPath=searchPath),
-                      databaseQuery,
-                      'COMMIT WORK;',
-                      createTableQuery])
+
+#Removing for now
+# print('Creating table...')
+# print("""Create table statement: """+createTableQuery)
+# executor.query_to_df('COMMIT WORK;',
+#                      ['SET SESSION SEARCHUIFDBPATH = {searchPath};'.format(searchPath=searchPath),
+#                       databaseQuery,
+#                       'COMMIT WORK;',
+#                       createTableQuery])
 #executor.query_to_df('\n'.join(query))
 
 # Recipe outputs
 print('Preparing SELECT Query for DSS Results...')
-nQuery = """SELECT * FROM {searchPath}.{table};""".format(searchPath=searchPath,
-                                                          table=outputTable)
+# nQuery = """SELECT * FROM {searchPath}.{table};""".format(searchPath=searchPath,
+#                                                           table=outputTable)
                                                           
 print('setSessionQuery')
 print(setSessionQuery)
 print('replaceFileQuery')
 print(replaceFileQuery)
-print("""SELECT Query: """+nQuery)
+# print("""SELECT Query: """+nQuery)
 print('Executing SELECT Query...')
-selectResult = executor.query_to_df(nQuery)
+selectResult = executor.query_to_df(createTableQuery,[setSessionQuery])
 print('Moving results to output...')
 pythonrecipe_out = output_A_datasets[0]
 pythonrecipe_out.write_with_schema(selectResult)

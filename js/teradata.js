@@ -235,6 +235,12 @@
           $scope.config.function.script_alias = '';
       },
 
+      getOriginalON() {
+         
+        $scope.config.function.sql_on_clause = 'SELECT * FROM ' + $scope.config.function.input_table;
+
+      },
+
       onAdditionalFileLocationChange: function(index) {
           if (!$scope || index < 0 ||
                   !$scope.config ||
@@ -403,6 +409,7 @@
         var isAliasedInputsPopulated;
         var isInAliasedInputsList = false;
         var y = false;
+        
         if (hasTargetTable) {
           //console.log('hasTargetTable');
           const targetTableAlias = functionArgument.targetTable.toUpperCase();
@@ -646,6 +653,7 @@
           () => { $scope.config.function.input_table = $scope.inputs.find(
                         (x => ('main' === x.role) && x.fullName) || {'fullName':''}).
                         fullName.split('.').pop();
+                  $scope.getOriginalON()
                 },
           () => {}
         );
@@ -756,8 +764,11 @@
           $scope.activateTabs();
           $scope.activateMultiTagsInput();
           $scope.activateValidation();
-
+          // Undefined
+          // $scope.getOriginalON();
         });
+
+
 
       },
 
@@ -851,7 +862,7 @@
 
         // $scope.preprocessMetadata();
         $scope.activateUi();
-
+        
       },
 
       /**
