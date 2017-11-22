@@ -241,6 +241,12 @@
 
       },
 
+      resetSelectToStar() {
+        
+       $scope.config.function.select_clause = '*';
+
+     },
+
       onAdditionalFileLocationChange: function(index) {
           if (!$scope || index < 0 ||
                   !$scope.config ||
@@ -653,7 +659,12 @@
           () => { $scope.config.function.input_table = $scope.inputs.find(
                         (x => ('main' === x.role) && x.fullName) || {'fullName':''}).
                         fullName.split('.').pop();
-                  $scope.getOriginalON()
+                  if($scope.config.function.sql_on_clause == null || $scope.config.function.sql_on_clause == undefined){
+                    $scope.getOriginalON()
+                  }
+                  if($scope.config.function.select_clause == null || $scope.config.function.select_clause == undefined){
+                    $scope.resetSelectToStar()
+                  }
                 },
           () => {}
         );

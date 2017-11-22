@@ -79,7 +79,7 @@
             </thead>
 
             <tbody>
-              <tr>
+              <!-- <tr>
                 <td>Table Type</td>
                 <td>
                   <select ng-model="config.function.table_type" data-container="body" data-placement="right" data-html="true">
@@ -87,6 +87,16 @@
                       <option value="SET" selected>SET</option>
                       <option value="MULTISET" selected>MULTISET</option>
                   </select>
+                </td>
+              </tr> -->
+              <tr>
+                <td>Select Columns</td>
+                <td>
+                    <div class="inner-cell">
+                        <input type="checkbox" ng-model="config.function.customSelectClause"
+                         ng-change="resetSelectToStar()"></input> Customize Select Columns
+                      </div>
+                  <textarea ng-readonly="!config.function.customSelectClause" rows="4" cols="200" ng-model="config.function.select_clause"></textarea>
                 </td>
               </tr>
               <tr>

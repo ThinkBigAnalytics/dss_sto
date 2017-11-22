@@ -221,11 +221,12 @@ useSQLOnClause = function_config.get('useSQLOnClause')
 
 # if useSQLOnClause:
 onClause = function_config.get('sql_on_clause')
+selectClause = function_config.get('select_clause')
 # else:
     # onClause = """SELECT * FROM """ + function_config.get('input_table')
 
 
-createTableQuery = """SELECT *
+createTableQuery = """SELECT {selectClause}
 FROM SCRIPT (ON ({onClause}){hashClause}{partitionClause}{orderClause}
              SCRIPT_COMMAND({script_command})
              RETURNS ('{returnClause}')
@@ -233,6 +234,7 @@ FROM SCRIPT (ON ({onClause}){hashClause}{partitionClause}{orderClause}
             format(tabletype=function_config.get('table_type', ''),
                    searchPath=searchPath,
                    outputTable=outputTable,
+                   selectClause=selectClause,
                    onClause=onClause,
                    script_command=script_command,
                    hashClause=hashClause,
