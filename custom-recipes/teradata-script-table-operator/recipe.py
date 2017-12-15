@@ -78,32 +78,46 @@ import os
 from dataiku import pandasutils as pdu
 from dataiku.core.sql import SQLExecutor2
 
-# print('Starting handle')
+#DataIku Managed Folder Handler (Specifically sto_scripts as of now)
 handle = dataiku.Folder("sto_scripts") if input_B_names else None
-# filepath = handle.file_path("ex2p.py")
-# filepath ="/home/dataiku/dss_data/managed_folders/DT186022_TEST/kA2too62/"
-
-# path = handle.get_path()
-
-# print('Check folder directory')
-# print(handle)
-# print(path)
-# print("Stuff")
-# print(os.listdir("/home/dataiku/dss_data/managed_folders/DT186022_TEST/kA2too62/"))
 
 
-# print(jsonfile)
 # Recipe inputs
-# empty_table = dataiku.Dataset("empty_table")
-print('Getting DB User')
-def db_user():
-    return getConnectionUser(output_A_datasets[0])
+# print('Getting DB User')
+# def db_user():
+#     return getConnectionUser(output_A_datasets[0])
 print('Getting Default Database')
 def default_database(dataset=output_A_datasets[0]):
     return getConnectionParamsFromDataset(output_A_datasets[0]).get('defaultDatabase', "");
 
-empty_table = input_A_datasets[0]
+def getConnectionDetails(dataset=input_A_datasets[0]):
+    return getConnectionParamsFromDataset(input_A_datasets[0]);
 
+
+properties = getConnectionDetails(input_A_datasets[0]).get('properties')
+autocommit = getConnectionDetails(input_A_datasets[0]).get('autocommitMode')
+tmode = ''
+
+for prop in properties:
+    if prop['name'] == 'TMODE' and prop['value'] == 'TERA':
+        #Detected TERA
+        print('I am in TERA MODE')
+        tmode = 'TERA'
+        stTxn = 'BEGIN TRANSACTION;'
+        edTxn = 'END TRANSACTION;'
+
+    elif prop['name'] == 'TMODE' and prop['value'] == 'ANSI':
+        #Detected ANSI
+        print('I am in ANSI MODE')
+        tmode = 'ANSI'
+        stTxn = ';'
+        edTxn = 'COMMIT WORK;'
+
+empty_table = input_A_datasets[0]
+#SQL Executor
+executor = SQLExecutor2(dataset=empty_table)
+
+defaultDB = default_database()
 if default_database(input_A_datasets[0]) != default_database():
     raise RuntimeError('Input dataset and output dataset have different connection details')
 
@@ -117,6 +131,7 @@ searchPath = default_database()
 outputTable = output_A_datasets[0].get_location_info()['info'].get('table', '')
 
 
+#Script Location for main script
 if(scriptLocation == 'sz'):
     scriptFileLocation = function_config.get('script_filelocation')
 elif 'czp' == scriptLocation:
@@ -145,12 +160,24 @@ def getPartitionClause(partitionarg):
 def getOrderClause(orderarg):
     return orderarg and ('\n             ORDER BY {orderarg}'.format(orderarg=orderarg))
 
+def getLocalOrderClause(orderarg):
+    return orderarg and ('\n             LOCAL ORDER BY {orderarg}'.format(orderarg=orderarg))
+
 def getAdditionalClauses(arg):
     return arg and ('\n{arg}'.format(arg=arg))
+
+def getSelectInstalledFileQuery(databasename, fileAlias):
+    return """select * from dbc.tables
+where databasename = '{dataset}'
+and TableName = '{table}'
+and TableKind = 'Z';""".format(dataset=databasename, table=fileAlias)
+
 
 partitionClause = getPartitionClause(function_config.get('partitionby', ''))
 hashClause = getHashClause(function_config.get('hashby', ''))
 orderClause = getOrderClause(function_config.get('orderby', ''))
+localOrderByClause = getLocalOrderClause(function_config.get('localorderby', ''))
+
 
 print('Building STO Script Command')
 script_command = ''
@@ -158,6 +185,8 @@ if commandType == 'python':
     script_command = """'export PATH; python ./"""+searchPath+"""/"""+scriptFileName+""" """+scriptArguments+"""'"""
 elif commandType == 'r':
     script_command = """'R --vanilla --slave -f ./"""+searchPath+"""/"""+scriptFileName+"""'"""
+elif commandType == 'other':
+    script_command = function_config.get('other_command', '')
 print("""Script Command: """+script_command)
 
 # select query
@@ -185,7 +214,7 @@ and TableKind = 'Z';""".format(searchPath=searchPath)
 dkuinstalldir = os.environ['DKUINSTALLDIR']
 newPath = dkuinstalldir + """/dist/"""+scriptFileName
 print(newPath)
-print(replaceFileQuery)
+# print(replaceFileQuery)
 #COPY FILE TEST
 copyfile(escape(scriptFileLocation.rstrip()), newPath)
 
@@ -200,13 +229,24 @@ for item in additionalFiles:
         ('s' == item.get('file_location', '')) else handle.file_path(item.get('filename', ''))
     newPath = dkuinstalldir + """/dist/"""+item.get('filename')
     print(newPath)
-    print(replaceFileQuery)
+    # print(replaceFileQuery)
     print(address)
     #COPY FILE TEST
     copyfile(address, newPath)
     if item.get('replace_file'):
         # installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.REPLACE_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+address+"""',0);"""
-        installAdditionalFilesArray.append("""\nCALL SYSUIF.REPLACE_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('filename')+"""',0);""")
+        tableCheck = executor.query_to_df(getSelectInstalledFileQuery(defaultDB,scriptAlias))
+        print('Checking table list for previously installed files')
+        print(tableCheck)
+        print(tableCheck.shape)
+        if(tableCheck.shape[0] < 1):
+            print("""File Alias:"""+ item.get('file_alias'))
+            print('Was not able to find the file in the table list. Attempting to use INSTALL_FILE')        
+            installAdditionalFilesArray.append("""\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('filename')+"""');""")
+        else:    
+            print("""File Alias:"""+ item.get('file_alias'))
+            print('Was able to find the file in the table list. Attempting to use REPLACE_FILE')                
+            installAdditionalFilesArray.append("""\nCALL SYSUIF.REPLACE_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('filename')+"""',0);""")
     else:
         # installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+address+"""');"""
         installAdditionalFilesArray.append("""\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('filename')+"""');""")
@@ -226,7 +266,7 @@ selectClause = function_config.get('select_clause')
     # onClause = """SELECT * FROM """ + function_config.get('input_table')
 
 
-createTableQuery = """SELECT {selectClause}
+STOQuery = """SELECT {selectClause}
 FROM SCRIPT (ON ({onClause}){hashClause}{partitionClause}{orderClause}
              SCRIPT_COMMAND({script_command})
              RETURNS ('{returnClause}')
@@ -256,11 +296,11 @@ def removePasswordFromRecipe(projectname, outputdatasetname):
             defr.get_recipe_params()['customConfig']['function'].pop('savepwd', None)
             r.set_definition_and_payload(defr)
 
-def getSelectTableQuery(inputDataset, inputTableName):
+def getSelectTableQuery(databasename, fileAlias):
     return """select * from dbc.tables
 where databasename = '{dataset}'
 and TableName = '{table}'
-and TableKind = 'T';""".format(dataset=inputDataset, table=inputTableName)
+and TableKind = 'T';""".format(dataset=databasename, table=fileAlias)
 
 def getPassword():
     dbpwd = function_config.get('dbpwd', '')
@@ -278,117 +318,50 @@ def database():
     # for now, database name = db user name
     return default_database()
     
-#PERFORM FILE LOADING
-# print('BTEQ file loading starting...')
-# if function_config.get("replace_script"):
-#     bteqScript = """bteq << EOF 
-#               .LOGON 153.64.211.111/{user},{pwd};
-#               """.format(user=db_user(),pwd=getPassword()) +setSessionQuery+"""
-#               """+databaseQuery+"""
-#               """+installAdditionalFiles+"""
-#               """+replaceFileQuery+"""
-#               .QUIT
-# EOF"""
-# else:
-#     bteqScript = """bteq << EOF 
-#               .LOGON 153.64.211.111/{user},{pwd};
-#               """.format(user=db_user(),pwd=getPassword()) +setSessionQuery+"""
-#               """+databaseQuery+"""
-#               """+installAdditionalFiles+"""
-#               """+installFileQuery+"""
-#               .QUIT
-# EOF"""
 
-# try:
-#     exitValue = call([bteqScript],shell=True)
-#     if(exitValue !=0):
-#         print(exitValue)
-#         raise RuntimeError('Error during BTEQ Loading, please check logs for more information')
-# except Exception as error:
-#     print('Error during BTEQ File loading. Please check the logs')
-#     removePasswordFromRecipe(output_A_names[0].split('.')[0], output_A_names[0].split('.')[1])
-#     raise 
-
-
-# print('Performing nquery')
-# selectResult = executor.query_to_df(nQuery,[setSessionQuery]);
-
-# print('Results')
-# print(selectResult)
-
-# # actual query
-# print("Actual query")
-# query = getFunctionQuery(empty_table, None)
-# # query = getFunctionQuery(input_A_datasets[0], None)
-# print(query)
-executor = SQLExecutor2(dataset=empty_table)
-
-
-
-# if function_config.get("replace_script"):
+#File Loading
 if function_config.get("replace_script"):
     print('performing replacefile')
-    executor.query_to_df(replaceFileQuery,[setSessionQuery]);
+    tableCheck = executor.query_to_df(getSelectInstalledFileQuery(defaultDB,scriptAlias))
+    print('Checking table list for previously installed files')
+    print(tableCheck)
+    print(tableCheck.shape)
+    if(tableCheck.shape[0] < 1):
+        print('Was not able to find the file in the table list. Attempting to use INSTALL_FILE')
+        if autocommit:
+            print('Auto commit is true')
+            executor.query_to_df(installFileQuery,[setSessionQuery])
+        else:
+            print('Auto commit is false')
+            executor.query_to_df(edTxn,[stTxn, setSessionQuery, installFileQuery])
+    else:    
+        print('Was able to find the file in the table list. Attempting to use REPLACE_FILE')
+        if autocommit:
+            print('Auto commit is true')
+            executor.query_to_df(replaceFileQuery,[setSessionQuery])
+        else:
+            print('Auto commit is false')
+            executor.query_to_df(edTxn,[stTxn, setSessionQuery, replaceFileQuery])
+        
+            
 else:
-    executor.query_to_df(installFileQuery,[setSessionQuery]);
+    print('performing installfile')
+    executor.query_to_df(edTxn,[stTxn, setSessionQuery, installFileQuery])
 
 if(installAdditionalFilesArray != []):
     print('Installing additional files...')
-    executor.query_to_df(installAdditionalFilesArray,[setSessionQuery])
+    executor.query_to_df(edTxn,[stTxn,setSessionQuery]+installAdditionalFilesArray)
     
-# executor = SQLExecutor2(dataset=input_A_datasets[0])
-
-#November 20, 2017 3:55PM REMOVING TO MOVE TO SELECT ONLY
-# print('Checking for existing table')
-# existingtable = executor.query_to_df(getSelectTableQuery(searchPath,
-#                                                          outputTable))
-
-# print('Existing Tables:')
-# print(len(existingtable.index))
-# if len(existingtable.index):
-#     print('Dropping tables')
-#     executor.query_to_df('COMMIT WORK',
-#                          ['DROP TABLE {searchPath}.{outputTable}'
-#                           .format(searchPath=searchPath,
-#                                   outputTable=outputTable)]);
-
-
-# existingScript = executor.query_to_df(scriptDoesExist);
-# if len(existingScript.index):
-#     if function_config.get("replace_script"):
-#         query = getReplaceFunctionQuery()
-#     else:
-#         query = getFunctionQuery(input_A_datasets[0], None)
-# else:
-#     query = getFunctionQuery(input_A_datasets[0], None) 
-# lenquery = len(query) - 1
-# executor.query_to_df(query[lenquery], query[-lenquery:])
-
-#Removing for now
-# print('Creating table...')
-# print("""Create table statement: """+createTableQuery)
-# executor.query_to_df('COMMIT WORK;',
-#                      ['SET SESSION SEARCHUIFDBPATH = {searchPath};'.format(searchPath=searchPath),
-#                       databaseQuery,
-#                       'COMMIT WORK;',
-#                       createTableQuery])
-#executor.query_to_df('\n'.join(query))
-
-# Recipe outputs
-print('Preparing SELECT Query for DSS Results...')
-# nQuery = """SELECT * FROM {searchPath}.{table};""".format(searchPath=searchPath,
-#                                                           table=outputTable)
-                                                          
+# Recipe outputs                                                          
 print('setSessionQuery')
 print(setSessionQuery)
 print('replaceFileQuery')
 print(replaceFileQuery)
 # print("""SELECT Query: """+nQuery)
 print('Executing SELECT Query...')
-selectResult = executor.query_to_df(createTableQuery,[setSessionQuery])
+print(STOQuery)
+selectResult = executor.query_to_df(STOQuery,[setSessionQuery])
 print('Moving results to output...')
 pythonrecipe_out = output_A_datasets[0]
 pythonrecipe_out.write_with_schema(selectResult)
-# print('Cleaning password from Recipe')
-# removePasswordFromRecipe(output_A_names[0].split('.')[0], output_A_names[0].split('.')[1])
-print('Complete!')
+print('Complete!')  

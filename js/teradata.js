@@ -64,9 +64,9 @@
       modal: true,
       width: '33%',
       minHeight: 250,
-      close : function(){
-          window.location.reload();
-      }
+      // close : function(){
+      //     window.location.reload();
+      // }
     }
 
     /**
@@ -93,6 +93,30 @@
       TARGET_TABLE: 'targetTable',
       INPUT_TABLE: 'INPUTTABLE',
       INPUT_TABLE_ALTERNATIVE: 'INPUT_TABLE'
+    }
+
+    const ARGUMENT_TITLES = {
+      FILE_NAME: 'The name of the file to be installed',
+      FILE_ALIAS: 'The file alias to be used in the SQL statement',
+      FILE_LOCATION: 'The location of the file(s) to be installed, either the fully qualified path on the Teradata server, or a DSS Jupyter Notebook/Managed Folder',
+      FILE_ADDRESS: 'The fully qualified file location on the Teradata Server',
+      FILE_FORMAT: 'Specifies whether a file is a TEXT or BINARY file',
+      REPLACE_SCRIPT: 'Specifies whether a file will always be replaced',
+      SCRIPT_TYPE: 'The type of script to be used typically Python or R',
+      OTHER_COMMAND: 'Enter the Unix command to execute your script',
+      SCRIPT_ARGUMENTS: 'The arguments for the script, place one argument per box. Click on the (+) button to add more arguments',
+      ON: 'The ON Clause used as the input data for the script',
+      ON_CUSTOM: 'Determines whether the ON Clause should be modified',
+      HASH_BY: 'A HASH BY clause will cause the rows in the ON clause to be redistributed to AMPs based on the hash value of the column(s) specified',
+      PARTITION_BY: 'A PARTITION BY clause will cause the STO to be executed against specific groups (partitions) based on the column(s) specified',
+      ORDER_BY: 'An ORDER BY clause specifies the order in which values in a group (partition) are sorted',
+      LOCAL_ORDER_BY: 'A LOCAL ORDER BY clause  orders the rows qualified on each AMP',
+      RETURNS_NAME: 'Specifies the name of the column(s) to be returned by the STO',
+      RETURNS_TYPE: 'Specifies the data type of the column(s) to be returned by the STO',
+      SELECT_CUSTOM: 'Determines whether the SELECT (output) columns (data to be returned by the query) should be modified. Default is to SELECT all column(s) in the RETURNS clause',
+      SELECT_COLUMNS: 'Specifies the contents of a user customized SELECT statement (data to be returned by the query)',
+      ADDITIONAL_CLAUSES: 'Specifies any additional clauses to the output such as a HAVING or QUALIFY clause'
+
     }
 
     /** Regex for locating HTML entities. */
@@ -310,19 +334,21 @@
       /**
        * Gets the description of the given argument from the static JSON metadata.
        */
-      getArgumentDescription: function (i) {
+      getArgumentDescription: function (argument) {
 
-        try {
+        // try {
 
-          return (functionMetadata && functionMetadata.argument_clauses[i])
-            ? functionMetadata.argument_clauses[i].description
-            : null;
+        //   return (functionMetadata && functionMetadata.argument_clauses[i])
+        //     ? functionMetadata.argument_clauses[i].description
+        //     : null;
 
-        } catch (e) {
+        // } catch (e) {
 
-          return null
+        //   return null
 
-        }
+        // }
+
+        return ARGUMENT_TITLES[argument]
 
       },
 
