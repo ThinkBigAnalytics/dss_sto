@@ -50,19 +50,20 @@
                 <td>
                     <div class="inner-cell">
                         <input type="checkbox" ng-model="config.function.customSelectClause"
-                         ng-change="resetSelectToStar()"
-                         data-toggle="tooltip" title="{{ getArgumentDescription('SELECT_CUSTOM') }}">
+                         ng-change="resetSelectToStar()" 
+                         data-toggle="tooltip" title="{{ getArgumentDescription('SELECT_CUSTOM') }}"
+                         data-placement="right">
                         </input> Customize Select Columns
                       </div>
                   <textarea ng-readonly="!config.function.customSelectClause" rows="4" cols="200" ng-model="config.function.select_clause"
-                  data-toggle="tooltip" title="{{ getArgumentDescription('SELECT_COLUMNS') }}"></textarea>
+                  data-toggle="tooltip" title="{{ getArgumentDescription('SELECT_COLUMNS') }}" data-placement="right"></textarea>
                 </td>
               </tr>
               <tr>
                 <td>Additional Clauses</td>
                 <td>
                   <textarea rows="4" cols="200" ng-model="config.function.add_clauses"
-                  data-toggle="tooltip" title="{{ getArgumentDescription('ADDITIONAL_CLAUSES') }}"></textarea>
+                  data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('ADDITIONAL_CLAUSES') }}"></textarea>
                 </td>
               </tr>
             </tbody>
@@ -131,11 +132,12 @@
                   <div class="inner-cell">
                     <textarea required ng-readonly="!config.function.useSQLOnClause"
                      ng-model="config.function.sql_on_clause"
-                     placeholder="SELECT * FROM {{config.function.input_table}}" data-toggle="tooltip" title="{{ getArgumentDescription('ON') }}"></textarea>
+                     placeholder="SELECT * FROM {{config.function.input_table}}" data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('ON') }}"></textarea>
                   </div>
                   <div class="inner-cell">
                     <input type="checkbox" ng-model="config.function.useSQLOnClause"
-                     ng-change="getOriginalON()"></input> Customize the ON clause
+                     ng-change="getOriginalON()"
+                     data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('ON_CUSTOM') }}"></input> Customize the ON clause
                   </div>
                 </td>
               </tr>
@@ -151,7 +153,7 @@
                 <td>PARTITION BY</td>
                 <td>
                   <input ng-model="config.function.partitionby" type="text" data-container="body" data-html="true" data-placement="right"
-                  data-toggle="tooltip" title="{{ getArgumentDescription('HASH_BY') }}"
+                  data-toggle="tooltip" title="{{ getArgumentDescription('PARTITION_BY') }}"
                   />
                 </td>
               </tr>
@@ -290,7 +292,8 @@
                   <div class="inner-cell">
                     <div class="inner-cell">
                       <p class="inner-label">Replace Script</p>
-                      <input type="checkbox" ng-model="config.function.replace_script"></input> Replace Current Script
+                      <input type="checkbox" ng-model="config.function.replace_script" 
+                      data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('REPLACE_SCRIPT') }}"></input> Replace Current Script
                     </div>
                   </div>
                 </td>
@@ -373,7 +376,7 @@
                     <div class="inner-cell">
                       <p class="inner-label">Replace File</p>
                       <input type="checkbox" ng-model="file.replace_file"
-                      data-toggle="tooltip" title="{{ getArgumentDescription('REPLACE_SCRIPT') }}"></input> Replace Current Script
+                      data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('REPLACE_SCRIPT') }}"></input> Replace Current File
                     </div>
                   </div>
                 </td>
