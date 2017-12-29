@@ -138,6 +138,8 @@
 
     }
 
+    
+
     /** Regex for locating HTML entities. */
     const ENTITY_REGEX = /[\u00A0-\u9999<>\&]/gim
 
@@ -228,6 +230,47 @@
         //   })
 
       },
+
+      hasNoPartitionBy(){
+        if($scope.config.function.partitionby == null || $scope.config.function.partitionby == ''){
+          console.log('No Part by')
+          return true
+        } else {
+          console.log(' Part by')
+          return false
+        }
+      },
+
+      hasNoHashBy(){
+        if($scope.config.function.hashby == null || $scope.config.function.hashby == ''){
+          console.log('No hash by')
+          return true
+        } else {
+          console.log('Hash by')
+          return false
+        }
+      },
+
+      openTabs: function(evt, tabName) {
+        // Declare all variables
+        var i, tabcontent, tablinks;
+        console.log(evt); 
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("plugintabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+    
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+    
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    },
 
       addMoreFilesClick: function () {
         $scope.config.function.files.push({});
@@ -815,11 +858,17 @@
         $delay(() => {
           console.log('I can actually run');
           $scope.initializeBootstrap();
-
+          console.log('Starting activation of cosmetic improvements')
           $scope.activateCosmeticImprovements();
+          console.log('Starting activation of Tab activation')
           $scope.activateTabs();
+          console.log('Starting activation of Multi tags input')
           $scope.activateMultiTagsInput();
+          console.log('Starting activation validation')
           $scope.activateValidation();
+          console.log('Initializing first tab')
+          document.getElementById("defaultOpen").click();
+          console.log('All is complete on activation')
           // Undefined
           // $scope.getOriginalON();
         });
@@ -905,6 +954,7 @@
        * Initializes this plugin.
        */
       initialize: function () {
+        console.log('Start initialize()')
         $scope.config.function = $scope.config.function || {};
         $scope.config.function.files = $scope.config.function.files || [];
         $scope.config.function.arguments = $scope.config.function.arguments || [{'value':''}];
@@ -918,7 +968,7 @@
 
         // $scope.preprocessMetadata();
         $scope.activateUi();
-        
+        console.log('Initialize done')
       },
 
       /**

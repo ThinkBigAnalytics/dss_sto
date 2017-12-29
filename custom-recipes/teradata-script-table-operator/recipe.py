@@ -267,7 +267,7 @@ selectClause = function_config.get('select_clause')
 
 
 STOQuery = """SELECT {selectClause}
-FROM SCRIPT (ON ({onClause}){hashClause}{partitionClause}{orderClause}
+FROM SCRIPT (ON ({onClause}){hashClause}{partitionClause}{orderClause}{localOrderClause}
              SCRIPT_COMMAND({script_command})
              RETURNS ('{returnClause}')
             ) {additionalClauses};""".\
@@ -280,6 +280,7 @@ FROM SCRIPT (ON ({onClause}){hashClause}{partitionClause}{orderClause}
                    hashClause=hashClause,
                    partitionClause=partitionClause,
                    orderClause=orderClause,
+                   localOrderClause=localOrderClause,
                    returnClause=returnClause,
                    additionalClauses=getAdditionalClauses(function_config.get('add_clauses','')))
 

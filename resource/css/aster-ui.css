@@ -249,3 +249,76 @@ div.inner-cell {
     vertical-align: baseline;
     border-radius: .25em;
 }
+
+/* Style the tab */
+.tabplugin {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tabplugin button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tabplugin button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tabplugin button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.plugintabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.modal {
+    display: none;
+ height: calc(60%);
+ width: calc(90%);
+ position: fixed;
+ top: 0%;
+ left: 50%;
+ transform: translate(-50%, 25%);
+}
+
+.modal.open {
+    display: block;
+ }
+ 
+ .modal-body {
+     overflow-y: auto !important;
+     height: 100% !important;
+ }
+ 
+ .modal-content {
+     position: absolute !important;
+     width: 100% !important;
+     bottom: 10px !important;
+     top: 20px !important;
+     overflow-y: auto !important;
+ }
+ 
+ .link1 {
+   color : orange !important;
+   float:right;
+ }
+ 
+ .link1:hover,
+ .link1:active {
+     color: brown !important;
+ }

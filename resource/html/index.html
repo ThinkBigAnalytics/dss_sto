@@ -5,6 +5,32 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.js"></script>
 <link rel="stylesheet" href="/plugins/KC_TestPlugins/resource/css/glyphs.css">
 
+<style>
+    @font-face {
+      font-family: 'Glyphicons Halflings';
+      src: url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.eot');
+      src: url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+           url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.woff2') format('woff2'),
+           url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.woff') format('woff'),
+           url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.ttf') format('truetype'),
+           url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+    }
+    .glyphicon {
+      position: relative;
+      top: 1px;
+      display: inline-block;
+      font: normal normal 16px/1 'Glyphicons Halflings';
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased;
+      margin-right: 4px;
+    }
+    /* Add icons you will be using below */
+    .glyphicon-question-sign:before {
+      content: '\e085';
+    }
+    
+    </style>
+
 <div id="main-container">
 
   <div ng-controller="TeradataControllerSTO">
@@ -13,6 +39,7 @@
       <label class="control-label">Function Name</label>
       <div class="controls">
         <p>SCRIPT Table Operator (STO)</p>
+        <a href="#" class="link1" data-toggle="modal" data-target="#basicModal"><span class="glyphicon glyphicon-question-sign"></span></a>
       </div>
     </div>
 
@@ -25,201 +52,26 @@
 
     <hr>
     <div class="control-group">
-      <div id="tabs">
-        <ul>
+      <!-- <div id="tabs">  -->
+      <!-- <md-tabs md-dynamic-height md-border-bottom> -->
+
+        <!-- <ul>
           <li><a href="#tabs-loading">Script Loading</a></li>
           <li><a href="#tabs-execution">STO Arguments</a></li>
           <li><a href="#tabs-table">Other SQL Arguments</a></li>
-        </ul>
+        </ul> -->
 
-        <!-- Tab: Other SQL Arguments -->
-        <div id="tabs-table">
-
-          <table class="table table-condensed table-hover">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Value</th>
-                <!--<th>Message</th>-->
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr>
-                <td>Select Columns</td>
-                <td>
-                    <div class="inner-cell">
-                        <input type="checkbox" ng-model="config.function.customSelectClause"
-                         ng-change="resetSelectToStar()" 
-                         data-toggle="tooltip" title="{{ getArgumentDescription('SELECT_CUSTOM') }}"
-                         data-placement="right">
-                        </input> Customize Select Columns
-                      </div>
-                  <textarea ng-readonly="!config.function.customSelectClause" rows="4" cols="200" ng-model="config.function.select_clause"
-                  data-toggle="tooltip" title="{{ getArgumentDescription('SELECT_COLUMNS') }}" data-placement="right"></textarea>
-                </td>
-              </tr>
-              <tr>
-                <td>Additional Clauses</td>
-                <td>
-                  <textarea rows="4" cols="200" ng-model="config.function.add_clauses"
-                  data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('ADDITIONAL_CLAUSES') }}"></textarea>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- Tab links -->
+        <div class="tabplugin">
+          <button class="tablinks" id="defaultOpen" ng-click="openTabs($event, 'tabs-loading')">Script Loading</button>
+          <button class="tablinks" ng-click="openTabs($event, 'tabs-execution')">STO Arguments</button>
+          <button class="tablinks" ng-click="openTabs($event, 'tabs-table')">Other SQL Arguments</button>
         </div>
-        <!-- End Tab: Other SQL Arguments -->
 
-        <!-- Tab: STO Arguments -->
-        <div id="tabs-execution">
 
-          <!--<table class="table table-condensed table-hover" ng-model-options="{ debounce: 200 }">-->
-          <table class="table table-condensed table-hover">
-            <thead>
-              <tr>
-                <th>Clause&#47;Argument</th>
-                <th>Value</th>
-                <!--<th>Message</th>-->
-              </tr>
-            </thead>
-
-            <tbody>
-              
-              <tr>
-                <td>Script Type</td>
-                <td>
-                  <div>
-                      <select required ng-model="config.function.command_type" data-toggle="tooltip" title="{{ getArgumentDescription('SCRIPT_TYPE') }}" data-container="body" data-placement="right" data-html="true">
-                          <option value="" selected>--No Selection--</option>
-                          <option value="python" selected>Python</option>
-                          <option value="r" selected>R</option>
-                          <option value="other" selected>Other</option>
-                      </select>
-                  </div>
-                  
-                  <div class="inner-cell" ng-if="config.function.command_type == 'other'">
-                    <p class="inner-label">Script Command</p>
-                  <textarea required
-                  ng-model="config.function.other_command"
-                  placeholder="Type script command here" data-toggle="tooltip" title="{{ getArgumentDescription('OTHER_COMMAND') }}"></textarea>
-                </div>
-                </td>
-              </tr>
-
-              <tr>
-                <td>Script Arguments &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <button style="border:none;background: none;" ng-click="addScriptArgument()" title="Add Script Argument">
-                       <span class="glyphicon glyphicon-plus-sign orange"></span>
-                   </button></td>
-                <td>
-                   <div ng-repeat="arg in config.function.arguments track by $index ">
-                     <input ng-model="arg.value" type="text" data-container="body" data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('SCRIPT_ARGUMENTS') }}" data-placement="right"
-                  />
-                     <button style="border:none;background: none;"
-                         ng-if="config.function.arguments.length > 1"
-                         ng-click="removeScriptArgument($index)"
-                         title="Remove Script Argument">
-                         <span class="glyphicon glyphicon-minus-sign orange"></span>
-                     </button>
-                   </div>
-                </td>
-              </tr>
-
-              <tr>
-                <td>ON</td>
-                <td>
-                  <div class="inner-cell">
-                    <textarea required ng-readonly="!config.function.useSQLOnClause"
-                     ng-model="config.function.sql_on_clause"
-                     placeholder="SELECT * FROM {{config.function.input_table}}" data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('ON') }}"></textarea>
-                  </div>
-                  <div class="inner-cell">
-                    <input type="checkbox" ng-model="config.function.useSQLOnClause"
-                     ng-change="getOriginalON()"
-                     data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('ON_CUSTOM') }}"></input> Customize the ON clause
-                  </div>
-                </td>
-              </tr>
-
-              <tr>
-                <td>HASH BY</td>
-                <td>
-                  <input ng-model="config.function.hashby" type="text" data-container="body" data-html="true" data-placement="right"
-                  data-toggle="tooltip" title="{{ getArgumentDescription('HASH_BY') }}"/>
-                </td>
-              </tr>
-              <tr>
-                <td>PARTITION BY</td>
-                <td>
-                  <input ng-model="config.function.partitionby" type="text" data-container="body" data-html="true" data-placement="right"
-                  data-toggle="tooltip" title="{{ getArgumentDescription('PARTITION_BY') }}"
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>ORDER BY</td>
-                <td>
-                  <input ng-model="config.function.orderby" type="text" data-container="body" data-html="true" data-placement="right"
-                  data-toggle="tooltip" title="{{ getArgumentDescription('ORDER_BY') }}"
-                  />
-                </td>
-              </tr>
-              <tr>
-                  <td>LOCAL ORDER BY</td>
-                  <td>
-                    <input ng-model="config.function.localorderby" type="text" data-container="body" data-html="true" data-placement="right"
-                    data-toggle="tooltip" title="{{ getArgumentDescription('LOCAL_ORDER_BY') }}"
-                    />
-                  </td>
-                </tr>
-              <tr>
-                <td>RETURNS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <button style="border:none;background: none;" ng-click="addReturnClause()" title="Add RETURNS column">
-                       <span class="glyphicon glyphicon-plus-sign orange"></span>
-                   </button></td>
-                <td>
-                  <div ng-repeat="clause in config.function.return_clause track by $index">
-                    <input required ng-model="clause.name"
-                      type="text" data-container="body" data-html="true" 
-                      data-placement="right" data-toggle="tooltip" title="{{ getArgumentDescription('RETURNS_NAME') }}"/>
-                    <input required list="datatypes" ng-model="clause.type"
-                      type="text" data-container="body" data-html="true" 
-                      data-placement="right" data-toggle="tooltip" title="{{ getArgumentDescription('RETURNS_TYPE') }}"/>
-                    <datalist id="datatypes">
-                        <option value="BYTEINT">
-                        <option value="SMALLINT">
-                        <option value="INTEGER">
-                        <option value="BIGINT">
-                        <option value="DECIMAL">
-                        <option value="NUMERIC">
-                        <option value="FLOAT">
-                        <option value="CHAR(n)">
-                        <option value="VARCHAR(n)">
-                        <option value="DATE">
-                        <option value="TIME">
-                        <option value="TIMESTAMP">
-                    </datalist>
-                    <button style="border:none;background: none;"
-                        ng-if="config.function.return_clause.length > 1"
-                        ng-click="removeReturnClause($index)"
-                        title="Remove RETURNS Column">
-                        <span class="glyphicon glyphicon-minus-sign orange"></span>
-                    </button>
-                  </div>
-                </td>
-                <td>
-                </td>
-              </tr>
-
-            </tbody>
-          </table>
-
-        </div>
-        <!-- End Tab: STO Arguments -->
 
         <!-- Tab: Script Loading Tab -->
-        <div id="tabs-loading">
+        <div id="tabs-loading" class="plugintabcontent">
           <table class="table table-condensed table-hover" ng-model-options="{ debounce: 200 }">
 
             <thead>
@@ -234,78 +86,66 @@
                 <td>
                   <div class="inner-cell" ng-if="config.function.script_location == 'cz'">
                     <p class="inner-label">Script File Name</p>
-                    <select required ng-model="config.function.script_filename"
-                      ng-change="onFilenameChange()"
-                      data-container="body"
-                      data-placement="right" data-html="true"
-                      data-toggle="tooltip" title="{{ getArgumentDescription('FILE_NAME') }}"
-                      ng-options="inputFile as inputFile for inputFile in fileList">
-                        <option value="" selected>--No Selection--</option>
+                    <select required ng-model="config.function.script_filename" ng-change="onFilenameChange()" data-container="body" data-placement="right"
+                      data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_NAME') }}" ng-options="inputFile as inputFile for inputFile in fileList">
+                      <option value="" selected>--No Selection--</option>
                     </select>
                   </div>
                   <div class="inner-cell" ng-if="config.function.script_location == 'czp'">
                     <p class="inner-label">Script File Name</p>
-                    <select required ng-model="config.function.script_filename"
-                      ng-change="onFilenameChange()"
-                      data-container="body"
-                      data-placement="right" data-html="true"
-                      data-toggle="tooltip" title="{{ getArgumentDescription('FILE_NAME') }}"
-                      ng-options="inputFile as inputFile for inputFile in nbList">
-                        <option value="" selected>--No Selection--</option>
+                    <select required ng-model="config.function.script_filename" ng-change="onFilenameChange()" data-container="body" data-placement="right"
+                      data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_NAME') }}" ng-options="inputFile as inputFile for inputFile in nbList">
+                      <option value="" selected>--No Selection--</option>
                     </select>
                   </div>
                   <div class="inner-cell" ng-if="config.function.script_location == 'sz'">
                     <p class="inner-label">Script File Name</p>
-                    <input required ng-model="config.function.script_filename" type="text"
-                     ng-change="onFilenameChange()"
-                     data-container="body" data-html="true" 
-                     data-toggle="tooltip" title="{{ getArgumentDescription('FILE_NAME') }}"
-                     data-placement="right"
+                    <input required ng-model="config.function.script_filename" type="text" ng-change="onFilenameChange()" data-container="body"
+                      data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_NAME') }}" data-placement="right"
                     />
                   </div>
                 </td>
                 <td>
-                    <div class="inner-cell">
-                        <p class="inner-label">Script File Location</p>
-                        <select required ng-model="config.function.script_location" data-container="body"
-                           ng-change="onFileLocationChange()"
-                           data-placement="right" data-html="true"
-                           data-toggle="tooltip" title="{{ getArgumentDescription('FILE_LOCATION') }}">
-                        <option value="" selected>--No Selection--</option>
-                        <option value="sz" selected>Teradata Server</option>
-                        <option value="cz" selected>Dataiku Managed Folder</option>
-                        <option value="czp" selected>DSS Notebooks</option>
-                        </select>
-                      </div>
+                  <div class="inner-cell">
+                    <p class="inner-label">Script File Location</p>
+                    <select required ng-model="config.function.script_location" data-container="body" ng-change="onFileLocationChange()" data-placement="right"
+                      data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_LOCATION') }}">
+                      <option value="" selected>--No Selection--</option>
+                      <option value="sz" selected>Teradata Server</option>
+                      <option value="cz" selected>Dataiku Managed Folder</option>
+                      <option value="czp" selected>DSS Notebooks</option>
+                    </select>
+                  </div>
                   <div class="inner-cell">
                     <p class="inner-label">Script File Alias</p>
                     <input required ng-model="config.function.script_alias" type="text" data-container="body" data-html="true" data-placement="right"
-                    data-toggle="tooltip" title="{{ getArgumentDescription('FILE_ALIAS') }}"
-                    />
+                      data-toggle="tooltip" title="{{ getArgumentDescription('FILE_ALIAS') }}" />
                   </div>
                   <div class="inner-cell" ng-if="'sz'===config.function.script_location">
                     <p class="inner-label">Script File Address</p>
                     <input required ng-model="config.function.script_filelocation" type="text" data-container="body" data-html="true" data-placement="right"
-                    data-toggle="tooltip" title="{{ getArgumentDescription('FILE_ADDRESS') }}"
-                    />
+                      data-toggle="tooltip" title="{{ getArgumentDescription('FILE_ADDRESS') }}" />
                   </div>
                   <div class="inner-cell">
                     <div class="inner-cell">
                       <p class="inner-label">Replace Script</p>
-                      <input type="checkbox" ng-model="config.function.replace_script" 
-                      data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('REPLACE_SCRIPT') }}"></input> Replace Current Script
+                      <input type="checkbox" ng-model="config.function.replace_script" data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('REPLACE_SCRIPT') }}"></input> Replace Current Script
                     </div>
                   </div>
                 </td>
               </tr>
             </tbody>
           </table>
-          <p><br><br><br></p>
+          <p>
+            <br>
+            <br>
+            <br>
+          </p>
           <div>
             <button ng-click="addMoreFilesClick()">Add More Files</button>
-            <label style="display: inline-block">&emsp;&emsp;&emsp;&emsp;
-              Added files will be installed in the following path:
-              <em>.&#47;{{connection.defaultDatabase}}&#47;&#60;filename&#62;</em></label>
+            <label style="display: inline-block">&emsp;&emsp;&emsp;&emsp; Added files will be installed in the following path:
+              <em>.&#47;{{connection.defaultDatabase}}&#47;&#60;filename&#62;</em>
+            </label>
           </div>
           <table class="table table-condensed table-hover" ng-model-options="{ debounce: 200 }">
 
@@ -322,61 +162,50 @@
                 <td>
                   <div class="inner-cell" ng-if="'c'===file.file_location">
                     <p class="inner-label">File Name</p>
-                    <select required ng-model="file.filename"
-                      ng-change="onAdditionalFilenameChange($index)"
-                      data-container="body"
-                      data-placement="right" data-html="true"
-                      data-toggle="tooltip" title="{{ getArgumentDescription('FILE_NAME') }}"
-                      ng-options="inputFile as inputFile for inputFile in fileList">
-                        <option value="" selected>--No Selection--</option>
+                    <select required ng-model="file.filename" ng-change="onAdditionalFilenameChange($index)" data-container="body" data-placement="right"
+                      data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_NAME') }}" ng-options="inputFile as inputFile for inputFile in fileList">
+                      <option value="" selected>--No Selection--</option>
                     </select>
                   </div>
                   <div class="inner-cell" ng-if="'s'===file.file_location">
                     <p class="inner-label">File Name</p>
-                    <input required ng-model="file.filename" type="text"
-                     ng-change="onAdditionalFilenameChange($index)"
-                     data-toggle="tooltip" title="{{ getArgumentDescription('FILE_NAME') }}"
-                     data-container="body" data-html="true" data-placement="right"
+                    <input required ng-model="file.filename" type="text" ng-change="onAdditionalFilenameChange($index)" data-toggle="tooltip"
+                      title="{{ getArgumentDescription('FILE_NAME') }}" data-container="body" data-html="true" data-placement="right"
                     />
                   </div>
                   <button ng-click="removeFile($index)">Remove File</button>
                 </td>
                 <td>
-                    <div class="inner-cell">
-                        <p class="inner-label">File Location</p>
-                        <select required ng-model="file.file_location" data-container="body"
-                           ng-change="onAdditionalFileLocationChange($index)"
-                           data-placement="right" data-html="true"
-                           data-toggle="tooltip" title="{{ getArgumentDescription('FILE_LOCATION') }}">
-                        <option value="s" selected>Teradata Server</option>
-                        <option value="c" selected>DSS Managed Folder</option>
-                        </select>
-                      </div>
+                  <div class="inner-cell">
+                    <p class="inner-label">File Location</p>
+                    <select required ng-model="file.file_location" data-container="body" ng-change="onAdditionalFileLocationChange($index)" data-placement="right"
+                      data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_LOCATION') }}">
+                      <option value="s" selected>Teradata Server</option>
+                      <option value="c" selected>DSS Managed Folder</option>
+                    </select>
+                  </div>
                   <div class="inner-cell">
                     <p class="inner-label">File Alias</p>
-                    <input required ng-model="file.file_alias" type="text" data-container="body" data-html="true" data-placement="right"
-                    data-toggle="tooltip" title="{{ getArgumentDescription('FILE_ALIAS') }}"
-                    />
+                    <input required ng-model="file.file_alias" type="text" data-container="body" data-html="true" data-placement="right" data-toggle="tooltip"
+                      title="{{ getArgumentDescription('FILE_ALIAS') }}" />
                   </div>
                   <div class="inner-cell" ng-if="'s'===file.file_location">
                     <p class="inner-label">File Address</p>
                     <input required ng-model="file.file_address" type="text" data-container="body" data-html="true" title="File Location" data-placement="right"
-                    data-toggle="tooltip" title="{{ getArgumentDescription('FILE_ADDRESS') }}"
-                    />
+                      data-toggle="tooltip" title="{{ getArgumentDescription('FILE_ADDRESS') }}" />
                   </div>
                   <div class="inner-cell">
                     <div class="inner-cell">
                       <p class="inner-label">File Format</p>
-                      <select required ng-model="file.file_format" data-container="body" data-placement="right" data-html="true"
-                      data-toggle="tooltip" title="{{ getArgumentDescription('FILE_FORMAT') }}">                      
+                      <select required ng-model="file.file_format" data-container="body" data-placement="right" data-html="true" data-toggle="tooltip"
+                        title="{{ getArgumentDescription('FILE_FORMAT') }}">
                         <option value="z" selected>Text File</option>
                         <option value="b" selected>Binary File</option>
                       </select>
                     </div>
                     <div class="inner-cell">
                       <p class="inner-label">Replace File</p>
-                      <input type="checkbox" ng-model="file.replace_file"
-                      data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('REPLACE_SCRIPT') }}"></input> Replace Current File
+                      <input type="checkbox" ng-model="file.replace_file" data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('REPLACE_SCRIPT') }}"></input> Replace Current File
                     </div>
                   </div>
                 </td>
@@ -385,8 +214,190 @@
           </table>
 
         </div>
+
         <!-- End Tab: Script Loading Tab -->
-      </div>
+
+        <!-- Tab: STO Arguments -->
+
+        <div id="tabs-execution" class="plugintabcontent">
+
+          <!--<table class="table table-condensed table-hover" ng-model-options="{ debounce: 200 }">-->
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th>Clause&#47;Argument</th>
+                <th>Value</th>
+                <!--<th>Message</th>-->
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>Script Type</td>
+                <td>
+                  <div>
+                    <select required ng-model="config.function.command_type" data-toggle="tooltip" title="{{ getArgumentDescription('SCRIPT_TYPE') }}"
+                      data-container="body" data-placement="right" data-html="true">
+                      <option value="" selected>--No Selection--</option>
+                      <option value="python" selected>Python</option>
+                      <option value="r" selected>R</option>
+                      <option value="other" selected>Other</option>
+                    </select>
+                  </div>
+
+                  <div class="inner-cell" ng-if="config.function.command_type == 'other'">
+                    <p class="inner-label">Script Command</p>
+                    <textarea required ng-model="config.function.other_command" placeholder="Type script command here" data-toggle="tooltip"
+                      title="{{ getArgumentDescription('OTHER_COMMAND') }}"></textarea>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Script Arguments &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <button style="border:none;background: none;" ng-click="addScriptArgument()" title="Add Script Argument">
+                    <span class="glyphicon glyphicon-plus-sign orange"></span>
+                  </button>
+                </td>
+                <td>
+                  <div ng-repeat="arg in config.function.arguments track by $index ">
+                    <input ng-model="arg.value" type="text" data-container="body" data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('SCRIPT_ARGUMENTS') }}"
+                      data-placement="right" />
+                    <button style="border:none;background: none;" ng-if="config.function.arguments.length > 1" ng-click="removeScriptArgument($index)"
+                      title="Remove Script Argument">
+                      <span class="glyphicon glyphicon-minus-sign orange"></span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>ON</td>
+                <td>
+                  <div class="inner-cell">
+                    <textarea required ng-readonly="!config.function.useSQLOnClause" ng-model="config.function.sql_on_clause" placeholder="SELECT * FROM {{config.function.input_table}}"
+                      data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('ON') }}"></textarea>
+                  </div>
+                  <div class="inner-cell">
+                    <input type="checkbox" ng-model="config.function.useSQLOnClause" ng-change="getOriginalON()" data-toggle="tooltip" data-placement="right"
+                      title="{{ getArgumentDescription('ON_CUSTOM') }}"></input> Customize the ON clause
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>HASH BY</td>
+                <td>
+                  <input ng-model="config.function.hashby" type="text" data-container="body" data-html="true" data-placement="right" data-toggle="tooltip"
+                    title="{{ getArgumentDescription('HASH_BY') }}" />
+                </td>
+              </tr>
+              <tr>
+                <td>LOCAL ORDER BY</td>
+                <td>
+                  <input ng-model="config.function.localorderby" type="text" data-container="body" data-html="true" data-placement="right"
+                    data-toggle="tooltip" title="{{ getArgumentDescription('LOCAL_ORDER_BY') }}" />
+                </td>
+              </tr>
+              <tr>
+                <td>PARTITION BY</td>
+                <td>
+                  <input ng-model="config.function.partitionby" type="text" data-container="body" data-html="true" data-placement="right" data-toggle="tooltip"
+                    title="{{ getArgumentDescription('PARTITION_BY') }}" />
+                </td>
+              </tr>
+              <tr>
+                <td>ORDER BY</td>
+                <td>
+                  <input ng-model="config.function.orderby" type="text" data-container="body" data-html="true" data-placement="right" data-toggle="tooltip"
+                    title="{{ getArgumentDescription('ORDER_BY') }}" />
+                </td>
+              </tr>
+              <tr>
+                <td>RETURNS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <button style="border:none;background: none;" ng-click="addReturnClause()" title="Add RETURNS column">
+                    <span class="glyphicon glyphicon-plus-sign orange"></span>
+                  </button>
+                </td>
+                <td>
+                  <div ng-repeat="clause in config.function.return_clause track by $index">
+                    <input required ng-model="clause.name" type="text" data-container="body" data-html="true" data-placement="right" data-toggle="tooltip"
+                      title="{{ getArgumentDescription('RETURNS_NAME') }}" />
+                    <input required list="datatypes" ng-model="clause.type" type="text" data-container="body" data-html="true" data-placement="right"
+                      data-toggle="tooltip" title="{{ getArgumentDescription('RETURNS_TYPE') }}" />
+                    <datalist id="datatypes">
+                      <option value="BYTEINT">
+                        <option value="SMALLINT">
+                          <option value="INTEGER">
+                            <option value="BIGINT">
+                              <option value="DECIMAL">
+                                <option value="NUMERIC">
+                                  <option value="FLOAT">
+                                    <option value="CHAR(n)">
+                                      <option value="VARCHAR(n)">
+                                        <option value="DATE">
+                                          <option value="TIME">
+                                            <option value="TIMESTAMP">
+                    </datalist>
+                    <button style="border:none;background: none;" ng-if="config.function.return_clause.length > 1" ng-click="removeReturnClause($index)"
+                      title="Remove RETURNS Column">
+                      <span class="glyphicon glyphicon-minus-sign orange"></span>
+                    </button>
+                  </div>
+                </td>
+                <td>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+
+        <!-- End Tab: STO Arguments -->
+
+        <!-- Tab: Other SQL Arguments -->
+        <div id="tabs-table" class="plugintabcontent">
+
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Value</th>
+                <!--<th>Message</th>-->
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Select Columns</td>
+                <td>
+                  <div class="inner-cell">
+                    <input type="checkbox" ng-model="config.function.customSelectClause" ng-change="resetSelectToStar()" data-toggle="tooltip"
+                      title="{{ getArgumentDescription('SELECT_CUSTOM') }}" data-placement="right">
+                    </input> Customize Select Columns
+                  </div>
+                  <textarea ng-readonly="!config.function.customSelectClause" rows="4" cols="200" ng-model="config.function.select_clause"
+                    data-toggle="tooltip" title="{{ getArgumentDescription('SELECT_COLUMNS') }}" data-placement="right"></textarea>
+                </td>
+              </tr>
+              <tr>
+                <td>Additional Clauses</td>
+                <td>
+                  <textarea rows="4" cols="200" ng-model="config.function.add_clauses" data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('ADDITIONAL_CLAUSES') }}"></textarea>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+        <!-- End Tab: Other SQL Arguments -->
+        <!-- </div> -->
+        <!-- </md-tabs> -->
+        <!-- End tabs -->
 
 
     </div>
@@ -403,4 +414,18 @@
 
 <div id="dialog-validation" data-html="true" title="Invalid recipe inputs" style="display: none">
   <div class="content"></div>
+</div>
+
+<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-lg" >
+      <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Learn More...</h4>
+          </div>
+          <div class="modal-body">
+            <iframe src="/plugins/KC_TestPlugins/resource/documentation/html/book/index.html" height="100%" width="98%"></iframe>
+          </div>
+      </div>
+    </div>
 </div>
