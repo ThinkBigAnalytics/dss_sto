@@ -45,7 +45,7 @@ def do(payload, config, plugin_config, inputs):
     folderpath = inputFolderLocation.get_path() if inputFolderLocation else ''
 
     fileList = os.listdir(folderpath) if folderpath else []
-    DATA_DIR = "/home/dataiku/dss_data/"
+    DATA_DIR = os.environ["DIP_HOME"]
     PYNBDIR = "config/ipython_notebooks/"
     pypath = os.path.join(DATA_DIR, PYNBDIR, project)
     pynbList = filter(lambda f: not f.startswith('.'), os.listdir(pypath)) if\
