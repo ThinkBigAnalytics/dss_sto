@@ -52,14 +52,6 @@
 
     <hr>
     <div class="control-group">
-      <!-- <div id="tabs">  -->
-      <!-- <md-tabs md-dynamic-height md-border-bottom> -->
-
-        <!-- <ul>
-          <li><a href="#tabs-loading">Script Loading</a></li>
-          <li><a href="#tabs-execution">STO Arguments</a></li>
-          <li><a href="#tabs-table">Other SQL Arguments</a></li>
-        </ul> -->
 
         <!-- Tab links -->
         <div class="tabplugin">
@@ -67,8 +59,6 @@
           <button class="tablinks" ng-click="openTabs($event, 'tabs-execution')">STO Arguments</button>
           <button class="tablinks" ng-click="openTabs($event, 'tabs-table')">Other SQL Arguments</button>
         </div>
-
-
 
         <!-- Tab: Script Loading Tab -->
         <div id="tabs-loading" class="plugintabcontent">
@@ -86,21 +76,21 @@
                 <td>
                   <div class="inner-cell" ng-if="config.function.script_location == 'cz'">
                     <p class="inner-label">Script File Name</p>
-                    <select required ng-model="config.function.script_filename" ng-change="onFilenameChange()" data-container="body" data-placement="right"
+                    <select required id="ScriptFileName" ng-model="config.function.script_filename" ng-change="onFilenameChange()" data-container="body" data-placement="right"
                       data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_NAME') }}" ng-options="inputFile as inputFile for inputFile in fileList">
                       <option value="" selected>--No Selection--</option>
                     </select>
                   </div>
                   <div class="inner-cell" ng-if="config.function.script_location == 'czp'">
                     <p class="inner-label">Script File Name</p>
-                    <select required ng-model="config.function.script_filename" ng-change="onFilenameChange()" data-container="body" data-placement="right"
+                    <select id="ScriptFileName" required ng-model="config.function.script_filename" ng-change="onFilenameChange()" data-container="body" data-placement="right"
                       data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_NAME') }}" ng-options="inputFile as inputFile for inputFile in nbList">
                       <option value="" selected>--No Selection--</option>
                     </select>
                   </div>
                   <div class="inner-cell" ng-if="config.function.script_location == 'sz'">
                     <p class="inner-label">Script File Name</p>
-                    <input required ng-model="config.function.script_filename" type="text" ng-change="onFilenameChange()" data-container="body"
+                    <input required id="ScriptFileName" ng-model="config.function.script_filename" type="text" ng-change="onFilenameChange()" data-container="body"
                       data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_NAME') }}" data-placement="right"
                     />
                   </div>
@@ -108,25 +98,25 @@
                 <td>
                   <div class="inner-cell">
                     <p class="inner-label">Script File Location</p>
-                    <select required ng-model="config.function.script_location" data-container="body" ng-change="onFileLocationChange()" data-placement="right"
+                    <select id="ScriptFileLocation" ng-model="config.function.script_location" data-container="body" ng-change="onFileLocationChange()" data-placement="right"
                       data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_LOCATION') }}">
-                      <option value="" selected>--No Selection--</option>
+                      <option value="" selected>No file to upload</option>
                       <option value="sz" selected>Teradata Server</option>
                       <option value="cz" selected>Dataiku Managed Folder</option>
                       <option value="czp" selected>DSS Notebooks</option>
                     </select>
                   </div>
-                  <div class="inner-cell">
+                  <div class="inner-cell" ng-if="config.function.script_location!=''" >
                     <p class="inner-label">Script File Alias</p>
-                    <input required ng-model="config.function.script_alias" type="text" data-container="body" data-html="true" data-placement="right"
+                    <input required id="ScriptFileAlias" ng-model="config.function.script_alias" type="text" data-container="body" data-html="true" data-placement="right"
                       data-toggle="tooltip" title="{{ getArgumentDescription('FILE_ALIAS') }}" />
                   </div>
                   <div class="inner-cell" ng-if="'sz'===config.function.script_location">
                     <p class="inner-label">Script File Address</p>
-                    <input required ng-model="config.function.script_filelocation" type="text" data-container="body" data-html="true" data-placement="right"
+                    <input required id="ScriptFileAlias" ng-model="config.function.script_filelocation" type="text" data-container="body" data-html="true" data-placement="right"
                       data-toggle="tooltip" title="{{ getArgumentDescription('FILE_ADDRESS') }}" />
                   </div>
-                  <div class="inner-cell">
+                  <div class="inner-cell" ng-if="config.function.script_location!=''" >
                     <div class="inner-cell">
                       <p class="inner-label">Replace Script</p>
                       <input type="checkbox" ng-model="config.function.replace_script" data-toggle="tooltip" data-placement="right" title="{{ getArgumentDescription('REPLACE_SCRIPT') }}"></input> Replace Current Script
@@ -162,14 +152,14 @@
                 <td>
                   <div class="inner-cell" ng-if="'c'===file.file_location">
                     <p class="inner-label">File Name</p>
-                    <select required ng-model="file.filename" ng-change="onAdditionalFilenameChange($index)" data-container="body" data-placement="right"
+                    <select required id="AdditionalFileName" ng-model="file.filename" ng-change="onAdditionalFilenameChange($index)" data-container="body" data-placement="right"
                       data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_NAME') }}" ng-options="inputFile as inputFile for inputFile in fileList">
                       <option value="" selected>--No Selection--</option>
                     </select>
                   </div>
                   <div class="inner-cell" ng-if="'s'===file.file_location">
                     <p class="inner-label">File Name</p>
-                    <input required ng-model="file.filename" type="text" ng-change="onAdditionalFilenameChange($index)" data-toggle="tooltip"
+                    <input required id="AdditionalFileName" ng-model="file.filename" type="text" ng-change="onAdditionalFilenameChange($index)" data-toggle="tooltip"
                       title="{{ getArgumentDescription('FILE_NAME') }}" data-container="body" data-html="true" data-placement="right"
                     />
                   </div>
@@ -178,7 +168,7 @@
                 <td>
                   <div class="inner-cell">
                     <p class="inner-label">File Location</p>
-                    <select required ng-model="file.file_location" data-container="body" ng-change="onAdditionalFileLocationChange($index)" data-placement="right"
+                    <select required id="AdditionalFileLocation" ng-model="file.file_location" data-container="body" ng-change="onAdditionalFileLocationChange($index)" data-placement="right"
                       data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_LOCATION') }}">
                       <option value="s" selected>Teradata Server</option>
                       <option value="c" selected>DSS Managed Folder</option>
@@ -186,18 +176,18 @@
                   </div>
                   <div class="inner-cell">
                     <p class="inner-label">File Alias</p>
-                    <input required ng-model="file.file_alias" type="text" data-container="body" data-html="true" data-placement="right" data-toggle="tooltip"
+                    <input required id="AdditionalFileAlias" ng-model="file.file_alias" type="text" data-container="body" data-html="true" data-placement="right" data-toggle="tooltip"
                       title="{{ getArgumentDescription('FILE_ALIAS') }}" />
                   </div>
                   <div class="inner-cell" ng-if="'s'===file.file_location">
                     <p class="inner-label">File Address</p>
-                    <input required ng-model="file.file_address" type="text" data-container="body" data-html="true" title="File Location" data-placement="right"
+                    <input required id="AdditionalFileAddress" ng-model="file.file_address" type="text" data-container="body" data-html="true" title="File Location" data-placement="right"
                       data-toggle="tooltip" title="{{ getArgumentDescription('FILE_ADDRESS') }}" />
                   </div>
                   <div class="inner-cell">
                     <div class="inner-cell">
                       <p class="inner-label">File Format</p>
-                      <select required ng-model="file.file_format" data-container="body" data-placement="right" data-html="true" data-toggle="tooltip"
+                      <select required id="AdditionalFileFormat" ng-model="file.file_format" data-container="body" data-placement="right" data-html="true" data-toggle="tooltip"
                         title="{{ getArgumentDescription('FILE_FORMAT') }}">
                         <option value="z" selected>Text File</option>
                         <option value="b" selected>Binary File</option>
@@ -237,8 +227,8 @@
                 <td>Script Type</td>
                 <td>
                   <div>
-                    <select required ng-model="config.function.command_type" data-toggle="tooltip" title="{{ getArgumentDescription('SCRIPT_TYPE') }}"
-                      data-container="body" data-placement="right" data-html="true">
+                    <select required id="ScriptType" ng-model="config.function.command_type" data-toggle="tooltip" title="{{ getArgumentDescription('SCRIPT_TYPE') }}"
+                      data-container="body" data-placement="right" data-html="true" ng-disabled="config.function.script_location==''">
                       <option value="" selected>--No Selection--</option>
                       <option value="python" selected>Python</option>
                       <option value="r" selected>R</option>
@@ -248,7 +238,7 @@
 
                   <div class="inner-cell" ng-if="config.function.command_type == 'other'">
                     <p class="inner-label">Script Command</p>
-                    <textarea required ng-model="config.function.other_command" placeholder="Type script command here" data-toggle="tooltip"
+                    <textarea required id="ScriptCommand" ng-model="config.function.other_command" placeholder="Type script command here" data-toggle="tooltip"
                       title="{{ getArgumentDescription('OTHER_COMMAND') }}"></textarea>
                   </div>
                 </td>
@@ -286,34 +276,51 @@
                 </td>
               </tr>
 
+
+
               <tr>
-                <td>HASH BY</td>
+                <td>HASH BY/PARTITION BY</td>
                 <td>
-                  <input ng-model="config.function.hashby" type="text" data-container="body" data-html="true" data-placement="right" data-toggle="tooltip"
-                    title="{{ getArgumentDescription('HASH_BY') }}" />
+                  <div class="inner-cell">
+                    <select ng-model="config.function.partitionOrHash" data-toggle="tooltip" title="{{ getArgumentDescription('SCRIPT_TYPE') }}"
+                  data-container="body" data-placement="right" data-html="true">
+                    <option value="" selected>None</option>
+                    <option value="part" selected>PARTITION BY</option>
+                    <option value="hash" selected>HASH BY</option>
+                </div>
                 </td>
               </tr>
-              <tr>
-                <td>LOCAL ORDER BY</td>
-                <td>
-                  <input ng-model="config.function.localorderby" type="text" data-container="body" data-html="true" data-placement="right"
-                    data-toggle="tooltip" title="{{ getArgumentDescription('LOCAL_ORDER_BY') }}" />
-                </td>
-              </tr>
-              <tr>
+
+              <tr ng-if="config.function.partitionOrHash=='hash'">
+                  <td>HASH BY</td>
+                  <td>
+                    <input ng-model="config.function.hashby" type="text" data-container="body" data-html="true" data-placement="right" data-toggle="tooltip"
+                      title="{{ getArgumentDescription('HASH_BY') }}" />
+                  </td>
+                </tr>
+              
+
+              <tr ng-if="config.function.partitionOrHash=='part'">
                 <td>PARTITION BY</td>
                 <td>
                   <input ng-model="config.function.partitionby" type="text" data-container="body" data-html="true" data-placement="right" data-toggle="tooltip"
                     title="{{ getArgumentDescription('PARTITION_BY') }}" />
                 </td>
               </tr>
-              <tr>
+              <tr ng-if="config.function.partitionOrHash=='hash'">
+                  <td>LOCAL ORDER BY</td>
+                  <td>
+                    <input ng-model="config.function.localorderby" type="text" data-container="body" data-html="true" data-placement="right"
+                      data-toggle="tooltip" title="{{ getArgumentDescription('LOCAL_ORDER_BY') }}" ng-readonly="hasNoHashBy()"/>
+                  </td>
+                </tr>
+              <tr ng-if="config.function.partitionOrHash=='part'">
                 <td>ORDER BY</td>
                 <td>
                   <input ng-model="config.function.orderby" type="text" data-container="body" data-html="true" data-placement="right" data-toggle="tooltip"
-                    title="{{ getArgumentDescription('ORDER_BY') }}" />
+                    title="{{ getArgumentDescription('ORDER_BY') }}" ng-readonly="hasNoPartitionBy()"/>
                 </td>
-              </tr>
+              </tr> 
               <tr>
                 <td>RETURNS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <button style="border:none;background: none;" ng-click="addReturnClause()" title="Add RETURNS column">
@@ -322,23 +329,23 @@
                 </td>
                 <td>
                   <div ng-repeat="clause in config.function.return_clause track by $index">
-                    <input required ng-model="clause.name" type="text" data-container="body" data-html="true" data-placement="right" data-toggle="tooltip"
+                    <input required id="ReturnsName" ng-model="clause.name" type="text" data-container="body" data-html="true" data-placement="right" data-toggle="tooltip"
                       title="{{ getArgumentDescription('RETURNS_NAME') }}" />
-                    <input required list="datatypes" ng-model="clause.type" type="text" data-container="body" data-html="true" data-placement="right"
+                    <input required id="ReturnsType" list="datatypes" ng-model="clause.type" type="text" data-container="body" data-html="true" data-placement="right"
                       data-toggle="tooltip" title="{{ getArgumentDescription('RETURNS_TYPE') }}" />
                     <datalist id="datatypes">
                       <option value="BYTEINT">
-                        <option value="SMALLINT">
-                          <option value="INTEGER">
-                            <option value="BIGINT">
-                              <option value="DECIMAL">
-                                <option value="NUMERIC">
-                                  <option value="FLOAT">
-                                    <option value="CHAR(n)">
-                                      <option value="VARCHAR(n)">
-                                        <option value="DATE">
-                                          <option value="TIME">
-                                            <option value="TIMESTAMP">
+                      <option value="SMALLINT">
+                      <option value="INTEGER">
+                      <option value="BIGINT">
+                      <option value="DECIMAL">
+                      <option value="NUMERIC">
+                      <option value="FLOAT">
+                      <option value="CHAR(n)">
+                      <option value="VARCHAR(n)">
+                      <option value="DATE">
+                      <option value="TIME">
+                      <option value="TIMESTAMP">
                     </datalist>
                     <button style="border:none;background: none;" ng-if="config.function.return_clause.length > 1" ng-click="removeReturnClause($index)"
                       title="Remove RETURNS Column">
@@ -395,8 +402,6 @@
 
 
         <!-- End Tab: Other SQL Arguments -->
-        <!-- </div> -->
-        <!-- </md-tabs> -->
         <!-- End tabs -->
 
 

@@ -133,8 +133,8 @@
       SELECT_CUSTOM: 'The default SELECT clause used by the plugin selects all output arguments of your script. Use this option to determine whether to modify the default SELECT behavior.',
       // SELECT_COLUMNS: 'Specifies the contents of a user customized SELECT statement (data to be returned by the query)',
       SELECT_COLUMNS: 'Specify explicitly the contents of the SELECT clause.',
-      // ADDITIONAL_CLAUSES: 'Specifies any additional clauses to the output such as a HAVING or QUALIFY clause'
-      ADDITIONAL_CLAUSES: 'Specifies the SQL code for any additional clause to be used when invoking the STO. Examples of such clauses include DELIMITER, QUOTECHAR, etc. For more details, see Chapter 27 of the Teradata Guide "SQL Functions, Operators, Expression, and Predicates."'
+      ADDITIONAL_CLAUSES: 'Specifies any additional clauses to the output such as a HAVING or QUALIFY clause'
+      // ADDITIONAL_CLAUSES: 'Specifies the SQL code for any additional clause to be used when invoking the STO. Examples of such clauses include DELIMITER, QUOTECHAR, etc. For more details, see Chapter 27 of the Teradata Guide "SQL Functions, Operators, Expression, and Predicates."'
 
     }
 
@@ -197,43 +197,10 @@
           return 'string'
       },
 
-      /**
-       * Gets the static JSON metadata of the given function.
-       */
-      getFunctionMetadata: function (selectedFunction) {
-
-        // if (typeof selectedFunction === 'undefined') {
-        //   return;
-        // }
-
-        // const promise = $http
-        //   .get(`${FUNCTION_METADATA_PATH}${selectedFunction}.json`)
-        //   .success(data => {
-        //     functionMetadata = data;
-        //     console.log(functionMetadata);
-        //     functionVersion = functionMetadata.function_version;
-        //     // functionType = functionMetadata.function_type.toLowerCase();
-        //     // $scope.config.function.function_type = functionMetadata.function_type.toLowerCase();
-        //     console.log(functionVersion);
-        //     // console.log(functionType);
-        //     // console.log($scope.config.function_type);
-
-        //     // //console.log('Function Metadata');
-        //     // //console.log(data);
-        //     // //console.log($scope.config);
-
-        //     $scope.preprocessDescriptions();
-        //     $scope.preprocessMetadata();
-        //     $scope.activateTabs();
-        //     $scope.activateMultiTagsInput();
-        //     $scope.activateTooltips();
-        //   })
-
-      },
-
       hasNoPartitionBy(){
         if($scope.config.function.partitionby == null || $scope.config.function.partitionby == ''){
           console.log('No Part by')
+          $scope.config.function.orderby = '';
           return true
         } else {
           console.log(' Part by')
@@ -244,6 +211,7 @@
       hasNoHashBy(){
         if($scope.config.function.hashby == null || $scope.config.function.hashby == ''){
           console.log('No hash by')
+          $scope.config.function.localorderby = '';
           return true
         } else {
           console.log('Hash by')
@@ -319,6 +287,7 @@
       onFileLocationChange() {
           $scope.config.function.script_filename = '';
           $scope.config.function.script_alias = '';
+          $scope.config.function.command_type = 'other'
       },
 
       getOriginalON() {
@@ -397,21 +366,7 @@
        * Gets the description of the given argument from the static JSON metadata.
        */
       getArgumentDescription: function (argument) {
-
-        // try {
-
-        //   return (functionMetadata && functionMetadata.argument_clauses[i])
-        //     ? functionMetadata.argument_clauses[i].description
-        //     : null;
-
-        // } catch (e) {
-
-        //   return null
-
-        // }
-
         return ARGUMENT_TITLES[argument]
-
       },
 
       getPermittedValues: function (i) {
@@ -470,8 +425,7 @@
         })
         let potentialMatches = argumentsList
           .filter(arg => tableNameAliases.includes(arg.name.toUpperCase()));
-        // .filter(arg => tableNameAlias.toUpperCase() === arg.name.toUpperCase());
-        // .filter(arg => [KEYS.INPUT_TABLE, KEYS.INPUT_TABLE_ALTERNATIVE].includes(arg.name.toUpperCase()));
+        
         console.log('Find tablename');
         console.log(potentialMatches);
         console.log(argumentsList);
@@ -505,13 +459,12 @@
         var y = false;
         
         if (hasTargetTable) {
-          //console.log('hasTargetTable');
+          
           const targetTableAlias = functionArgument.targetTable.toUpperCase();
-          // if (KEYS.ALTERNATE_NAMES in func)
-          // var tableAliasList = 
+          
           console.log('Table name');
           console.log(targetTableAlias);
-          // const isAliased = KEYS.INPUT_TABLE !== targetTableAlias;
+          
           if (aliasedInputsList !== []) {
             isAliasedInputsPopulated = true;
             aliasedInputsList.map((input) => {
@@ -524,31 +477,28 @@
           } else {
             isInAliasedInputsList = false;
           }
-          // const isAliased = aliasedInputsList.includes(targetTableAlias);
+          
           const isAliased = isInAliasedInputsList;
-          //console.log(KEYS.INPUT_TABLE);
-          //console.log(targetTableAlias);
-
+          
           if (isAliased) {
             console.log('isAliased');
             let matchingInputs = aliasedInputsList.filter(input => targetTableAlias === input.name.toUpperCase());
             if (matchingInputs.length > 0) {
-              //console.log('Matching inputs > 0');
+              
               targetTableName = matchingInputs[0].value;
             } else {
-              //console.log('Matching inputs < 0');
+              
               targetTableName = $scope.findTableNameInArgumentsList(argumentsList, targetTableAlias);
             }
 
 
           } else {
-            //console.log('isNotAliased');
-            //console.log(unaliasedInputsList);
+            
             if (unaliasedInputsList.count && unaliasedInputsList.values && unaliasedInputsList.values.length) {
               console.log('Went to unaliased');
 
               targetTableName = unaliasedInputsList.values[0];
-              //console.log(targetTableName);
+              
             }
 
             else {
@@ -563,22 +513,18 @@
         } else if (unaliasedInputsList.values && unaliasedInputsList.values.length > 0) {
 
           targetTableName = unaliasedInputsList.values[0]
-          //console.log('This else if');
-          //console.log(targetTableName);
+          
 
         }
 
         if (!targetTableName || !$scope.inputschemas) {
-          //console.log('This happened');
-          //console.log(targetTableName);
-          //console.log($scope);
+          
           return [];
         }
 
 
         if (targetTableName && targetTableName in $scope.inputschemas) {
-          //console.log('Schemas');
-          //console.log($scope.inputschemas[targetTableName]);
+          
           return $scope.inputschemas[targetTableName];
 
         }
@@ -661,10 +607,16 @@
       validate: function () {
 
         const invalids = []
-        $('.ng-invalid:not(form,.ng-hide)').each((i, x) => invalids.push($(x).parent().prev().text()))
-
+        $('.ng-invalid:not(form,.ng-hide,div,#selectize-selectized,option)').each((i, x) => {
+          // invalids.push($(x).parent().prev().text());
+          invalids.push($(x)[0].id);
+          console.log($(x)[0]);
+        }
+      )
+        
         if (invalids.length) {
           $scope.validationDialog(`Please amend the following fields: <ul>${invalids.map(x => `<li>${x}</li>`).join('')}</ul>`)
+          // $scope.validationDialog(`Please amend the fields marked in red`)
           return false
         }
 

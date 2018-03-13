@@ -129,7 +129,9 @@ scriptFileName = function_config.get('script_filename', '')
 scriptLocation = function_config.get('script_location', '')
 searchPath = default_database()
 outputTable = output_A_datasets[0].get_location_info()['info'].get('table', '')
+partitionOrHash = function_config.get('partitionOrHash', '')
 
+performFileLoad = True
 
 #Script Location for main script
 if(scriptLocation == 'sz'):
@@ -139,8 +141,11 @@ elif 'czp' == scriptLocation:
     writePythonNotebookToResourceFolder(output_A_names[0].split('.')[0], scriptFileName)
     scriptFileName = scriptFileName.replace("'", "")
     scriptFileName = scriptFileName.replace(" ", "")
-else:
+elif 'cz' == scriptLocation:
     scriptFileLocation = handle.file_path(scriptFileName)
+else:
+    performFileLoad = False
+    
 
 
 scriptLocation = scriptLocation[:2]
@@ -160,8 +165,8 @@ def getPartitionClause(partitionarg):
 def getOrderClause(orderarg):
     return orderarg and ('\n             ORDER BY {orderarg}'.format(orderarg=orderarg))
 
-def getLocalOrderClause(orderarg):
-    return orderarg and ('\n             LOCAL ORDER BY {orderarg}'.format(orderarg=orderarg))
+def getLocalOrderClause(localorderarg):
+    return localorderarg and ('\n             LOCAL ORDER BY {localorderarg}'.format(localorderarg=localorderarg))
 
 def getAdditionalClauses(arg):
     return arg and ('\n{arg}'.format(arg=arg))
@@ -173,10 +178,25 @@ and TableName = '{table}'
 and TableKind = 'Z';""".format(dataset=databasename, table=fileAlias)
 
 
-partitionClause = getPartitionClause(function_config.get('partitionby', ''))
-hashClause = getHashClause(function_config.get('hashby', ''))
-orderClause = getOrderClause(function_config.get('orderby', ''))
-localOrderByClause = getLocalOrderClause(function_config.get('localorderby', ''))
+if(partitionOrHash == 'part'):
+    print('Partition')
+    partitionClause = getPartitionClause(function_config.get('partitionby', ''))
+    orderClause = getOrderClause(function_config.get('orderby', ''))
+    hashClause = ''
+    localOrderByClause = ''
+elif(partitionOrHash == 'hash'):
+    print('Hash')
+    hashClause = getHashClause(function_config.get('hashby', ''))
+    localOrderByClause = getLocalOrderClause(function_config.get('localorderby', ''))
+    partitionClause = ''
+    orderClause = ''
+else: 
+    print('No Partition/Hash')
+    hashClause = ''
+    localOrderByClause = ''
+    partitionClause = ''
+    orderClause = ''
+    
 
 
 print('Building STO Script Command')
@@ -186,7 +206,7 @@ if commandType == 'python':
 elif commandType == 'r':
     script_command = """'R --vanilla --slave -f ./"""+searchPath+"""/"""+scriptFileName+"""'"""
 elif commandType == 'other':
-    script_command = function_config.get('other_command', '')
+    script_command = """'"""+function_config.get('other_command', '')+"""'"""
 print("""Script Command: """+script_command)
 
 # select query
@@ -201,10 +221,8 @@ etQuery = 'COMMIT WORK;'
 #File Related:
 
 removeFileQuery = """CALL SYSUIF.REMOVE_FILE('""" + scriptAlias + """',1);"""
-# installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + function_config.get('script_alias') + """','""" + function_config.get('script_filename') + """','cz!"""+filepath+"""');"""
 print('Building Script installation query')
 installFileQuery = """CALL SYSUIF.INSTALL_FILE('""" + escape(scriptAlias) + """','""" + escape(scriptFileName) + """','"""+escape(scriptLocation)+"""!"""+escape(scriptFileName)+"""');"""
-#sz if in DB
 replaceFileQuery = """CALL SYSUIF.REPLACE_FILE('""" + escape(scriptAlias) + """','""" + escape(scriptFileName) + """','"""+escape(scriptLocation)+"""!"""+escape(scriptFileName)+"""', 0);"""
 scriptDoesExist = """select * from dbc.tables
 where databasename = '{searchPath}'
@@ -216,8 +234,8 @@ newPath = dkuinstalldir + """/dist/"""+scriptFileName
 print(newPath)
 # print(replaceFileQuery)
 #COPY FILE TEST
-copyfile(escape(scriptFileLocation.rstrip()), newPath)
-
+if(performFileLoad):
+    copyfile(escape(scriptFileLocation.rstrip()), newPath)
 
 #ADDITIONAL FILES
 #INSTALL Additional files
@@ -248,7 +266,6 @@ for item in additionalFiles:
             print('Was able to find the file in the table list. Attempting to use REPLACE_FILE')                
             installAdditionalFilesArray.append("""\nCALL SYSUIF.REPLACE_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('filename')+"""',0);""")
     else:
-        # installAdditionalFiles = installAdditionalFiles + """\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+address+"""');"""
         installAdditionalFilesArray.append("""\nCALL SYSUIF.INSTALL_FILE('""" + item.get('file_alias') + """','""" + item.get('filename') + """','"""+item.get('file_location')+item.get('file_format')+"""!"""+item.get('filename')+"""');""")
 print("""Additional Files Installation Query/ies: """)
 print(installAdditionalFilesArray)
@@ -259,15 +276,11 @@ print(installAdditionalFilesArray)
 print(output_A_names[0])
 useSQLOnClause = function_config.get('useSQLOnClause')
 
-# if useSQLOnClause:
 onClause = function_config.get('sql_on_clause')
 selectClause = function_config.get('select_clause')
-# else:
-    # onClause = """SELECT * FROM """ + function_config.get('input_table')
-
 
 STOQuery = """SELECT {selectClause}
-FROM SCRIPT (ON ({onClause}){hashClause}{partitionClause}{orderClause}{localOrderClause}
+FROM SCRIPT (ON ({onClause}){hashClause}{localOrderClause}{partitionClause}{orderClause}
              SCRIPT_COMMAND({script_command})
              RETURNS ('{returnClause}')
             ) {additionalClauses};""".\
@@ -280,22 +293,10 @@ FROM SCRIPT (ON ({onClause}){hashClause}{partitionClause}{orderClause}{localOrde
                    hashClause=hashClause,
                    partitionClause=partitionClause,
                    orderClause=orderClause,
-                   localOrderClause=localOrderClause,
+                   localOrderClause=localOrderByClause,
                    returnClause=returnClause,
                    additionalClauses=getAdditionalClauses(function_config.get('add_clauses','')))
 
-
-def removePasswordFromRecipe(projectname, outputdatasetname):
-    client = dataiku.api_client()
-    project = client.get_project(projectname)
-    r = project.get_recipe("compute_{}".format(outputdatasetname))
-    defr = r.get_definition_and_payload()
-    if defr:
-        params = defr.get_recipe_params()
-        if 'customConfig' in defr.get_recipe_params() and 'function' in defr.get_recipe_params()['customConfig']:
-            defr.get_recipe_params()['customConfig']['function'].pop('dbpwd', None)
-            defr.get_recipe_params()['customConfig']['function'].pop('savepwd', None)
-            r.set_definition_and_payload(defr)
 
 def getSelectTableQuery(databasename, fileAlias):
     return """select * from dbc.tables
@@ -321,33 +322,32 @@ def database():
     
 
 #File Loading
-if function_config.get("replace_script"):
-    print('performing replacefile')
-    tableCheck = executor.query_to_df(getSelectInstalledFileQuery(defaultDB,scriptAlias))
-    print('Checking table list for previously installed files')
-    print(tableCheck)
-    print(tableCheck.shape)
-    if(tableCheck.shape[0] < 1):
-        print('Was not able to find the file in the table list. Attempting to use INSTALL_FILE')
-        if autocommit:
-            print('Auto commit is true')
-            executor.query_to_df(installFileQuery,[setSessionQuery])
-        else:
-            print('Auto commit is false')
-            executor.query_to_df(edTxn,[stTxn, setSessionQuery, installFileQuery])
-    else:    
-        print('Was able to find the file in the table list. Attempting to use REPLACE_FILE')
-        if autocommit:
-            print('Auto commit is true')
-            executor.query_to_df(replaceFileQuery,[setSessionQuery])
-        else:
-            print('Auto commit is false')
-            executor.query_to_df(edTxn,[stTxn, setSessionQuery, replaceFileQuery])
-        
-            
-else:
-    print('performing installfile')
-    executor.query_to_df(edTxn,[stTxn, setSessionQuery, installFileQuery])
+if(performFileLoad):
+    if function_config.get("replace_script"):
+        print('performing replacefile')
+        tableCheck = executor.query_to_df(getSelectInstalledFileQuery(defaultDB,scriptAlias))
+        print('Checking table list for previously installed files')
+        print(tableCheck)
+        print(tableCheck.shape)
+        if(tableCheck.shape[0] < 1):
+            print('Was not able to find the file in the table list. Attempting to use INSTALL_FILE')
+            if autocommit:
+                print('Auto commit is true')
+                executor.query_to_df(installFileQuery,[setSessionQuery])
+            else:
+                print('Auto commit is false')
+                executor.query_to_df(edTxn,[stTxn, setSessionQuery, installFileQuery])
+        else:    
+            print('Was able to find the file in the table list. Attempting to use REPLACE_FILE')
+            if autocommit:
+                print('Auto commit is true')
+                executor.query_to_df(replaceFileQuery,[setSessionQuery])
+            else:
+                print('Auto commit is false')
+                executor.query_to_df(edTxn,[stTxn, setSessionQuery, replaceFileQuery])
+    else:
+        print('performing installfile')
+        executor.query_to_df(edTxn,[stTxn, setSessionQuery, installFileQuery])
 
 if(installAdditionalFilesArray != []):
     print('Installing additional files...')
@@ -358,7 +358,6 @@ print('setSessionQuery')
 print(setSessionQuery)
 print('replaceFileQuery')
 print(replaceFileQuery)
-# print("""SELECT Query: """+nQuery)
 print('Executing SELECT Query...')
 print(STOQuery)
 selectResult = executor.query_to_df(STOQuery,[setSessionQuery])
