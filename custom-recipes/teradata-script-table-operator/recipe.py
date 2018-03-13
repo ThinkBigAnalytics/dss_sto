@@ -1,3 +1,20 @@
+# -*- coding: utf-8 -*-
+'''
+Copyright © 2018 by Teradata.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+associated documentation files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute,
+sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+'''
+
 # Code for custom code recipe KC_TestPlugins_compute_pythonrecipe_out (imported from a Python recipe)
 
 # To finish creating your custom recipe from your original PySpark recipe, you need to:
@@ -297,24 +314,11 @@ FROM SCRIPT (ON ({onClause}){hashClause}{localOrderClause}{partitionClause}{orde
                    returnClause=returnClause,
                    additionalClauses=getAdditionalClauses(function_config.get('add_clauses','')))
 
-
 def getSelectTableQuery(databasename, fileAlias):
     return """select * from dbc.tables
 where databasename = '{dataset}'
 and TableName = '{table}'
 and TableKind = 'T';""".format(dataset=databasename, table=fileAlias)
-
-def getPassword():
-    dbpwd = function_config.get('dbpwd', '')
-    conn_name = getCurrentConnectionName(output_A_datasets[0])
-    filepath = getAuthFilePath(conn_name)
-    if dbpwd and function_config.get('savepwd', False):
-        write_encrypted(filepath, dbpwd)
-    elif not dbpwd:
-        dbpwd = read_encrypted(getAuthFilePath(conn_name))
-    else:
-        pass
-    return dbpwd
 
 def database():
     # for now, database name = db user name

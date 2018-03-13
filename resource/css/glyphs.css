@@ -1,3 +1,8 @@
+/**
+ * Using Jan Kovaric's icon fonts from Glyphicon Halflings under Twitter Bootstrap.
+ * The icon fonts were released under the same MIT license as Bootstrap.
+ */
+
 .orange {
     color: orange
 }
@@ -34,4 +39,8 @@
 
 .glyphicon-plus-sign:before {
   content:"\e081";
+}
+
+.glyphicon-question-sign:before {
+  content: '\e085';
 }

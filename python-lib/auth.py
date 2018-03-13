@@ -1,24 +1,29 @@
+# -*- coding: utf-8 -*-
+'''
+Copyright © 2018 by Teradata.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+associated documentation files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute,
+sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+'''
+
 '''
 Created on Sep 18, 2017
 
 @author: dt186022
-
-Usage:
- - Saving: write_encrypted(getAuthFilePath(AUTH_FILENAME), db_pwd)
- - Reading: read_encrypted(getAuthFilePath(AUTH_FILENAME))
- - Limitation: assumption is only one db password
 '''
-
-from auth_constants import *
 
 import dataiku
 from dataiku.customrecipe import *
-from binascii import hexlify, unhexlify
-from simplecrypt import encrypt, decrypt
 
-import hashlib
-import hmac
-import base64
 import os
 
 def pathExists(filepath):
@@ -49,35 +54,3 @@ def getAuthFilePath(filename):
     except Exception as e:
         print('Error getting resource recipe: {error}'.format(error=repr(e.args)))
     return filepath
-
-def getSignature(pwd=MASTER_PASSWORD):
-    hostid = ''
-    try:
-        hostid = os.popen("hostid").read().strip()
-    except Exception as e:
-        print('Error accessing hostid')
-    message = bytes(SECRET_KEY + hostid).encode('utf-8')
-    secret = bytes(pwd).encode('utf-8')
-    return base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest()) 
-
-def write_encrypted(filepath, plaintext):
-    try:
-        if not os.path.exists(os.path.dirname(filepath)):
-            os.makedirs(os.path.dirname(filepath))
-        with open(filepath, 'wb') as output:
-            tobewritten = encrypt(getSignature(), plaintext.encode('utf8'))
-            output.write(hexlify(tobewritten))
-    except Exception as e:
-        print('Error writing encrypted text to {filename}: {error}'.format(filename=filepath,
-                                                                           error=repr(e.args)))
-        
-def read_encrypted(filepath):
-    plainsavedtext = ''
-    try:
-        with open(filepath, 'rb') as input:
-            ciphersavedtext = input.read()
-            plainsavedtext = decrypt(getSignature(), unhexlify(ciphersavedtext)).decode('utf8')
-    except Exception as e:
-        print('Error reading encrypted text from {filename}: {error}'.format(filename=filepath,
-                                                                             error=repr(e.args)))
-    return plainsavedtext
