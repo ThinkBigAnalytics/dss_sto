@@ -34,8 +34,7 @@ def getConnectionParams(name):
     return mydssconnection.get_definition().get('params', {})
 
 def getConnectionParamsFromDataset(inputDataset):
-    name = getCurrentConnectionName(inputDataset)
-    return getConnectionParams(name)
+    return inputDataset.get_location_info(sensitive_info=True)['info']
 
 # paylaod is sent from the javascript's callPythonDo()
 # config and plugin_config are the recipe/dataset and plugin configured values
@@ -53,7 +52,7 @@ def do(payload, config, plugin_config, inputs):
             inputDataSets.append(inputtablename)
             if not connection:
                 inputdataset = dataiku.Dataset(inputtablename)
-                connection = getConnectionParamsFromDataset(inputdataset)
+                connection = getConnectionParamsFromDataset(inputdataset).get('connectionParams', {})
         else:
             inputfoldername = input['fullName'].split('.')[1]       
             inputFolderLocation =  dataiku.Folder(inputfoldername)
