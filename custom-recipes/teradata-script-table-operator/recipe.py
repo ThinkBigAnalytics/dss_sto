@@ -14,9 +14,6 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FO
 DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 '''
-
-# Code for custom code recipe KC_TestPlugins_compute_pythonrecipe_out (imported from a Python recipe)
-
 # To finish creating your custom recipe from your original PySpark recipe, you need to:
 #  - Declare the input and output roles in recipe.json
 #  - Replace the dataset names by roles access in your code

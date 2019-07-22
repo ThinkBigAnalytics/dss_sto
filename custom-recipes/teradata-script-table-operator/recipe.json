@@ -1,12 +1,12 @@
-// This file is the descriptor for the Custom code recipe KC_TestPlugins_compute_pythonrecipe_out
+// This file is the descriptor for the Custom code recipe TeradataVantageTeradataVantageTeradataVantageTeradataVantageScriptTO_Plugin_compute_pythonrecipe_out
 {
     // Meta data for display purposes
     "meta": {
         "label": "Teradata SCRIPT Table Operator",
         "author": "Me",
         "tags": [
-            "myrecipe",
-            "dev"
+            "Teradata",
+            "SCRIPT Table Operator"
         ]
     },
     "kind": "PYTHON",
@@ -80,6 +80,6 @@
     "readable": true,
     "writable": false,
     "paramsTemplate": "html/index.html",
-    "paramsModule": "teradataSTO.module",
+    "paramsModule": "teradataScriptTO.module",
     "paramsPythonSetup": "python/DataTransformation.py"
 }

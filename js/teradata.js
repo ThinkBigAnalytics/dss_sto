@@ -28,9 +28,9 @@
     throw new Error('jQuery library not present!')
   }
 
-  const app = angular.module('teradataSTO.module', []);
+  const app = angular.module('teradataScriptTO.module', []);
 
-  app.controller('TeradataControllerSTO', function ($scope, $timeout) {
+  app.controller('TeradataControllerScriptTO', function ($scope, $timeout) {
 
     /**
      * A wrapper function that delays execution so that
