@@ -1,0 +1,337 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>II. Requirements · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="iii-creating-a-vantage-connection.html" />
+    
+    
+    <link rel="prev" href="./index.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    I. Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.2" data-path="ii-requirements.html">
+            
+                <a href="ii-requirements.html">
+            
+                    
+                    II. Requirements
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="iii-creating-a-vantage-connection.html">
+            
+                <a href="iii-creating-a-vantage-connection.html">
+            
+                    
+                    III. Creating a Vantage Connection
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="iv-vantage-analytic-plugin-installation.html">
+            
+                <a href="iv-vantage-analytic-plugin-installation.html">
+            
+                    
+                    IV. Teradata Vantage Analytic Plugin Installation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="v-vantage-plugin-usage.html">
+            
+                <a href="v-vantage-plugin-usage.html">
+            
+                    
+                    V. Teradata Vantage SCRIPT Table Operator Plugin Usage
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >II. Requirements</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="ii-requirements">II. Requirements</h1>
+<hr>
+<ol>
+<li><p><strong>Dataiku Data Science Studio version 5.1.2 or later</strong></p>
+<p>Dataiku DSS enterprise edition is required to import datasets from Vantage tables. Dataiku offers both downloadable and online options which can be obtained from the Dataiku <a href="https://www.dataiku.com/dss/trynow/" target="_blank">website</a>. The downloadable option can be configured to use the free or the enterprise edition, while the online option only comes in enterprise edition with free trial for a period of 14 days. A comparison between the two editions can be seen in the features table for <a href="https://www.dataiku.com/dss/editions/" target="_blank">Dataiku DSS Editions</a>.</p>
+<p>Teradata Vantage Analytic Functions plugin has been tested on Dataiku DSS version 5.1.2.<br>&#xA0; </p>
+</li>
+<li><p><strong>Plugin</strong></p>
+<p>To use the Teradata Vantage Analytic Functions plugin, you need the compressed file &quot;TeradataVantageFunctionsPlugin.zip&quot; that contains the Teradata Vantage Analytic Functions plugin software and metadata. 
+&#xA0;  </p>
+<p>To use the SCRIPT Table Operator plugin, you need the compressed file &quot;TeradataVantageScriptTOPlugin.zip&quot; that contains the SCRIPT Table Operator plugin software and metadata.
+&#xA0;  </p>
+</li>
+<li><p><strong>Access Credentials</strong></p>
+<p> To use the plugins, you will need 2 different kinds of credentials, that is, one set for DSS and a second one for Vantage.  Specifically:</p>
+<ol>
+<li><p>Dataiku DSS user credentials allow a user to login to a DSS instance.  Your DSS server administrator can provide you 
+with these credentials.</p>
+</li>
+<li><p>Vantage credentials allow a user to connect to the Advanced SQL Engine Database of a Vantage system, and, with appropriate permissions, read and write tables into the Advanced SQL Engine.  Your Vantage database administrator (DBA) can provide you with credentials and suitable permissions for one or more databases on a Vantage system.</p>
+<p>Use your DSS user credentials to log on to a DSS instance, and then use your Vantage credentials to establish a connection between DSS and a Vantage system.  <a href="iii-creating-a-vantage-connection.html">Section III (&quot;Creating A Vantage Connection&quot;)</a> provides instructions on how to setup a DSS connection to a Vantage Advanced SQL Engine Database.  It is suggested to create one connection per each database for which you intend to store output tables in.</p>
+</li>
+</ol>
+<p>&#xA0;  </p>
+</li>
+<li><p><strong>Teradata JDBC Driver</strong></p>
+<p>The Teradata JDBC Driver 16.20 or later is required to establish a connection between DSS and a Vantage System. </p>
+</li>
+<li><p><strong>Teradata Vantage Version 1.1</strong>
+ Both plugins require a connection to a Teradata Vantage system that minimally comprises of a Advanced SQL Engine.
+ <strong>Teradata Vantage Analytic Functions Plugin</strong>
+ The Teradata Vantage Analytic Functions Plugin for Dataiku DSS integrates about 180 of the Teradata Vantage Analytic Functions Plugin further requires a Vantage System v.1.1.  For this plugin, if your Vantage v.1.1 system only has a Advanced SQL Engine, then only the analytic functions built into the Advanced SQL Engine will be available to the plugin, and namely, the following functions:</p>
+<ul>
+<li>Attribution</li>
+<li>nPath</li>
+<li>Sessionize</li>
+<li>DecisionTreePredict</li>
+<li>DecisionForestPredict</li>
+<li>GLMPredict</li>
+<li>SVMSparsePredict</li>
+<li>NaiveBayesPredict</li>
+<li><p>NaiveBayesTextClassifierPredict
+The Machine Learning and Graph engine is required to completely leverage all capabilities of the Teradata Vantage Analytic Functions Plugin.
+<strong>SCRIPT Table Operator Plugin</strong></p>
+<p>To use the SCRIPT Table Operator Plugin with a Vantage system Advanced SQL Engine and execute R and Python scripts in the Advanced SQL Engine nodes, one of the following R and/or Python bundles need to be installed directly on each node of the Advanced SQL Engine:
+<img src="assets/SCRIPTTOtable.png" alt=""></p>
+<p>Moreover, your DBA must grant you in advance the additional following privileges:</p>
+</li>
+<li><p><code>EXECUTE</code> Function privilege on <code>TD_SYSFNLIB.SCRIPT</code> 
+This is needed in order to invoke the SCRIPT Table Operator.</p>
+</li>
+<li><p><code>EXECUTE</code> privilege on the functions <code>SYSUIF.INSTALL_FILE</code>, <code>SYSUIF.REMOVE_FILE</code>, and <code>SYSUIF.REPLACE_FILE</code>.</p>
+</li>
+</ul>
+</li>
+</ol>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="./" class="navigation navigation-prev " aria-label="Previous page: I. Introduction">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="iii-creating-a-vantage-connection.html" class="navigation navigation-next " aria-label="Next page: III. Creating a Vantage Connection">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"II. Requirements","level":"1.2","depth":1,"next":{"title":"III. Creating a Vantage Connection","level":"1.3","depth":1,"path":"iii-creating-a-vantage-connection.md","ref":"iii-creating-a-vantage-connection.md","articles":[]},"previous":{"title":"I. Introduction","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"ii-requirements.md","mtime":"2019-09-17T12:56:59.712Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-09-29T18:12:41.727Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>IV. Teradata Script Table Operator Plugin Usage · GitBook</title>
+        <title>V. Teradata Vantage SCRIPT Table Operator Plugin Usage · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -58,7 +58,7 @@
 
     
     
-    <link rel="prev" href="iii-creating-a-teradata-connection.html" />
+    <link rel="prev" href="iv-vantage-analytic-plugin-installation.html" />
     
 
     </head>
@@ -89,7 +89,7 @@
     
         <li class="chapter " data-level="1.1" data-path="./">
             
-            <a href="index.html">
+                <a href="./">
             
                     
                     I. Introduction
@@ -100,9 +100,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2" data-path="chapter1.html">
+        <li class="chapter " data-level="1.2" data-path="ii-requirements.html">
             
-                <a href="chapter1.html">
+                <a href="ii-requirements.html">
             
                     
                     II. Requirements
@@ -113,12 +113,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3" data-path="iii-creating-a-teradata-connection.html">
+        <li class="chapter " data-level="1.3" data-path="iii-creating-a-vantage-connection.html">
             
-                <a href="iii-creating-a-teradata-connection.html">
+                <a href="iii-creating-a-vantage-connection.html">
             
                     
-                    III. Creating a Teradata Connection
+                    III. Creating a Vantage Connection
             
                 </a>
             
@@ -126,12 +126,25 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.4" data-path="vi-teradata-script-table-operator-plugin-usage.html">
+        <li class="chapter " data-level="1.4" data-path="iv-vantage-analytic-plugin-installation.html">
             
-                <a href="vi-teradata-script-table-operator-plugin-usage.html">
+                <a href="iv-vantage-analytic-plugin-installation.html">
             
                     
-                    IV. Teradata Script Table Operator Plugin Usage
+                    IV. Teradata Vantage Analytic Plugin Installation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5" data-path="v-vantage-plugin-usage.html">
+            
+                <a href="v-vantage-plugin-usage.html">
+            
+                    
+                    V. Teradata Vantage SCRIPT Table Operator Plugin Usage
             
                 </a>
             
@@ -169,7 +182,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >IV. Teradata Script Table Operator Plugin Usage</a>
+        <a href="." >V. Teradata Vantage SCRIPT Table Operator Plugin Usage</a>
     </h1>
 </div>
 
@@ -184,65 +197,59 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="iv-teradata-script-table-operator-plugin-usage">IV. Teradata Script Table Operator Plugin Usage</h1>
+                                <h1 id="v-using-the-teradata-script-table-operator-plugin">V. Using the Teradata SCRIPT Table Operator Plugin</h1>
 <hr>
-<p><strong>Plugin UI Overview</strong></p>
-<p>There are three (3) main tabs containing arguments used to install/replace the script files on the Teradata Database and/or invoke the SCRIPT Table Operator.</p>
+<p>This section assumes that a Dataiku DSS project already exists and input datasets have already been imported. Note that recipes need a non-empty dataset as input to run.</p>
+<p>There are three (3) main tabs containing arguments used to install/replace the script files on the Advanced SQL Engine Database and/or invoke the SCRIPT Table Operator (STO).</p>
 <h3 id="script-loading">Script Loading</h3>
-<p><img src="assets/script_loading.png" alt=""></p>
+<p><img src="assets/script_loading.png" alt="">)</p>
 <ul>
-<li><p><strong>Script File Name</strong></p>
-<ul>
+<li>Script File Name<ul>
 <li>The name of the script file to be uploaded.</li>
 <li>This is the main script used in the SCRIPT Table Operator.</li>
 <li>Depending on the selected Script File Location this input changes:<ul>
-<li>For Teradata Server &#x2013; A text input field is provided to enter a file name.</li>
-<li>For DSS Managed Folders and DSS Notebooks &#x2013; A drop-down box containing a list of the files under their respective locations is provided.</li>
+<li>If the script is on the Vantage Server &#x2013; A text input field is provided to enter a file name.</li>
+<li>If the script is in the DSS Managed Folders and DSS Notebooks &#x2013; A drop-down box containing a list of the files under their respective locations is provided.</li>
 </ul>
 </li>
 <li>The Script File Name will not appear until the Script File Location is selected.</li>
 </ul>
 </li>
-<li><p><strong>Script File Location</strong></p>
-<ul>
-<li>The location of the script to be installed, either on the Teradata server, a DSS Jupyter Notebook, or a DSS Managed Folder</li>
+<li>Script File Location<ul>
+<li>The location of the script to be installed, either on the Vantage server, a DSS Jupyter Notebook, or a DSS Managed Folder</li>
 </ul>
 </li>
-<li><p><strong>Script File Alias</strong></p>
-<ul>
+<li>Script File Alias<ul>
 <li>The file alias to be used in the SQL statement</li>
 <li>This is mainly used by the SCRIPT Installation/Replace process in the metadata tables.</li>
 </ul>
 </li>
-<li><p><strong>Script File Address</strong></p>
-<ul>
-<li>The fully qualified file location on the Teradata Server</li>
-<li>This only appears if the selected option for Script File Location is &#x201C;Teradata Server&#x201D; </li>
+<li>Script File Address<ul>
+<li>The fully qualified file location on the Vantage Server</li>
+<li>This only appears if the selected option for Script File Location is &#x201C;Vantage Server&#x201D; </li>
 </ul>
 </li>
-<li><p><strong>Add More Files</strong></p>
-<ul>
-<li>This button allows the user to have additional files installed in the Teradata Database.</li>
+<li>Add More Files<ul>
+<li>This button allows the user to have additional files installed in the Vantage Advanced SQL Engine.</li>
 <li>There is a file path specified to the right of the button in which the additional files are installed.<ul>
 <li>This may normally be used in instances where the user&#x2019;s main script references an additional file.</li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p><strong>Additional Files:</strong></p>
-<ul>
+<li>Additional Files:<ul>
 <li>File Name<ul>
 <li>This is the file name of an additional file.</li>
-<li>Similar to the Script File Name it is a Text Field for files located in the Teradata Database and a drop-down box if DSS Managed Folder is selected as the File Location</li>
+<li>Similar to the Script File Name it is a Text Field for files located in the Vantage Advanced SQL Engine and a drop-down box if DSS Managed Folder is selected as the File Location</li>
 </ul>
 </li>
 <li>File Location<ul>
-<li>The location of the file to be installed, either on the Teradata server or a DSS Managed Folder</li>
+<li>The location of the file to be installed, either on the Vantage server or a DSS Managed Folder</li>
 </ul>
 </li>
 <li>File Address<ul>
-<li>The fully qualified file location on the Teradata Server</li>
-<li>Similar to the Script File Address this only appears when Teradata Server is selected as the file location.</li>
+<li>The fully qualified file location on the Vantage server</li>
+<li>Similar to the Script File Address this only appears when &quot;Vantage Server&quot; is selected as the file location.</li>
 </ul>
 </li>
 <li>File Format<ul>
@@ -252,10 +259,10 @@
 </ul>
 </li>
 </ul>
-<h2 id="sto-arguments">STO Arguments</h2>
-<p><img src="assets/sto_arguments.png" alt=""></p>
+<h3 id="script-table-operator-arguments">SCRIPT Table Operator Arguments</h3>
+<p><img src="assets/sto_arguments.png" alt="">)</p>
 <ul>
-<li><p><strong>Script Type</strong></p>
+<li><p>Script Type</p>
 <ul>
 <li>The type of script to be used typically Python or R&apos;</li>
 <li>Script Command <ul>
@@ -265,43 +272,43 @@
 </li>
 </ul>
 </li>
-<li><p><strong>Script Arguments</strong></p>
+<li><p>Script Arguments</p>
 <ul>
 <li>The arguments for the script, place one argument per box. Click on the (+) button to add more arguments&apos;</li>
 </ul>
 </li>
-<li><p><strong>ON</strong></p>
+<li><p>ON</p>
 <ul>
 <li>The ON Clause used as the input data for the script</li>
-<li>If UNMODIFIED the clause defaults to &quot;SELECT * FROM {input_table}&quot;</li>
+<li>If UNMODIFIED the clause defaults to &#x201C;SELECT * FROM {input_table}&#x201D;</li>
 </ul>
 </li>
-<li><p><strong>Customize the ON clause</strong></p>
+<li><p>Customize the ON clause</p>
 <ul>
 <li>A checkbox which specifies whether the ON clause should be modified.</li>
 </ul>
 </li>
-<li><p><strong>HASH BY</strong></p>
+<li><p>HASH BY</p>
 <ul>
-<li>A HASH BY clause will cause the rows in the ON clause to be redistributed to AMPs based on the hash value of the column(s) specified.</li>
+<li>A HASH BY clause will cause the rows in the ON clause to be redistributed to AMPs based on the hash value of the column(s) specified&apos;</li>
 </ul>
 </li>
-<li><p><strong>PARTITION BY</strong></p>
+<li><p>PARTITION BY</p>
 <ul>
-<li>A PARTITION BY clause will cause the STO to be executed against specific groups (partitions) based on the column(s) specified</li>
+<li>A PARTITION BY clause will cause the STO to execute against specific groups (partitions) based on the column(s) specified</li>
 </ul>
 </li>
-<li><p><strong>ORDER BY</strong></p>
+<li><p>ORDER BY</p>
 <ul>
-<li>An ORDER BY clause specifies the order in which values in a group (partition) are sorted</li>
+<li>&apos;An ORDER BY clause specifies the order in which values in a group (partition) are sorted</li>
 </ul>
 </li>
-<li><p><strong>LOCAL ORDER BY</strong></p>
+<li><p>LOCAL ORDER BY</p>
 <ul>
 <li>A LOCAL ORDER BY clause orders the rows qualified on each AMP</li>
 </ul>
 </li>
-<li><p><strong>RETURNS</strong></p>
+<li><p>RETURNS</p>
 <ul>
 <li>RETURNS NAME<ul>
 <li>The first column under returns</li>
@@ -316,26 +323,29 @@
 </ul>
 </li>
 </ul>
-<h3 id="other-sql-arguments">Other SQL Arguments</h3>
-<p><img src="assets/other_arguments.png" alt=""></p>
+<h3 id="other-sql-arguments">OTHER SQL Arguments</h3>
+<p><img src="assets/other_arguments.png" alt="">)</p>
 <ul>
-<li><p><strong>Select Columns</strong></p>
+<li><p>Select Columns</p>
 <ul>
 <li>Specifies the contents of a user customized SELECT statement (data to be returned by the query) </li>
 <li>Default is to SELECT all column(s) in the RETURNS clause</li>
 </ul>
 </li>
-<li><p><strong>Customize Select Columns Checkbox</strong></p>
+<li><p>Customize Select Columns Checkbox</p>
 <ul>
 <li>Determines whether the SELECT (output) columns (data to be returned by the query) should be modified. </li>
 </ul>
 </li>
-<li><p><strong>Additional Clauses</strong></p>
+<li><p>Additional Clauses</p>
 <ul>
 <li>Specifies any additional clauses to the output such as a HAVING or QUALIFY clause</li>
 </ul>
 </li>
 </ul>
+<h3 id="running-the-script-table-operator-plugin">Running the SCRIPT Table Operator Plugin</h3>
+<p>After setting up the arguments, click on the [<code>RUN</code>] button to run the SCRIPT Table Operator. </p>
+<p><img src="assets/usage5.png" alt="">)</p>
 
                                 
                                 </section>
@@ -363,7 +373,7 @@
 
             
                 
-                <a href="iii-creating-a-teradata-connection.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: III. Creating a Teradata Connection">
+                <a href="iv-vantage-analytic-plugin-installation.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: IV. Teradata Vantage Analytic Plugin Installation">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
@@ -375,7 +385,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"IV. Teradata Script Table Operator Plugin Usage","level":"1.4","depth":1,"previous":{"title":"III. Creating a Teradata Connection","level":"1.3","depth":1,"path":"iii-creating-a-teradata-connection.md","ref":"iii-creating-a-teradata-connection.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"vi-teradata-script-table-operator-plugin-usage.md","mtime":"2017-12-29T10:11:16.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-29T10:11:41.175Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"V. Teradata Vantage SCRIPT Table Operator Plugin Usage","level":"1.5","depth":1,"previous":{"title":"IV. Teradata Vantage Analytic Plugin Installation","level":"1.4","depth":1,"path":"iv-vantage-analytic-plugin-installation.md","ref":"iv-vantage-analytic-plugin-installation.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"v-vantage-plugin-usage.md","mtime":"2019-09-29T18:04:35.714Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-09-29T18:12:41.727Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

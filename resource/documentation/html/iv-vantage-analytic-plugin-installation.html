@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>III. Creating a Teradata Connection · GitBook</title>
+        <title>IV. Teradata Vantage Analytic Plugin Installation · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="vi-teradata-script-table-operator-plugin-usage.html" />
+    <link rel="next" href="v-vantage-plugin-usage.html" />
     
     
-    <link rel="prev" href="chapter1.html" />
+    <link rel="prev" href="iii-creating-a-vantage-connection.html" />
     
 
     </head>
@@ -91,7 +91,7 @@
     
         <li class="chapter " data-level="1.1" data-path="./">
             
-                <a href="index.html">
+                <a href="./">
             
                     
                     I. Introduction
@@ -102,9 +102,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2" data-path="chapter1.html">
+        <li class="chapter " data-level="1.2" data-path="ii-requirements.html">
             
-                <a href="chapter1.html">
+                <a href="ii-requirements.html">
             
                     
                     II. Requirements
@@ -115,12 +115,12 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.3" data-path="iii-creating-a-teradata-connection.html">
+        <li class="chapter " data-level="1.3" data-path="iii-creating-a-vantage-connection.html">
             
-                <a href="iii-creating-a-teradata-connection.html">
+                <a href="iii-creating-a-vantage-connection.html">
             
                     
-                    III. Creating a Teradata Connection
+                    III. Creating a Vantage Connection
             
                 </a>
             
@@ -128,12 +128,25 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="vi-teradata-script-table-operator-plugin-usage.html">
+        <li class="chapter active" data-level="1.4" data-path="iv-vantage-analytic-plugin-installation.html">
             
-                <a href="vi-teradata-script-table-operator-plugin-usage.html">
+                <a href="iv-vantage-analytic-plugin-installation.html">
             
                     
-                    IV. Teradata Script Table Operator Plugin Usage
+                    IV. Teradata Vantage Analytic Plugin Installation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="v-vantage-plugin-usage.html">
+            
+                <a href="v-vantage-plugin-usage.html">
+            
+                    
+                    V. Teradata Vantage SCRIPT Table Operator Plugin Usage
             
                 </a>
             
@@ -171,7 +184,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >III. Creating a Teradata Connection</a>
+        <a href="." >IV. Teradata Vantage Analytic Plugin Installation</a>
     </h1>
 </div>
 
@@ -186,21 +199,28 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="iii-creating-a-teradata-connection">III. Creating a Teradata Connection</h1>
+                                <h1 id="iv-teradata-vantage-analytic-functions-plugin-installation">IV. Teradata Vantage Analytic Functions Plugin Installation</h1>
 <hr>
-<p>Teradata is supported by the DataIku DSS, although there are some additional details needed when setting up the Teradata Connection<br>.</p>
+<p>The steps to install the Teradata Vantage Analytic Functions or the SCRIPT Table Operator plugins are as follows:</p>
 <ol>
-<li><p>In the Dataiku DSS home page, click on Admin Tools (gear icon). Alternatively, you can go to <a href="http://dataikuhost:port/admin/" target="_blank">http://dataikuhost:port/admin/</a>. <img src="assets/settings.png" alt=""></p>
+<li><p>Assume that the zip file of the plugin you want to install is stored in your local filesystem.</p>
 </li>
-<li><p>In the DSS settings page, Connections tab, Click on NEW CONNECTION. From the options that will be presented, choose Teradata.<img src="assets/settings2.png" alt=""></p>
+<li><p>In DSS Settings page (accessible through the Admin Tools button), select the [<code>Plugins</code>] tab, then select the [<code>ADVANCED</code>] option.</p>
+<p><img src="assets/install_1.png" alt="">
+&#xA0;</p>
 </li>
-<li><p>Fill up the following fields as appropriate:<br>Host: Teradata Database Host<br>User: Username of the user<br>Password: Password of the user.<br>Default database: Preferred default database<br>Host: Teradata Database Host</p>
+<li><p>Click on [<code>Choose File</code>] and navitage to the location of the plugin zip file in your local filesystem.
+&#xA0;</p>
 </li>
-<li><p>Click on the &#x201C;Add&#x201D; button under Advanced properties and add two (2) new properties <strong><br>CHARSET:</strong> UTF8<br><strong>MODE</strong>: ANSI or TERA.<img src="assets/settings3.png" alt=""></p>
+<li><p>If a previous installation of the Teradata Vantage Analytic plugin exists, check &quot;Is update&quot;.</p>
+<p>&#xA0;</p>
 </li>
-<li><p>Click on Test button to verify that connection details provided in the previous steps are valid.</p>
+<li><p>Click on the [<code>UPLOAD</code>] button.</p>
+<p>&#xA0;</p>
 </li>
-<li><p>Finally, click on Save button.</p>
+<li><p>When the upload succeeds, click on the [<code>Reload</code>] button, or do a hard refresh (Ctrl + F5) on all open Dataiku browsers for the change to take effect.</p>
+</li>
+<li><p>Repeat process, if you want to install a different plugin.</p>
 </li>
 </ol>
 
@@ -230,12 +250,12 @@
 
             
                 
-                <a href="chapter1.html" class="navigation navigation-prev " aria-label="Previous page: II. Requirements">
+                <a href="iii-creating-a-vantage-connection.html" class="navigation navigation-prev " aria-label="Previous page: III. Creating a Vantage Connection">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="vi-teradata-script-table-operator-plugin-usage.html" class="navigation navigation-next " aria-label="Next page: IV. Teradata Script Table Operator Plugin Usage">
+                <a href="v-vantage-plugin-usage.html" class="navigation navigation-next " aria-label="Next page: V. Teradata Vantage SCRIPT Table Operator Plugin Usage">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -246,7 +266,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"III. Creating a Teradata Connection","level":"1.3","depth":1,"next":{"title":"IV. Teradata Script Table Operator Plugin Usage","level":"1.4","depth":1,"path":"vi-teradata-script-table-operator-plugin-usage.md","ref":"vi-teradata-script-table-operator-plugin-usage.md","articles":[]},"previous":{"title":"II. Requirements","level":"1.2","depth":1,"path":"chapter1.md","ref":"chapter1.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"iii-creating-a-teradata-connection.md","mtime":"2017-12-29T10:11:16.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-29T10:11:41.175Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"IV. Teradata Vantage Analytic Plugin Installation","level":"1.4","depth":1,"next":{"title":"V. Teradata Vantage SCRIPT Table Operator Plugin Usage","level":"1.5","depth":1,"path":"v-vantage-plugin-usage.md","ref":"v-vantage-plugin-usage.md","articles":[]},"previous":{"title":"III. Creating a Vantage Connection","level":"1.3","depth":1,"path":"iii-creating-a-vantage-connection.md","ref":"iii-creating-a-vantage-connection.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"iv-vantage-analytic-plugin-installation.md","mtime":"2019-08-14T14:27:29.175Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-09-29T18:12:41.727Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

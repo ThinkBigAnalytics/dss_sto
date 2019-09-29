@@ -34,7 +34,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
     <div class="control-group">
       <label class="control-label">Description</label>
       <div class="controls" style="max-width: 40%; text-align: justify">
-        <p>SCRIPT Table Operator allows users to run Python/R Scripts within the Teradata database.</p>
+        <p>SCRIPT Table Operator allows users to run Python/R Scripts within the Advanced SQL database.</p>
       </div>
     </div>
 
@@ -89,7 +89,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     <select id="ScriptFileLocation" ng-model="config.function.script_location" data-container="body" ng-change="onFileLocationChange()" data-placement="right"
                       data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_LOCATION') }}">
                       <option value="" selected>No file to upload</option>
-                      <option value="sz" selected>Teradata Server</option>
+                      <option value="sz" selected>Vantage Server</option>
                       <option value="cz" selected>Dataiku Managed Folder</option>
                       <option value="czp" selected>DSS Notebooks</option>
                     </select>
@@ -158,7 +158,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     <p class="inner-label">File Location</p>
                     <select required id="AdditionalFileLocation" ng-model="file.file_location" data-container="body" ng-change="onAdditionalFileLocationChange($index)" data-placement="right"
                       data-html="true" data-toggle="tooltip" title="{{ getArgumentDescription('FILE_LOCATION') }}">
-                      <option value="s" selected>Teradata Server</option>
+                      <option value="s" selected>Vantage Server</option>
                       <option value="c" selected>DSS Managed Folder</option>
                     </select>
                   </div>

@@ -5,7 +5,7 @@
     "id" : "TeradataVantageScriptTO_Plugin",
 
     // Version. It is highly recommended to use Semantic Versioning
-    "version" : "0.0.1",
+    "version" : "1.0.0",
 
 
     // Meta data for display purposes
