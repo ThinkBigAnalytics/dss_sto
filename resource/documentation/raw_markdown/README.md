@@ -24,7 +24,7 @@ The Teradata Vantage Analytic Functions Plugin for Dataiku DSS integrates about 
 
 **SCRIPT Table Operator Plugin**
 
-The SCRIPT Table Operator Plugin allows the execution of R or Python scripts inside the Teradata Database. The plugin will take an R or Python script within a DSS notebook, or an R or Python script uploaded to the plugin and  install  the scripts and other related files (i.e. saved models in RDS or pickle files) on the Advanced SQL Engine.
+The SCRIPT Table Operator Plugin allows the execution of R or Python scripts inside the Teradata  Advanced SQL Database. The plugin will take an R or Python script within a DSS notebook, or an R or Python script uploaded to the plugin and  install  the scripts and other related files (i.e. saved models in RDS or pickle files) on the Advanced SQL Engine.
 
 Similar to the Teradata Vantage Analytic Functions Plugin, the SCRIPT Table Operator Plugin translates the user-requested tasks in the plugin into SQL queries, which are then sent to a connected Vantage system to set up and invoke the SCRIPT Table Operator.
 
