@@ -809,10 +809,14 @@
 
         const $a = $('.mainPane > div:first > div:first > div.recipe-settings-section2 > a');
         $a
-          .text('Learn more about Teradata SCRIPT Table Operator')
+          .text('Learn more about Teradata Vantage SCRIPT Table Operator')
           .css('color', 'orange')
-          .attr('target', '_blank');
+          .attr('target', '_blank')
+          .attr('href', 'https://info.teradata.com/download.cfm?ItemID=1013063');
         $a.parent().css('text-align', 'center');
+
+
+        
         // $('#main-container > div > div:nth-child(1) > div > select')[0].value = '';
         $('.dss-page,#main-container').css('display', 'block');
         // $('select:first, select:first > option').css('text-transform', 'capitalize');
